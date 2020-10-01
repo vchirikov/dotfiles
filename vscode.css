@@ -1,0 +1,64 @@
+/*
+  https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css
+  https://marketplace.visualstudio.com/items?itemName=lehni.vscode-fix-checksums
+*/
+
+.loopText tspan {
+  fill: white;
+  background: white;
+}
+
+/* removes underscore style on links */
+
+.mtku, .detected-link {
+  text-decoration: none !important;
+}
+
+/* sets better width of debugger hover widget */
+
+.monaco-editor .debug-hover-widget .complex-value {
+  width: 100% !important;
+  min-width: 648px !important;
+  width: 60vw !important;
+  resize: both !important;
+}
+
+/* 
+  intellisense width fix
+  related with:
+  https://stackoverflow.com/posts/62963539/edit
+  https://github.com/microsoft/vscode/issues/29126
+ */
+
+.editor-widget.suggest-widget.visible {
+  width: 800px !important;
+}
+
+.editor-widget.suggest-widget.visible.docs-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.monaco-editor .suggest-widget.docs-side>.details {
+  max-height: 30vh !important;
+  height: 180px !important;
+}
+
+.monaco-editor .suggest-widget.docs-side>.details p {
+  margin-top: 8px;
+}
+
+.monaco-editor .suggest-widget.docs-side>.details, .monaco-editor .suggest-widget.docs-side>.tree {
+  float: none;
+  width: 100%;
+}
+
+.monaco-editor .parameter-hints-widget>.wrapper {
+    max-width: 60vw !important;
+}
+
+/* editor-hover */
+.monaco-editor .overflowingContentWidgets .monaco-hover-content {
+  max-width: 60vw !important;
+  max-height: 50vh !important;
+}
