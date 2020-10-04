@@ -25,7 +25,7 @@
 
 /* 
   intellisense width fix
-  related with:
+  based on:
   https://stackoverflow.com/posts/62963539/edit
   https://github.com/microsoft/vscode/issues/29126
  */
@@ -61,4 +61,12 @@
 .monaco-editor .overflowingContentWidgets .monaco-hover-content {
   max-width: 60vw !important;
   max-height: 50vh !important;
+}
+
+/* hides editor group icons. https://github.com/microsoft/vscode/issues/46403 */
+
+a[title="Open Changes"],
+a[title="Git: View File History (Alt+H)"], 
+a[title="Split Editor Right (Ctrl+\)"] {
+  display: none !important;
 }
