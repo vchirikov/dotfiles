@@ -123,3 +123,7 @@ a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Spl
   line-height: 20px !important;
   min-width: 14px !important;
 }
+
+.tabs-breadcrumbs {
+  font-size: 0.9em !important;
+}
