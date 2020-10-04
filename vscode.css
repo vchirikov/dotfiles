@@ -54,10 +54,11 @@
 }
 
 .monaco-editor .parameter-hints-widget>.wrapper {
-    max-width: 60vw !important;
+  max-width: 60vw !important;
 }
 
 /* editor-hover */
+
 .monaco-editor .overflowingContentWidgets .monaco-hover-content {
   max-width: 60vw !important;
   max-height: 50vh !important;
@@ -65,8 +66,95 @@
 
 /* hides editor group icons. https://github.com/microsoft/vscode/issues/46403 */
 
-a[title="Open Changes"],
-a[title="Git: View File History (Alt+H)"], 
-a[title="Split Editor Right (Ctrl+\)"] {
+a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Split Editor Right (Ctrl+\)"], a[title="Split Editor Right (Ctrl+\\)"] {
   display: none !important;
+}
+
+/* Multiple row tabs from: */
+
+/* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
+
+.tabs-and-actions-container>.monaco-scrollable-element {
+  height: auto !important;
+}
+
+.tabs-and-actions-container>.monaco-scrollable-element>.tabs-container {
+  height: auto !important;
+  flex-wrap: wrap;
+}
+
+/* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
+  height: 25px;
+  padding-left: 4px;
+  font-size: 0.8em;
+  /* smaller font-size for tab icons and label */
+}
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .label-name {
+  font-size: inherit !important;
+  /* inherit updated font-size for label */
+}
+
+/* Following CSS for smaller close button on tabs: */
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-close {
+  width: 20px;
+}
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-close .action-label {
+  height: 12px;
+  width: 12px;
+  background-size: 12px;
+}
+
+.monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-close .action-label.codicon {
+  font-size: 12px;
+}
+
+/* OPTIONAL: Following CSS for smaller breadcrumbs (below tab-bar) */
+
+.monaco-breadcrumbs {
+  font-size: 0.65em;
+  opacity: 0.8;
+  height: 18px !important;
+}
+
+.tabs-breadcrumbs .breadcrumbs-control {
+  height: 18px !important;
+}
+
+.monaco-workbench .symbol-icon.block {
+  height: 8px;
+  width: 8px;
+  min-height: 8px;
+  min-width: 14px;
+  background-position: 50%;
+  background-size: contain;
+}
+
+.breadcrumbs-control .monaco-breadcrumb-item:before {
+  min-width: 12px !important;
+  height: 12px !important;
+  background-size: contain !important;
+}
+
+/* OPTIONAL: Following CSS for smaller action-bar (beside the tab-bar) with menu, split, etc. */
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions {
+  height: 20px;
+  padding: 0;
+}
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions .action-label, .monaco-workbench .part.editor>.content .editor-group-container>.title .title-actions .action-label {
+  height: 20px;
+  line-height: 20px;
+  min-width: 14px;
+  background-size: 8px;
+}
+
+.tabs-and-actions-container>.editor-actions>.monaco-toolbar>.monaco-action-bar>.actions-container {
+  max-width: 60px;
+  flex-wrap: wrap;
 }
