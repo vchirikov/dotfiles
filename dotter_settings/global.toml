@@ -1,2 +1,5 @@
 [vscode.files]
 "vscode.css" = "~/vscode.css"
+
+[wt]
+"windows_terminal/settings.json" = "~/.wt/settings.json"
