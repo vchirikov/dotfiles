@@ -1,5 +1,6 @@
 [vscode.files]
 "vscode.css" = "~/vscode.css"
+"omnisharp.json" = "~/.omnisharp/omnisharp.json"
 
 [wt]
 "windows_terminal/settings.json" = "~/.wt/settings.json"

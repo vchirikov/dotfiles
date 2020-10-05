@@ -1,0 +1,44 @@
+{
+    "script": {
+        "enabled": false,
+        "defaultTargetFramework": "netcoreapp3.1",
+        "enableScriptNuGetReferences": false
+    },
+    "cake": {
+        "enabled": false,
+        "bakeryPath ": null
+    },
+    "msbuild": {
+        "enabled": true,
+        "enablePackageAutoRestore": true
+    },
+    "roslynExtensionsOptions": {
+        "enableAnalyzersSupport": true,
+        "enableImportCompletion": true,
+        "enableDecompilationSupport": true,
+        "documentAnalysisTimeoutMs": 90000
+    },
+    "formattingOptions": {
+        "enableEditorConfigSupport": true,
+        "organizeImports": true
+    },
+    "renameOptions": {
+        "renameInComments": true,
+        "renameOverloads": true,
+        "renameInStrings": true
+    },
+    "implementTypeOptions": {
+        "propertyGenerationBehavior": "PreferAutoProperties",
+        "insertionBehavior": "WithOtherMembersOfTheSameKind"
+    },
+    "fileOptions": {
+        "systemExcludeSearchPatterns": [
+            "**/node_modules/**/*",
+            "**/bin/**/*",
+            "**/obj/**/*",
+            "**/.git/**/*",
+            "**/artifacts/**/*",
+            "**/tmp/**/*"
+        ]
+    }
+}
