@@ -18,13 +18,9 @@
 
 /* Disabled due to https://code.visualstudio.com/updates/v1_50#_debug-hover-improvements */
 
-/* 
-  .monaco-editor .debug-hover-widget .complex-value {
-  width: 100% !important;
+.monaco-editor .debug-hover-widget .complex-value {
   min-width: 648px !important;
-  width: 60vw !important;
-  resize: both !important;
-} */
+}
 
 /* 
   intellisense width fix
