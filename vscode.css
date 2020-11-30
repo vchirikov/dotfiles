@@ -27,6 +27,7 @@
  */
 
 .editor-widget.suggest-widget.visible {
+  width: 500px;
   min-width: 500px !important;
 }
 
