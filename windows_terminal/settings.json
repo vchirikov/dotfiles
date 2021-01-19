@@ -10,7 +10,11 @@
   "initialRows": 60,
   "requestedTheme": "dark",
   "theme": "dark",
+  "tabWidthMode": "titleLength",
   "showTerminalTitleInTitlebar": false,
+  "launchMode": "maximized",
+  // my third monitor
+  "initialPosition": "-1879 , 1443",
   "copyFormatting": false,
   "wordDelimiters": " ./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}~?\u2502",
   "profiles": {
@@ -40,6 +44,8 @@
         "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
         "hidden": false,
         "name": "pwsh",
+        "tabTitle": "pwsh",
+        "suppressApplicationTitle": true,
         "source": "Windows.Terminal.PowershellCore",
         "commandline": "pwsh -NoLogo"
       },
@@ -70,6 +76,12 @@
         "hidden": true,
         "name": "Azure Cloud Shell",
         "source": "Windows.Terminal.Azure"
+      },
+      {
+          "guid": "{a3a2e83a-884a-5379-baa8-16f193a13b21}",
+          "hidden": false,
+          "name": "PowerShell 7 Preview",
+          "source": "Windows.Terminal.PowershellCore"
       }
     ]
   },
