@@ -50,7 +50,7 @@ a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Spl
 
 /* Menu size */
 
-div.menubar, .monaco-workbench, .part.titlebar, div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(1){
+div.menubar, .part.titlebar, div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(1){
   height: 25px !important;
   line-height: 25px;
 }
