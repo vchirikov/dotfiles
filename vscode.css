@@ -22,6 +22,7 @@
   min-width: 648px !important;
 }
 
+
 /* 
   intellisense width fix
  */
@@ -50,16 +51,16 @@ a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Spl
 
 /* Menu size */
 body > div.file-icons-enabled.monaco-workbench > div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(2) {
-  top:25px !important;
+  top:26px !important;
 }
 
 div.menubar, .part.titlebar {
-  height: 25px !important;
-  line-height: 25px;
+  height: 26px !important;
+  line-height: 26px;
 }
 
 .monaco-workbench .part.titlebar>.window-appicon {
-  width: 25px !important;
+  width: 26px !important;
 }
 
 
@@ -76,7 +77,7 @@ div.menubar, .part.titlebar {
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
-  height: 25px !important;
+  height: 26px !important;
   padding-left: 4px !important;
   font-size: 0.9em !important;
   /* smaller font-size for tab icons and label */
@@ -88,7 +89,12 @@ div.menubar, .part.titlebar {
 }
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label {
-  line-height: 25px;
+  line-height: 22px;
+}
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label > div::after{
+  line-height: 22px;
+  font-size: 0.8em !important;
 }
 
 /* Following CSS for smaller close button on tabs: */
@@ -108,7 +114,7 @@ div.menubar, .part.titlebar {
 }
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .monaco-icon-label:before {
-  height: 25px !important;
+  height: 26px !important;
 }
 
 /* OPTIONAL: Following CSS for smaller action-bar (beside the tab-bar) with menu, split, etc. */
