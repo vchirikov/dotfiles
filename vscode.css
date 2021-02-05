@@ -48,10 +48,27 @@ a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Spl
   display: none !important;
 }
 
+/* Menu size */
+
+div.menubar, .monaco-workbench, .part.titlebar, div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(1){
+  height: 25px !important;
+  line-height: 25px;
+}
+
+.monaco-workbench .part.titlebar>.window-appicon {
+  width: 25px !important;
+}
+
+
 /* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
 
 .tabs-and-actions-container>.monaco-scrollable-element {
   height: auto !important;
+}
+
+.tabs-and-actions-container>.monaco-scrollable-element>.tabs-container {
+  height: auto !important;
+  flex-wrap: wrap;
 }
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
