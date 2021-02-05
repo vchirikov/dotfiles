@@ -85,14 +85,14 @@ div.menubar, .part.titlebar {
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .label-name {
   font-size: inherit !important;
-  /* inherit updated font-size for label */
+  /* inherit updated font-size fo111r label */
 }
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label {
   line-height: 22px;
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label .monaco-icon-label-container::after{
+.monaco-workbench .part.editor>.content .editor-group-container>.title.tabs .monaco-icon-label::after{
   line-height: 25px;
   font-size: 0.8em !important;
 }
