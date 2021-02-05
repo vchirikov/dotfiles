@@ -92,8 +92,8 @@ div.menubar, .part.titlebar {
   line-height: 22px;
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label > div::after{
-  line-height: 22px;
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label .monaco-icon-label-container::after{
+  line-height: 25px;
   font-size: 0.8em !important;
 }
 
