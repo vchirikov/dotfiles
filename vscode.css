@@ -49,6 +49,9 @@ a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Spl
 }
 
 /* Menu size */
+body > div.file-icons-enabled.monaco-workbench > div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(2) {
+  top:25px !important;
+}
 
 div.menubar, .part.titlebar {
   height: 25px !important;
@@ -68,7 +71,6 @@ div.menubar, .part.titlebar {
 
 .tabs-and-actions-container>.monaco-scrollable-element>.tabs-container {
   height: auto !important;
-  flex-wrap: wrap;
 }
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
