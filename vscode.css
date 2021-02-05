@@ -76,7 +76,9 @@ div.menubar, .part.titlebar {
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-conta
+
+iner>.tab {
   height: 26px !important;
   padding-left: 4px !important;
   font-size: 0.9em !important;
@@ -92,7 +94,7 @@ div.menubar, .part.titlebar {
   line-height: 22px;
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title.tabs .monaco-icon-label::after{
+.monaco-workbench .part.editor>.content .editor-group-container>.title.tabs .monaco-icon-label:after{
   line-height: 25px;
   font-size: 0.8em !important;
 }
