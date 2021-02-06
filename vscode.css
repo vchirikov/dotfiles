@@ -31,8 +31,10 @@
   width: 500px;
   min-width: 500px !important;
 }
-
-.monaco-editor .parameter-hints-widget>.wrapper {
+/* old, can be deleted? */
+.monaco-editor .parameter-hints-widget>.wrapper, 
+/* new version */
+.monaco-editor .parameter-hints-widget>.phwrapper {
   max-width: 60vw !important;
 }
 
