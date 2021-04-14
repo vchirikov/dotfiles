@@ -22,7 +22,6 @@
   min-width: 648px !important;
 }
 
-
 /* 
   intellisense width fix
  */
@@ -31,9 +30,12 @@
   width: 500px;
   min-width: 500px !important;
 }
+
 /* old, can be deleted? */
-.monaco-editor .parameter-hints-widget>.wrapper, 
+
+.monaco-editor .parameter-hints-widget>.wrapper,
 /* new version */
+
 .monaco-editor .parameter-hints-widget>.phwrapper {
   max-width: 60vw !important;
 }
@@ -52,8 +54,9 @@ a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Spl
 }
 
 /* Menu size */
-body > div.file-icons-enabled.monaco-workbench > div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(2) {
-  top:26px !important;
+
+body>div.file-icons-enabled.monaco-workbench>div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-container>div:nth-child(2) {
+  top: 26px !important;
 }
 
 div.menubar, .part.titlebar {
@@ -65,6 +68,9 @@ div.menubar, .part.titlebar {
   width: 26px !important;
 }
 
+.tabs-container>.tab.active {
+  background-color: rgb(80, 80, 80) !important;
+}
 
 /* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
 
@@ -94,7 +100,7 @@ div.menubar, .part.titlebar {
   line-height: 22px;
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title.tabs .monaco-icon-label:after{
+.monaco-workbench .part.editor>.content .editor-group-container>.title.tabs .monaco-icon-label:after {
   line-height: 25px;
   font-size: 0.8em !important;
 }
