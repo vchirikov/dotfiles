@@ -69,7 +69,7 @@ div.menubar, .part.titlebar {
 }
 
 .tabs-container>.tab.active {
-  background-color: #304E76 !important;
+  background-color: #26446c !important;
 }
 
 /* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
