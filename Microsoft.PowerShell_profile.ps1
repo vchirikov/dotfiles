@@ -120,6 +120,34 @@ function killall {
         $ProcessName)
     stop-process -Name $ProcessName
 }
+
+# spindown hdd
+
+function spindown {
+    param(
+        [ArgumentCompleter(
+            {
+                param($cmd, $param, $values)
+                smartctl --scan-open | 
+                Where-Object { $_.Contains("ATA device") } | 
+                ForEach-Object { $_.Split()[0] }  | 
+                Where-Object { $_.StartsWith($values, [StringComparison]::OrdinalIgnoreCase) } |
+                Sort-Object |
+                ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
+            }
+        )]
+        [string] $device)
+
+    if ([string]::IsNullOrWhiteSpace($device)) {
+        # stop all hdd
+        smartctl --scan-open | Where-Object { $_.Contains("ATA device") } | ForEach-Object { $_.Split()[0] } | ForEach-Object { Write-Host "`e[93msmartctl -s standby,now $($_)`e[0m"; smartctl -s standby,now $($_) }
+    }
+    else {
+        Write-Host "`e[93msmartctl -s standby,now $($device)`e[0m";
+        smartctl -s standby,now $device 
+    }
+}
+
 # run visual studio
 function vs {
     param(
