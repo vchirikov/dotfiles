@@ -62,6 +62,41 @@ function prompt {
     "$prompt "
 }
 
+# https://github.com/Canop/broot
+function mouse_on{
+    $unixCmd = 'printf "\x1B[?1003h\x1B[?1006h"';
+    wsl $unixCmd.Split(' ')
+}
+
+function mouse_off{
+    $unixCmd = 'printf "\e[?1000l"';
+    wsl $unixCmd.Split(' ')
+}
+function br {
+    mouse_on;
+    $tempFile = New-TemporaryFile
+    try {
+        $broot = $env:BROOT
+        if (-not $broot) {
+             $broot = 'broot'
+        }
+        & $broot --outcmd $tempFile $args
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "$broot exited with code $LASTEXITCODE"
+            return
+        }
+        $command = Get-Content $tempFile
+        if ($command) {
+            # broot returns extended-length paths but not all PowerShell/Windows
+            # versions might handle this so strip the '\\?'
+            Invoke-Expression $command.Replace("\\?\", "")
+        }
+    } finally {
+        mouse_off;
+        Remove-Item -force $tempFile
+    }
+}
+
 # dotnet tool install --global dotnet-suggest --version 1.1.142701
 # dotnet suggest shell start
 $availableToComplete = (dotnet-suggest list) | Out-String
@@ -189,14 +224,21 @@ Set-PSReadLineKeyHandler -Key Ctrl+Shift+b `
     -LongDescription "Build the current directory" `
     -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("dotnet build -nologo -maxCpuCount -nodeReuse:false -clp:ErrorsOnly -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false")
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("dotnet build -nologo -maxCpuCount -nodeReuse:false -clp:ErrorsOnly -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false")
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
 
 # runs build system command
 function bs {
+    # Use -p:UseRazorBuildServer=false to disable the Razor (rzc) server.
+    # Use -p:UseSharedCompilation=false to disable the Roslyn (vbcscompiler) server.
+    # Use /nodeReuse:false for MSBuild to disable node re-use.
     if ($args -eq $null -or $args.Length -eq 0) {
-        dotnet build -nologo -maxCpuCount -nodeReuse:false -clp:ErrorsOnly -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
+        dotnet build -nologo -maxCpuCount -nodeReuse:false -clp:ErrorsOnly -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
+        return;
+    }
+    if($args[0] -eq "restore"){
+        dotnet restore -nologo -maxCpuCount -nodeReuse:false -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false 
         return;
     }
     [string] $path = "build";
@@ -226,7 +268,7 @@ function createLnk {
         [string] $args = ""
     )
     $path = [System.IO.Path]::GetFullPath($path);
-    
+
     if ([string]::IsNullOrWhiteSpace($output)) {
         $output = $([System.IO.Path]::Combine($PWD, $([System.IO.Path]::GetFileNameWithoutExtension($path)) + ".lnk"));
     }
@@ -279,9 +321,7 @@ else {
 }
 
 <#
-.SYNOPSIS
 Helper function used to log parameters for tab completion scriptblock
-#>
 
 function Write-TabCompletionLog {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
@@ -302,15 +342,6 @@ function Write-TabCompletionLog {
     }
 }
 
-
-<#
-.SYNOPSIS
-Get the log file name used if logging is on.
-.DESCRIPTION
-For Windows this will be "$env:TEMP\tabcompletion.json", otherwise New-TemporaryFile was used
-.OUTPUTS
-The filename
-#>
 function Get-TabCompletionLogFile {
     [CmdletBinding()]
     param()
@@ -350,17 +381,18 @@ function TabExpansion2 {
         [System.Management.Automation.CommandCompletion] $result = $null;
         if ($psCmdlet.ParameterSetName -eq 'ScriptInputSet') {
             $result = [System.Management.Automation.CommandCompletion]::CompleteInput(
-                <#inputScript#>  $inputScript,
-                <#cursorColumn#> $cursorColumn,
-                <#options#>      $options)
+                 $inputScript,
+                $cursorColumn,
+                $options)
         }
         else {
             $result = [System.Management.Automation.CommandCompletion]::CompleteInput(
-                <#ast#>              $ast,
-                <#tokens#>           $tokens,
-                <#positionOfCursor#> $positionOfCursor,
-                <#options#>          $options)
+                $ast,
+                $tokens,
+                $positionOfCursor,
+                $options)
         }
         return $result;
     }
 }
+#>
