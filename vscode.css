@@ -84,7 +84,7 @@ div.menubar, .part.titlebar {
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
 
-div.monaco-scrollable-element > div.split-view-container > div:nth-child(3){
+div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(3){
   top: 26px !important;
 }
 
