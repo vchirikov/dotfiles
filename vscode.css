@@ -1,6 +1,8 @@
 /*
   https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css
   https://marketplace.visualstudio.com/items?itemName=lehni.vscode-fix-checksums
+  after 1.58 the vscode-custom-css doesn't work https://github.com/be5invis/vscode-custom-css/issues/144
+  You can change file "C:\Program Files\Microsoft VS Code\resources\app\out\vs\code\electron-browser\workbench\workbench.html" for the same result + fix checksums
 */
 
 .loopText tspan {
@@ -84,7 +86,7 @@ div.menubar, .part.titlebar {
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
 
-div.monaco-grid-view > div > div > div.monaco-scrollable-element > div.split-view-container > div:nth-child(3){
+div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-container>div:nth-child(3) {
   top: 26px !important;
 }
 
