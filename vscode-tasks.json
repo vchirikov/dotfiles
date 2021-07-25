@@ -8,6 +8,9 @@
             "args": [
                 "-f",
                 "win64",
+                // error reporting like VS style
+                "-Xvc",
+                "-w+all", // warnings
                 // for debug with concord:
                 "-gcv8",
                 "-I\"${workspaceFolder}\"",
@@ -15,18 +18,30 @@
                 "-l artifacts/obj/${fileBasenameNoExtension}.lst",
                 "${file}"
             ],
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": false
+            },
             "group": {
                 "kind": "build",
                 "isDefault": false
             },
+            "presentation": {
+                "reveal": "always",
+                "echo": false,
+                "focus": false,
+                "revealProblems": "never",
+                "showReuseMessage": false,
+                "clear": true,
+                "panel": "shared",
+                "group": "shared"
+            },
+            // $msCompile doesn't work even with -Xvc
             "problemMatcher": {
                 "owner": "external",
-                "fileLocation": [
-                    "relative",
-                    "${workspaceFolder}"
-                ],
+                "fileLocation": "absolute",
                 "pattern": {
-                    "regexp": "^(.*):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "regexp": "^(.*)\\((\\d+)\\)\\s*:\\s*(warning|error):\\s*(.*)$",
                     "file": 1,
                     "line": 2,
                     "severity": 3,
@@ -35,7 +50,7 @@
             }
         },
         {
-            "label": "asm link",
+            "label": "asm linker",
             "command": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Preview\\VC\\Tools\\MSVC\\14.30.30401\\bin\\Hostx64\\x64\\link.exe",
             "type": "process",
             "args": [
@@ -69,16 +84,37 @@
                 "kind": "build",
                 "isDefault": false
             },
-            "dependsOn": ["compile"],
-            "problemMatcher": [],
+            "dependsOn": [
+                "asm compile"
+            ],
+            "problemMatcher": {
+                "owner": "external",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/artifacts/obj"
+                ],
+                "pattern": {
+                    "regexp": "^(.*)\\s*:\\s*(warning|error)\\s([^:]*):\\s*(.*)$",
+                    "file": 1,
+                    "severity": 2,
+                    "code": 3,
+                    "message": 4
+                }
+            },
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": false
+            },
             "presentation": {
-                "echo": true,
                 "reveal": "always",
+                "echo": false,
                 "focus": false,
+                "revealProblems": "never",
+                "showReuseMessage": false,
+                "clear": false,
                 "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+                "group": "shared"
+            },
         },
         {
             "label": "cargo build",
