@@ -1,0 +1,135 @@
+[user]
+    name = vchirikov
+    repositoryformatversion = 0
+    filemode = false
+    bare = false
+    logallrefupdates = true
+    symlinks = true
+    ignorecase = true
+    hideDotFiles = dotGitOnly
+[core]
+    autocrlf = input
+    eol = lf
+    sparseCheckout = true
+    editor = code --wait
+    # https://github.com/sharkdp/bat
+    pager = bat --pager=never --theme="OneHalfDark" --style=numbers,changes
+    longpaths = true
+    hooksPath = /dev/null
+    # https://github.com/git-for-windows/git/wiki/Symbolic-Links#allowing-non-administrators-to-create-symbolic-links
+    # it may also be useful to set the env variable MSYS=winsymlinks:nativestrict
+    symlinks = true
+    # https://github.com/git-for-windows/git/discussions/3251
+    useBuiltinFSMonitor = true
+
+[alias]
+    download = "!f() { \
+            dir=$(echo $1 | sed 's/https*:\\/\\/[^\\/]*\\///') ; \
+            if [ -z ${2+x} ]; then \
+                echo -e \"\\e[1;34mDownload ${1} into ${dir}\\e[0m\" ; \
+                git clone --depth 1 $1 $dir ; \
+            else \
+                echo -e \"\\e[1;34mDownload only ${2} into ${dir}\\e[0m\" ; \
+                git clone --depth 1 --filter=blob:none --sparse $1 $dir ; \
+                cd $dir ; \
+                git sparse-checkout set ${2-.} \
+                cd - ; \
+            fi ; \
+        }; f"
+    # Line of code - diff with empty tree
+    loc = diff --shortstat 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+    f = fetch --force --tags --prune --prune-tags --jobs=12 --progress --all
+    # br = branch-remote
+    br = "!f(){ fetch --force --tags --prune --prune-tags --jobs=12 --all --quiet && git checkout -b $1 remotes/origin/$2 --no-track; };f"
+    pf = push --force-with-lease
+    # return curent branchname
+    cwd = rev-parse --abbrev-ref HEAD
+    am = commit --amend --no-edit --quiet --allow-empty-message
+    lg = "!f() { git log --color --oneline -n ${1-10} ; }; f"
+    it = !git init && git commit -m root --allow-empty
+    st = status --short --branch
+    filelog = log -u
+    flg = log -u
+    r = reset
+    ri = "!f() { echo rebase interactive back to ${1-3}; git rebase -i HEAD~${1-3} ; }; f"
+    rc = rebase --continue
+    ra = rebase --abort
+    rs = rebase --skip
+    rst ="!f() { echo reset soft back ${1-1} ; git reset --soft HEAD~${1-1} ; }; f"
+    undo ="!f() { echo reset soft back ${1-1} ; git reset --soft HEAD~${1-1} ; }; f"
+    stashes = stash list
+    remotes = remote -v
+    pruner = !git prune --expire=now && git reflog expire --expire-unreachable=now --rewrite --all
+    repacker = !git repack -a -d -f --depth=300 --window=300 --window-memory=1g
+    go = switch
+    # branch
+    branches = branch --all -vv
+    bls = branch --all -vv 
+    brm = branch --delete
+    brmf = branch -D
+    bmv = branch --move
+    branch-remote-rm = push --delete
+    brrm = push --delete
+    bclean-merged = "!f() { git branch --merged ${1-master} | egrep -v '(${1-master}|\\*|\\+)' | xargs -r git branch -d; }; f"
+    bclean = "!f() { git branch | egrep -v '(master|main|\\*|\\+)' | xargs -r git branch -D; }; f"
+    hide = update-index --assume-unchanged
+    unhide = update-index --no-assume-unchanged
+    unhide-all = !git ls-files -v | grep '^[a-z]' | cut -c3- | xargs git update-index --no-assume-unchanged --
+    hidden = !git ls-files -v | grep '^[a-z]' | cut -c3-
+    wipe = !git add --all && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+    gh-clean = !gh-clean-notifications
+    # find/show the merge commit when a given commit was merged into current or given branch
+    # git find-merge <SHA-1> [master]
+    find-merge = "!sh -c 'commit=$0 && branch=${1:-HEAD} && (git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 -s | uniq -f1 -d | sort -n | tail -1 | cut -f2'"
+    show-merge = "!sh -c 'merge=$(git find-merge $0 $1) && [ -n \"$merge\" ] && git show $merge'"
+    # show what branches you have been working on lately
+    my = "!f() { git for-each-ref --sort='-authordate:iso8601' --count ${1-15} --format=' %(color:green)%(authordate:relative)%09%(color:white)%(refname:short)' refs/heads ; }; f"
+[extensions]
+    worktreeConfig = true
+[fetch]
+    prune = true
+    pruneTags = true
+    output = compact
+    parallel = 8
+[rebase]
+    autoStash = true
+    autoSquash = true
+[worktree]
+    guessRemote = true
+[push]
+    default = current
+	followTags = true
+[url "https://github.com/"]
+    insteadOf = github:
+[url "https://github.com/"]
+    insteadOf = gh:
+[url "https://github.com/vchirkov"]
+    insteadOf = my:
+[diff]
+    renameLimit = 9999999
+	submodule = log
+[interactive]
+    useBuiltin = true
+    singleKey = true
+[feature]
+    experimental = true
+	manyFiles = true
+[rerere]
+    enabled = 1
+    autoUpdate = true
+[merge]
+    conflictstyle = diff3
+    autoStash = true
+[status]
+	submodulesummary = 1
+[submodule]
+    recurse = true
+[color "status"]
+    added = green bold
+    changed = red bold strike
+    untracked = cyan
+    branch = yellow black bold ul
+[pull] 
+    # https://github.blog/2021-08-16-highlights-from-git-2-33/
+    # this is used for any merge, not just git pull, ort == new recursive
+    twohead = ort
