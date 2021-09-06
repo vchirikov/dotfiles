@@ -20,18 +20,19 @@
     # it may also be useful to set the env variable MSYS=winsymlinks:nativestrict
     symlinks = true
     # https://github.com/git-for-windows/git/discussions/3251
-    useBuiltinFSMonitor = true
+    useBuiltinFSMonitor = false
+    fsmonitor = false
 
 [alias]
     download = "!f() { \
             dir=$(echo $1 | sed 's/https*:\\/\\/[^\\/]*\\///') ; \
             if [ -z ${2+x} ]; then \
-                echo -e \"\\e[1;34mDownload ${1} into ${dir}\\e[0m\" ; \
-                git clone --depth 1 $1 $dir ; \
+                echo -e \"\\e[1;34mDownload ${1} into ${GIT_PREFIX:-.}/${dir}\\e[0m\" ; \
+                git clone --depth 1 $1 ${GIT_PREFIX:-.}/$dir ; \
             else \
-                echo -e \"\\e[1;34mDownload only ${2} into ${dir}\\e[0m\" ; \
-                git clone --depth 1 --filter=blob:none --sparse $1 $dir ; \
-                cd $dir ; \
+                echo -e \"\\e[1;34mDownload only ${2} into ${GIT_PREFIX:-.}/${dir}\\e[0m\" ; \
+                git clone --depth 1 --filter=blob:none --sparse $1 ${GIT_PREFIX:-.}/$dir ; \
+                cd ${GIT_PREFIX:-.}/$dir ; \
                 git sparse-checkout set ${2-.} \
                 cd - ; \
             fi ; \
