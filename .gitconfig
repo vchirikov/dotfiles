@@ -7,6 +7,8 @@
     symlinks = true
     ignorecase = true
     hideDotFiles = dotGitOnly
+[init]
+    defaultBranch = master
 [core]
     autocrlf = input
     eol = lf
@@ -16,35 +18,54 @@
     pager = bat --pager=never --theme="OneHalfDark" --style=numbers,changes
     longpaths = true
     hooksPath = /dev/null
+    # fixes UAC issues (don't need to run git as admin)
+    fscache = true
     # https://github.com/git-for-windows/git/wiki/Symbolic-Links#allowing-non-administrators-to-create-symbolic-links
     # it may also be useful to set the env variable MSYS=winsymlinks:nativestrict
     symlinks = true
     # https://github.com/git-for-windows/git/discussions/3251
+    # use fs-enable/fs-disable aliases
     useBuiltinFSMonitor = false
-    fsmonitor = false
-
+    untrackedcache = true
 [alias]
+    fs-status = fsmonitor--daemon status
+    fs-stop = "!f() { \
+        echo -e \"\\e[1;34mStop git file system monitoring daemon\\e[0m\" ; \
+        git fsmonitor--daemon stop ; \
+        git fsmonitor--daemon status ; \
+    }; f"
+    fs-enable = "!f() { \
+        echo -e \"\\e[1;34mEnable git file system monitoring\\e[0m\" ; \
+        git config core.useBuiltinFSMonitor true ; \
+        git config --unset core.fsmonitor ; \
+        git update-index --fsmonitor ; \
+    }; f"
+    fs-disable = "!f() { \
+        echo -e \"\\e[1;34mDisable git file system monitoring\\e[0m\" ; \
+        git config --unset core.useBuiltinFSMonitor ; \
+        git config --unset core.fsmonitor ; \
+        git update-index --no-fsmonitor ; \
+        git fsmonitor--daemon stop ; \
+    }; f"
     download = "!f() { \
             dir=$(echo $1 | sed 's/https*:\\/\\/[^\\/]*\\///') ; \
             if [ -z ${2+x} ]; then \
                 echo -e \"\\e[1;34mDownload ${1} into ${GIT_PREFIX:-.}/${dir}\\e[0m\" ; \
                 git clone --depth 1 $1 ${GIT_PREFIX:-.}/$dir ; \
+                git fs-disable \
             else \
                 echo -e \"\\e[1;34mDownload only ${2} into ${GIT_PREFIX:-.}/${dir}\\e[0m\" ; \
                 git clone --depth 1 --filter=blob:none --sparse $1 ${GIT_PREFIX:-.}/$dir ; \
                 cd ${GIT_PREFIX:-.}/$dir ; \
                 git sparse-checkout set ${2-.} \
+                git fs-disable \
                 cd - ; \
             fi ; \
         }; f"
     # Line of code - diff with empty tree
     loc = diff --shortstat 4b825dc642cb6eb9a060e54bf8d69288fbee4904
     f = fetch --force --tags --prune --prune-tags --jobs=12 --progress --all
-    # br = branch-remote
-    br = "!f(){ fetch --force --tags --prune --prune-tags --jobs=12 --all --quiet && git checkout -b $1 remotes/origin/$2 --no-track; };f"
     pf = push --force-with-lease
-    # return curent branchname
-    cwd = rev-parse --abbrev-ref HEAD
     am = commit --amend --no-edit --quiet --allow-empty-message
     lg = "!f() { git log --color --oneline -n ${1-10} ; }; f"
     it = !git init && git commit -m root --allow-empty
@@ -56,8 +77,8 @@
     rc = rebase --continue
     ra = rebase --abort
     rs = rebase --skip
-    rst ="!f() { echo reset soft back ${1-1} ; git reset --soft HEAD~${1-1} ; }; f"
-    undo ="!f() { echo reset soft back ${1-1} ; git reset --soft HEAD~${1-1} ; }; f"
+    rst ="!f() { echo -e \"\\e[1;34mReset soft back ${1-1}\\e[0m\" ; git reset --soft HEAD~${1-1} ; }; f"
+    undo ="!f() { echo -e \"\\e[1;34mReset soft back ${1-1}\\e[0m\" ; git reset --soft HEAD~${1-1} ; }; f"
     stashes = stash list
     remotes = remote -v
     pruner = !git prune --expire=now && git reflog expire --expire-unreachable=now --rewrite --all
@@ -65,6 +86,7 @@
     go = switch
     # branch
     branches = branch --all -vv
+    bpwd = rev-parse --abbrev-ref HEAD
     bls = branch --all -vv 
     brm = branch --delete
     brmf = branch -D
@@ -99,22 +121,23 @@
     guessRemote = true
 [push]
     default = current
-	followTags = true
+    followTags = true
 [url "https://github.com/"]
     insteadOf = github:
 [url "https://github.com/"]
     insteadOf = gh:
-[url "https://github.com/vchirkov"]
+[url "https://github.com/vchirikov/"]
     insteadOf = my:
 [diff]
     renameLimit = 9999999
-	submodule = log
+    submodule = log
 [interactive]
     useBuiltin = true
     singleKey = true
 [feature]
-    experimental = true
-	manyFiles = true
+    # because it also turns on core.useBuiltinFSMonitor
+    experimental = false
+    manyFiles = true
 [rerere]
     enabled = 1
     autoUpdate = true
@@ -122,7 +145,7 @@
     conflictstyle = diff3
     autoStash = true
 [status]
-	submodulesummary = 1
+    submodulesummary = 1
 [submodule]
     recurse = true
 [color "status"]
