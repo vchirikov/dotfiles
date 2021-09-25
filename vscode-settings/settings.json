@@ -1,0 +1,639 @@
+{
+  "vsharp.server": "http://localhost:4351/",
+  "[asm]": {
+    "editor.defaultFormatter": "ipid.asm-comment-aligner",
+    "files.eol": "\n"
+  },
+  "[aspnetcorerazor]": {
+    "editor.codeLens": true,
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true
+  },
+  "[xml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "files.eol": "\n"
+  },
+  // implicit-indent is nice for https://github.com/microsoft/vscode/issues/13960, but it breaks
+  // ParametersInfo + arrow keys
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+  "[helm]": {
+    "editor.tabSize": 2
+  },
+  "[python]": {
+    "files.eol": "\n"
+  },
+  "[csharp]": {
+    //"editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": true,
+      "strings": true,
+    },
+    "editor.formatOnType": true,
+    "editor.formatOnSave": false,
+    "editor.wordBasedSuggestions": false,
+  },
+  "[git-commit]": {
+    "editor.rulers": [
+      -1
+    ]
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features",
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+    "editor.tabSize": 2
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "auto-close-tag.activationOnLanguage": [
+    "xml",
+    "php",
+    "ejs",
+    "jinja",
+    "javascriptreact",
+    "typescriptreact",
+    "markdown",
+    "vue",
+    "liquid",
+    "html"
+  ],
+  "breadcrumbs.enabled": true,
+  "back-n-forth.withLastEditLocation": true,
+  "back-n-forth.iconStyle": "chevron",
+  "csharp.semanticHighlighting.enabled": true,
+  "csharp.referencesCodeLens.enabled": false,
+  "csharp.suppressBuildAssetsNotification": true,
+  "csharp.suppressDotnetInstallWarning": true,
+  "csharp.suppressProjectJsonWarning": true,
+  "csharp.suppressDotnetRestoreNotification": true,
+  "csharp.suppressHiddenDiagnostics": true,
+  ///////
+  "csharp.maxProjectFileCountForDiagnosticAnalysis": 1,
+  ///////
+  "csharp.unitTestDebuggingOptions": {
+    "allowFastEvaluate": true,
+    "enableStepFiltering": true,
+    "justMyCode": true,
+    "requireExactSource": false,
+    // https://github.com/OmniSharp/omnisharp-vscode/issues/4332
+    "suppressJITOptimizations": false,
+    "logging": {
+      "exceptions": true,
+      "programOutput": true,
+      "moduleLoad": false,
+    },
+    "symbolOptions": {
+      "searchPaths": [],
+      "searchMicrosoftSymbolServer": false,
+      "searchNuGetOrgSymbolServer": false,
+      "cachePath": "C:\\dbg_symbol_cache",
+      "moduleFilter": {
+        "mode": "loadAllButExcluded",
+        "excludedModules": [
+          "xunit*",
+          "FluentAssertions*",
+          "Moq*",
+          "FakeItEasy*",
+          "System*",
+          "Microsoft*"
+        ]
+      }
+    },
+    "sourceFileMap": {
+      "/_/": "${workspaceFolder}"
+    }
+  },
+  "csharp.testsCodeLens.enabled": true,
+  "csharpfixformat.style.newline.elseCatch": true,
+  "csharpfixformat.style.spaces.beforeIndexerBracket": false,
+  "csharpfixformat.style.spaces.beforeParenthesis": false,
+  // https://github.com/OmniSharp/omnisharp-vscode/issues/1980 https://github.com/OmniSharp/omnisharp-vscode/issues/1680 and other,
+  // We delete them with an autoformating
+  "editor.trimAutoWhitespace": false,
+  "editor.formatOnSaveMode": "modifications",
+  "editor.suggest.preview": true,
+  "editor.suggest.showDeprecated": true,
+  "editor.foldingImportsByDefault": true,
+  "editor.find.addExtraSpaceOnTop": false,
+  "editor.find.seedSearchStringFromSelection": "selection",
+  "security.workspace.trust.enabled": false,
+  "explorer.sortOrder": "type",
+  "debug.console.fontSize": 12,
+  "debug.console.closeOnEnd": false,
+  "debug.openExplorerOnEnd": false,
+  "debug.openDebug": "openOnDebugBreak",
+  "debug.inlineValues": true,
+  "debug.node.autoAttach": "off",
+  "debug.javascript.usePreview": true,
+  "debug.javascript.usePreviewAutoAttach": true,
+  "workbench.experimental.useCustomHover": true,
+  "workbench.editor.tabSizing": "fit",
+  "workbench.editor.sharedViewState": true,
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.decorations.badges": true,
+  "workbench.editor.decorations.colors": true,
+  "workbench.editor.highlightModifiedTabs": true,
+  "workbench.editor.revealIfOpen": true,
+  "workbench.editor.enablePreviewFromCodeNavigation": true,
+  "debug.onTaskErrors": "showErrors",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.renderSideBySide": true,
+  "docker-explorer.enableTelemetry": false,
+  "dotnetAcquisitionExtension.enableTelemetry": false,
+  "redhat.telemetry.enabled": false,
+  "dotnetAcquisitionExtension.existingDotnetPath": [
+    {
+      "extensionId": "msazurermtools.azurerm-vscode-tools",
+      "path": "C:\\Program Files\\dotnet\\dotnet.exe"
+    },
+    {
+      "extensionId": "ms-dotnettools.dotnet-interactive-vscode",
+      "path": "C:\\Program Files\\dotnet\\dotnet.exe"
+    },
+    // {"extensionId": "vchirikov.vscode-vsharp", "path": "C:\\Program Files\\dotnet\\dotnet.exe"},
+  ],
+  // disabled for now
+  "dotnet-test-explorer.enableTelemetry": false,
+  "dotnet-test-explorer.runInParallel": true,
+  "dotnet-test-explorer.testArguments": " --nologo -noLogo ",
+  "dotnetCoreExplorer.logpanel": true,
+  "dotnetCoreExplorer.codeLens": true,
+  "dotnetCoreExplorer.maxCpuCount": 8,
+  //"dotnetCoreExplorer.searchpatterns": "artifacts/tests/*Tests.dll",
+  // Disable until: https://github.com/Derivitec/vscode-dotnet-adapter/issues/36
+  "dotnetCoreExplorer.searchpatterns": {
+    "UnitTests": "**/artifacts/tests/*.UnitTests.dll",
+    "IntegrationTests": "**/artifacts/tests/*.IntegrationTests.dll",
+    "OtherTests": [
+      "**/artifacts/tests/*.Tests.dll",
+      "**/artifacts/tests/*.Test.dll",
+    ]
+  },
+  "editor.autoIndent": "full",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": false,
+    "source.fixAll": false,
+    //"source.fixAll.markdownlint": true
+  },
+  "editor.fontFamily": "Consolas NF, Consolas, 'Courier New', monospace",
+  "editor.formatOnType": true,
+  "editor.lineHeight": 15,
+  "editor.links": true,
+  // for screensharing
+  "editor.mouseWheelZoom": true,
+  "editor.smartSelect.selectLeadingAndTrailingWhitespace": false,
+  "editor.useTabStops": true,
+  "editor.minimap.showSlider": "always",
+  "editor.parameterHints.cycle": true,
+  "editor.parameterHints.enabled": true,
+  "editor.quickSuggestions": true,
+  "editor.linkedEditing": true,
+  "editor.stickyTabStops": true,
+  "editor.renderWhitespace": "all",
+  "workbench.tree.renderIndentGuides": "always",
+  "editor.suggest.localityBonus": true,
+  "editor.tabCompletion": "on",
+  "editor.semanticHighlighting.enabled": true,
+  "emmet.excludeLanguages": [
+    "markdown",
+    "csharp",
+    "C#"
+  ],
+  "emmet.includeLanguages": {
+    "aspnetcorerazor": "html",
+    "razor": "html"
+  },
+  "explorer.compactFolders": true,
+  "explorer.incrementalNaming": "smart",
+  "explorer.openEditors.visible": 0,
+  "explorer.autoReveal": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.decorations.badges": true,
+  "explorer.decorations.colors": true,
+  "extensions.ignoreRecommendations": true,
+  "files.autoGuessEncoding": true,
+  "files.defaultLanguage": "markdown",
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.idea": true,
+    "**/.svn": true,
+    "**/.vs": true,
+    "**/bin": true,
+    "**/CVS": true,
+    "**/node_modules": true,
+    "**/obj": true,
+    "**/tmp": false,
+    "**/tools": false,
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/.idea/": true,
+    "**/.vs/**": true,
+    "**/artifacts": true,
+    "**/bin": true,
+    "**/node_modules/*/**": true,
+    "**/obj": true,
+    "**/tmp": true,
+  },
+  "grunt.autoDetect": "off",
+  "gulp.autoDetect": "off",
+  "git.autoRepositoryDetection": "subFolders",
+  "git.countBadge": "all",
+  // git refresh settings
+  "git.autorefresh": false,
+  "gitlens.views.repositories.autoRefresh": false,
+  "gitlens.views.repositories.autoReveal": false,
+  "git.showInlineOpenFileAction": true,
+  "git.decorations.enabled": true,
+  "git.autofetchPeriod": 1200,
+  "git.useCommitInputAsStashMessage": true,
+  "git.allowForcePush": true,
+  "git.showProgress": true,
+  "git.ignoreWindowsGit27Warning": true,
+  "git.ignoreLimitWarning": true,
+  "git.autofetch": false,
+  "git.autoStash": true,
+  "git.confirmSync": false,
+  "git.openDiffOnClick": true,
+  "git.enableSmartCommit": true,
+  "git.path": "C:\\Program Files\\Git\bin\\git.exe",
+  "git.rebaseWhenSync": true,
+  "git.showPushSuccessNotification": true,
+  "git.useForcePushWithLease": true,
+  "gitHistory.pageSize": 50,
+  "dotnetSDKAcquisitionExtension.enableTelemetry": false,
+  "githubPullRequests.telemetry.enabled": false,
+  "gitlens.advanced.blame.delayAfterEdit": 15000,
+  "gitlens.menus": {
+    "editorGroup": {
+      "blame": false,
+      "compare": false,
+    }
+  },
+  // ######################################################################
+  "gitlens.currentLine.enabled": false,
+  "gitlens.advanced.messages": {
+    "suppressNoRepositoryWarning": true,
+  },
+  "gitlens.advanced.telemetry.enabled": false,
+  "gitlens.codeLens.authors.enabled": false,
+  "gitlens.codeLens.recentChange.enabled": false,
+  "gitlens.views.repositories.files.layout": "auto",
+  "hediet.vscode-drawio.codeLinkActivated": false,
+  "http.proxyStrictSSL": false,
+  "path-intellisense.autoSlashAfterDirectory": true,
+  "jake.autoDetect": "off",
+  "javascript.format.semicolons": "insert",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "html.format.wrapLineLength": 0,
+  "html.format.wrapAttributes": "preserve",
+  "liveshare.allowGuestDebugControl": true,
+  "liveshare.allowGuestTaskControl": true,
+  "liveshare.featureSet": "insiders",
+  "liveshare.languages.allowGuestCommandControl": true,
+  "liveshare.guestApprovalRequired": true,
+  "liveshare.showInStatusBar": "whileCollaborating",
+  "liveshare.showVerboseNotifications": true,
+  "markdown.styles": [
+    "https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.0.9/mermaid.neutral.css"
+  ],
+  "markdownlint.config": {
+    "MD001": false,
+    "MD025": false,
+    "MD026": false
+  },
+  "markdownlint.run": "onSave",
+  "merge-conflict.autoNavigateNextConflict.enabled": true,
+  "merge-conflict.codeLens.enabled": true,
+  "msbuildProjectTools.language.enable": false,
+  "msbuildProjectTools.language.useClassicProvider": true,
+  "msbuildProjectTools.nuget.disablePreFetch": true,
+  "msbuildProjectTools.nuget.includeLocalSources": true,
+  "msbuildProjectTools.logging.seq.level": "Error",
+  "msbuildProjectTools.nuget.includePreRelease": true,
+  "msbuildProjectTools.nuget.newestVersionsFirst": true,
+  "editor.minimap.maxColumn": 60,
+  "editor.minimap.renderCharacters": true,
+  "editor.minimap.size": "proportional",
+  "jupyter.experimental.debugging": true,
+  "jupyter.interactiveWindowMode": "single",
+  "jupyter.allowUnauthorizedRemoteConnection": false,
+  "jupyter.codeLenses": "jupyter.runcell,  jupyter.runallcellsabove, jupyter.debugcell",
+  "jupyter.debugCodeLenses": "jupyter.debugcontinue, jupyter.debugstop, jupyter.debugstepover",
+  "jupyter.debugJustMyCode": true,
+  "jupyter.askForKernelRestart": true,
+  "jupyter.enableScrollingForCellOutputs": true,
+  // without it my ca snippet doesn't work
+  "editor.snippetSuggestions": "inline",
+  "editor.suggest.showIcons": true,
+  "editor.suggest.filterGraceful": true,
+  "editor.suggest.insertMode": "replace",
+  "editor.quickSuggestionsDelay": 10,
+  "editor.comments.insertSpace": true,
+  // this commit suggestion on [] in C# for example, annoying
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.accessibilitySupport": "off",
+  "omnisharp.enableAsyncCompletion": true,
+  "omnisharp.disableMSBuildDiagnosticWarning": true,
+  "omnisharp.loggingLevel": "information",
+  //"omnisharp.loggingLevel": "debug",
+  "omnisharp.enableDecompilationSupport": true,
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.enableImportCompletion": true,
+  "omnisharp.path": "latest",
+  "omnisharp.useEditorFormattingSettings": true,
+  // https://github.com/mono/mono/issues/20250
+  "omnisharp.useGlobalMono": "auto",
+  "omnisharp.projectLoadTimeout": 600,
+  "omnisharp.maxProjectResults": 100,
+  "omnisharp.minFindSymbolsFilterLength": 2,
+  "omnisharp.maxFindSymbolsItems": 500,
+  "pasteImage.path": "${currentFileDir}/img",
+  "pasteImage.forceUnixStyleSeparator": true,
+  "pasteImage.filePathConfirmInputBoxMode": "onlyName",
+  "pasteImage.showFilePathConfirmInputBox": true,
+  "php.suggest.basic": false,
+  "powershell.enableProfileLoading": true,
+  "powershell.integratedConsole.focusConsoleOnExecute": false,
+  "powershell.integratedConsole.suppressStartupBanner": true,
+  "powershell.promptToUpdatePowerShell": false,
+  "problems.showCurrentInStatus": true,
+  "references.preferredLocation": "view",
+  "razor.languageServer.debug": false,
+  "razor.disabled": true,
+  "scm.alwaysShowActions": true,
+  "scm.alwaysShowRepositories": true,
+  "search.exclude": {
+    "**/.vs": true,
+    "**/.vscode": true,
+    "**/artifacts": true,
+    "**/bower_components": true,
+    "**/node_modules": true,
+    "**/tmp": true,
+    "**/tools": true
+  },
+  "search.sortOrder": "type",
+  "task.saveBeforeRun": "always",
+  "testExplorer.mergeSuites": true,
+  "testExplorer.useNativeTesting": true,
+  "telemetry.enableCrashReporter": false,
+  "telemetry.enableTelemetry": false,
+  "terminal.explorerKind": "external",
+  "terminal.integrated.gpuAcceleration": "on",
+  "terminal.integrated.customGlyphs": true,
+  "terminal.integrated.tabs.enabled": true,
+  "terminal.external.windowsExec": "wt",
+  "terminal.integrated.persistentSessionScrollback": 200,
+  "terminal.integrated.env.windows": {
+    "DOTNET_CLI_UI_LANGUAGE": "en",
+    "LC_ALL": "ru_RU.UTF-8",
+    "MSBUILDDISABLENODEREUSE": "1"
+  },
+  "terminal.integrated.windowsEnableConpty": true,
+  "terminal.integrated.profiles.windows": {
+    "pwsh": {
+      "path": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "overrideName": true,
+      "args": [
+        "-NoLogo"
+      ],
+      "icon": "terminal-powershell",
+      "env": {
+        "MSBUILDDISABLENODEREUSE": "1"
+      }
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "pwsh",
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.rightClickBehavior": "default",
+  "typescript.check.npmIsInstalled": false,
+  "typescript.format.semicolons": "insert",
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "vscode_custom_css.imports": [
+    "https://raw.githubusercontent.com/vchirikov/dotfiles/master/vscode.css",
+  ],
+  "vscode_custom_css.statusbar": false,
+  "vscode_custom_css.policy": true,
+  "vssolution.createTemplateFolderQuestion": false,
+  "vssolution.showOutputChannel": false,
+  "vssolution.netcoreIgnore": [
+    "bin",
+    "node_modules",
+    "obj",
+    "artifacts",
+  ],
+  "window.newWindowDimensions": "maximized",
+  "window.openFilesInNewWindow": "default",
+  "window.title": "${folderName} - ${activeEditorShort}${dirty}",
+  "window.titleBarStyle": "custom",
+  "window.restoreWindows": "none",
+  "workbench.editor.closeEmptyGroups": true,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.list.smoothScrolling": true,
+  "workbench.sideBar.location": "right",
+  "workbench.settings.editor": "json",
+  "workbench.enableExperiments": true,
+  "workbench.startupEditor": "newUntitledFile",
+  "xmlTools.splitXmlnsOnFormat": false,
+  "vsicons.dontShowNewVersionMessage": true,
+  // [colors](https://code.visualstudio.com/api/references/theme-color)
+  "workbench.colorCustomizations": {
+    // variations
+    //"sideBar.background": "#1b1e25",
+    //"editor.background": "#0e1014",
+    //"editor.selectionBackground": "#5a6781",
+    //"editor.wordHighlightBackground": "#5a6781",
+    "editor.background": "#0e1014",
+    "editorGroup.emptyBackground": "#0e1014",
+    "sideBar.background": "#191d24",
+    "panel.background": "#0e1014",
+    "activityBar.background": "#191d24",
+    //"breadcrumb.background": "#0e1014",
+    "breadcrumb.background": "#191d24",
+    "minimap.background": "#191d2488",
+    "titleBar.activeBackground": "#191d24",
+    "titleBar.inactiveBackground": "#191d24",
+    "editorOverviewRuler.background": "#191d24",
+    "editorOverviewRuler.border": "#191d24",
+    "menu.background": "#0e1014",
+    //"input.background": "#0e101488",
+    "scrollbarSlider.background": "#4c576d",
+    "scrollbarSlider.hoverBackground": "#5a6781",
+    "scrollbarSlider.activeBackground": "#5a6781",
+    "tab.hoverBackground": "#191d24",
+    "tab.inactiveBackground": "#0e1014",
+    "editorGroupHeader.tabsBackground": "#191d24",
+    "editorGroupHeader.noTabsBackground": "#191d24",
+    "editorGroupHeader.border": "#191d24",
+    "editorGroupHeader.tabsBorder": "#191d24",
+    "tab.unfocusedInactiveBackground": "#0e1014",
+    "editorInfo.background": "#191d2428",
+    "editorWidget.background": "#191d24",
+    "editor.hoverHighlightBackground": "#55637ab0",
+    "editorSuggestWidget.background": "#191d24",
+    "editorHoverWidget.background": "#191d24",
+    "editorWhitespace.foreground": "#1a1e25",
+    "editorIndentGuide.background": "#242931",
+    "debugExceptionWidget.background": "#242931",
+    //"editorWhitespace.foreground": "#2b2b2b",
+    //"editorIndentGuide.background": "#313131",
+    //"editor.lineHighlightBackground": "#4141415e",
+    "editorIndentGuide.activeBackground": "#BB86FC96",
+    "editor.stackFrameHighlightBackground": "#555753",
+    "editor.lineHighlightBackground": "#5a67813d",
+    "editor.focusedStackFrameHighlightBackground": "#BB86FC",
+  },
+  "editor.bracketPairColorization.enabled": true,
+  // I'll try to use the default colorizer from vs 1.60 ^^^^^^^
+  /*
+  "bracket-pair-colorizer-2.scopeLineCSS": [
+    "borderStyle : solid",
+    "borderWidth : 1px",
+    "borderColor : #BB86FC",
+    "opacity: 0.58"
+  ],
+  */
+  "search.mode": "newEditor",
+  "editor.rulers": [
+    {
+      //"color": "#262626",
+      "color": "#1a1e25",
+      "column": 140
+    }
+  ],
+  // global launch.json
+  "launch": {
+    "configurations": [
+      {
+        "name": "Vivaldi",
+        "type": "edge",
+        "request": "attach",
+        "port": 9222,
+        "urlFilter": "http://localhost*",
+        // change this if needed in launch.json
+        "webRoot": "${workspaceFolder}",
+        "disableNetworkCache": false,
+        "smartStep": true,
+        "showAsyncStacks": false,
+        "skipFiles": [
+          "node_modules/**/*.js"
+        ],
+        "targetTypes": [
+          // Vivaldi uses "webview" for pages
+          "webview",
+          "page"
+        ]
+      },
+      {
+        "name": ".NET Core Attach",
+        "type": "coreclr",
+        "request": "attach",
+        "processId": "${command:pickProcess}"
+      }
+    ],
+  },
+  "workbench.preferredDarkColorTheme": "Visual Studio 2019 Dark",
+  "workbench.preferredLightColorTheme": "Default Light+",
+  "workbench.editorAssociations": {
+    "*.md": "default",
+    "git-rebase-todo": "default",
+    "*.ipynb": "jupyter-notebook"
+  },
+  "[git-rebase]": {
+    "editor.quickSuggestions": {
+      "other": false,
+      "comments": false,
+      "strings": false
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "workbench.editor.restoreViewState": false
+  },
+  "terminal.integrated.fontFamily": "Consolas NF",
+  "terminal.integrated.fontSize": 12,
+  "svg.preview.mode": "svg",
+  "terminal.integrated.experimentalUseTitleEvent": true,
+  "codetour.showMarkers": false,
+  "docker.showStartPage": false,
+  // this extension can cause perfomance problems on big files, check https://github.com/Jasonlhy/VSCode-Hungry-Delete/issues/21
+  // also intellisence issue: https://github.com/Jasonlhy/VSCode-Hungry-Delete/issues/16
+  "hungryDelete.keepOneSpace": true,
+  "hungryDelete.enableSmartBackspace": true,
+  "hungryDelete.keepOneSpaceException": ">;",
+  "dotnet-insights.surpressStartupMessage": true,
+  "notebook.experimental.useMarkdownRenderer": true,
+  "notebook.lineNumbers": "on",
+  "bracket-pair-colorizer-2.showVerticalScopeLine": false,
+  "bracket-pair-colorizer-2.showHorizontalScopeLine": false,
+  "asm-code-lens.donated": true,
+  "multiCommand.commands": [
+    {
+      "command": "multiCommand.splitTerminal",
+      "interval": 130,
+      "sequence": [
+        "workbench.action.terminal.kill",
+        {
+          "command": "workbench.action.tasks.runTask",
+          "args": "Shared"
+        },
+        "workbench.action.terminal.split",
+      ]
+    }
+  ],
+  "githubIssues.queries": [
+    {
+      "label": "My Issues",
+      "query": "default"
+    },
+    {
+      "label": "Created Issues",
+      "query": "author:${user} state:open repo:${owner}/${repository} sort:created-desc"
+    }
+  ],
+  "notebook.cellToolbarLocation": {
+    "default": "right",
+    "jupyter-notebook": "left"
+  },
+  "extensions.supportUntrustedWorkspaces": {
+    "be5invis.vscode-custom-css": {
+      "supported": true
+    }
+  },
+  "extensions.supportVirtualWorkspaces": {
+    "be5invis.vscode-custom-css": true
+  },
+  "files.associations": {
+    "*.asm": "asm"
+  },
+  "workbench.colorTheme": "Visual Studio 2019 Dark",
+  "workbench.editor.enablePreview": false
+}

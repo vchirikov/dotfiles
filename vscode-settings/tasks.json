@@ -1,0 +1,241 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "asm compile",
+            "command": "nasm",
+            "type": "process",
+            "args": [
+                "-f",
+                "win64",
+                // error reporting like VS style
+                "-Xvc",
+                "-w+all", // warnings
+                // for debug with concord:
+                "-gcv8",
+                "-I\"${workspaceFolder}\"",
+                "-o artifacts/obj/${fileBasenameNoExtension}.obj",
+                "-l artifacts/obj/${fileBasenameNoExtension}.lst",
+                "${file}"
+            ],
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": false
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "echo": false,
+                "focus": false,
+                "revealProblems": "never",
+                "showReuseMessage": false,
+                "clear": true,
+                "panel": "shared",
+                "group": "shared"
+            },
+            // $msCompile doesn't work even with -Xvc
+            "problemMatcher": {
+                "owner": "external",
+                "fileLocation": "absolute",
+                "pattern": {
+                    "regexp": "^(.*)\\((\\d+)\\)\\s*:\\s*(warning|error):\\s*(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "severity": 3,
+                    "message": 4
+                }
+            }
+        },
+        {
+            "label": "asm linker",
+            "command": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Preview\\VC\\Tools\\MSVC\\14.30.30401\\bin\\Hostx64\\x64\\link.exe",
+            "type": "process",
+            "args": [
+                "artifacts/obj/${fileBasenameNoExtension}.obj",
+                "/out:artifacts/bin/${fileBasenameNoExtension}.exe",
+                // or
+                // "/out:artifacts/bin/${fileBasenameNoExtension}.dll",
+                "/NOLOGO",
+                "/incremental:no",
+                "/MACHINE:X64",
+                "/SUBSYSTEM:CONSOLE",
+                // or 
+                // "/dll"
+                // debug:
+                "/opt:noref",
+                "/debug",
+                "/pdb:artifacts/bin/${fileBasenameNoExtension}.pdb",
+                // release:
+                // "/opt:ref"
+                "/LIBPATH:C:\\Program Files\\Microsoft Visual Studio\\2022\\Preview\\VC\\Tools\\MSVC\\14.30.30401\\lib\\x64\\",
+                "/LIBPATH:C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.19041.0\\um\\x64\\",
+                "/LIBPATH:C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.19041.0\\ucrt\\x64\\",
+                "kernel32.lib",
+                "legacy_stdio_definitions.lib",
+                "msvcrt.lib"
+                // or/and
+                // "ucrt.lib"
+                // "shell32.lib"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "dependsOn": [
+                "asm compile"
+            ],
+            "problemMatcher": {
+                "owner": "external",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/artifacts/obj"
+                ],
+                "pattern": {
+                    "regexp": "^(.*)\\s*:\\s*(warning|error)\\s([^:]*):\\s*(.*)$",
+                    "file": 1,
+                    "severity": 2,
+                    "code": 3,
+                    "message": 4
+                }
+            },
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "echo": false,
+                "focus": false,
+                "revealProblems": "never",
+                "showReuseMessage": false,
+                "clear": false,
+                "panel": "shared",
+                "group": "shared"
+            },
+        },
+        {
+            "label": "cargo build",
+            "detail": "run cargo build",
+            "args": [
+                "build",
+                "-v"
+            ],
+            "type": "process",
+            "command": "cargo",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "rust",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceRoot}"
+                    ],
+                    "pattern": {
+                        "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3,
+                        "endLine": 4,
+                        "endColumn": 5,
+                        "severity": 6,
+                        "message": 7
+                    }
+                }
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {}
+            }
+        },
+        {
+            "label": "build",
+            "detail": "run dotnet build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "--no-restore",
+                "-nologo",
+                "-maxCpuCount",
+                "-nodeReuse:false",
+                "-p:UseRazorBuildServer=false",
+                "-p:UseSharedCompilation=false",
+                "-p:EnableAnalyzer=false",
+                "-p:EnableNETAnalyzers=false",
+                "-p:GenerateFullPaths=true",
+                "/clp:ForceNoAlign"
+            ],
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": false
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "echo": false,
+                "focus": false,
+                "revealProblems": "never",
+                "showReuseMessage": false,
+                "clear": true,
+                "panel": "shared",
+                "group": "shared"
+            },
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "MSBUILDDISABLENODEREUSE": "1"
+                }
+            }
+        },
+        {
+            "label": "Shared",
+            "command": "echo `e[93mᓚᘏᗢ`e[0m",
+            "presentation": {
+                "group": "shared",
+                "panel": "shared",
+                "clear": false,
+                "echo": false,
+                "showReuseMessage": false,
+                "revealProblems": "never",
+                "reveal": "always",
+                "focus": true
+            },
+            "type": "shell",
+            "problemMatcher": [],
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": false
+            }
+        },
+        {
+            "label": "Startup",
+            "command": "${command:multiCommand.splitTerminal}",
+            "presentation": {
+                "group": "shared",
+                "panel": "shared",
+                "clear": true,
+                "echo": false,
+                "showReuseMessage": false,
+                "revealProblems": "never",
+                "reveal": "silent",
+                "focus": false
+            },
+            "problemMatcher": [],
+            "runOptions": {
+                "instanceLimit": 1,
+                "reevaluateOnRerun": false,
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}
