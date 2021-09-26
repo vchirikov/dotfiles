@@ -17,7 +17,6 @@
     # https://github.com/sharkdp/bat
     pager = bat --pager=never --theme="OneHalfDark" --style=numbers,changes
     longpaths = true
-    hooksPath = /dev/null
     # fixes UAC issues (don't need to run git as admin)
     fscache = true
     # https://github.com/git-for-windows/git/wiki/Symbolic-Links#allowing-non-administrators-to-create-symbolic-links
@@ -49,16 +48,16 @@
     }; f"
     download = "!f() { \
             dir=$(echo $1 | sed 's/https*:\\/\\/[^\\/]*\\///') ; \
-            if [ -z ${2+x} ]; then \
+            if [ -z \"${2+x}\" ]; then \
                 echo -e \"\\e[1;34mDownload ${1} into ${GIT_PREFIX:-.}/${dir}\\e[0m\" ; \
                 git clone --depth 1 $1 ${GIT_PREFIX:-.}/$dir ; \
-                git fs-disable \
+                git fs-disable ; \
             else \
                 echo -e \"\\e[1;34mDownload only ${2} into ${GIT_PREFIX:-.}/${dir}\\e[0m\" ; \
                 git clone --depth 1 --filter=blob:none --sparse $1 ${GIT_PREFIX:-.}/$dir ; \
                 cd ${GIT_PREFIX:-.}/$dir ; \
                 git sparse-checkout set ${2-.} \
-                git fs-disable \
+                git fs-disable ; \
                 cd - ; \
             fi ; \
         }; f"
@@ -66,8 +65,19 @@
     loc = diff --shortstat 4b825dc642cb6eb9a060e54bf8d69288fbee4904
     f = fetch --force --tags --prune --prune-tags --jobs=12 --progress --all
     pf = push --force-with-lease
-    am = commit --amend --no-edit --quiet --allow-empty-message
+    # How it works: [git fixup: --amend for older commits](https://blog.filippo.io/git-fixup-amending-an-older-commit/)  
+    fixup = "!f() { \
+        TARGET="" ; \
+        if [ -z \"${1+x}\" ] || [ \"${1}\" == \"fzf\" ]; then \
+            TARGET=$(git fzf) ; \
+        else \
+            TARGET=$(git rev-parse "HEAD~${1}" &> /dev/null ; if [ $? -eq 0 ]; then git rev-parse "HEAD~${1}" ; else git rev-parse "${1}" ; fi ;) ; \
+        fi ; \
+        echo -e \"\\e[1;34mFixup '${TARGET}' commit\\e[0m\" ; \
+        git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^ ; \
+    }; f"
     lg = "!f() { git log --color --oneline -n ${1-10} ; }; f"
+    fzf = "!f() { git log -n ${1-50} --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o echo ; }; f"
     it = !git init && git commit -m root --allow-empty
     st = status --short --branch
     filelog = log -u
