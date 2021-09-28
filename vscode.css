@@ -150,7 +150,6 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
 
 /* cweijan.vscode-mysql-client2 extension */
 
-#app > div.hint > div.toolbar button[title="Buy Author a Coffee."],
-#app > div.hint > div.toolbar button[title="Star the project to represent support."] {
+button[title="Buy Author a Coffee."], button[title="Star the project to represent support."] {
   display: none !important;
 }
