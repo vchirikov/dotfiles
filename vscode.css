@@ -147,3 +147,10 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
 .tabs-breadcrumbs {
   font-size: 0.9em !important;
 }
+
+/* cweijan.vscode-mysql-client2 extension */
+
+#app > div.hint > div.toolbar button[title="Buy Author a Coffee."],
+#app > div.hint > div.toolbar button[title="Star the project to represent support."] {
+  display: none !important;
+}

@@ -74,7 +74,7 @@
             TARGET=$(git rev-parse "HEAD~${1}" &> /dev/null ; if [ $? -eq 0 ]; then git rev-parse "HEAD~${1}" ; else git rev-parse "${1}" ; fi ;) ; \
         fi ; \
         echo -e \"\\e[1;34mFixup '${TARGET}' commit\\e[0m\" ; \
-        git commit --fixup=$TARGET ${@:2} && EDITOR=true git rebase -i --autostash --autosquash $TARGET^ ; \
+        git commit --fixup=$TARGET ${@:2} && GIT_EDITOR=true git rebase -i --autostash --autosquash $TARGET^ ; \
     }; f"
     lg = "!f() { git log --color --oneline -n ${1-10} ; }; f"
     fzf = "!f() { git log -n ${1-50} --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o echo ; }; f"
