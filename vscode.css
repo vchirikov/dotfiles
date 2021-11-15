@@ -24,9 +24,7 @@
   min-width: 648px !important;
 }
 
-/* 
-  intellisense width fix
- */
+/* intellisense width fix */
 
 .editor-widget.suggest-widget.visible {
   width: 500px;
@@ -146,4 +144,8 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
 
 .tabs-breadcrumbs {
   font-size: 0.9em !important;
+}
+
+.monaco-workbench {
+  background-color: #191d24;
 }
