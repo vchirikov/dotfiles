@@ -1,0 +1,17 @@
+#switch button.webviewbtn img { background-color: transparent !important; }
+/* remove dark theme flickering */
+/* The white flash displayed when navigating from the startpage --> url can be worked around with adding: <body style="background: #282a36;"> to the startpage.html. Replace the hex value with your preferred color. This will not persist through updates. */
+
+/*
+https://cri.dev/posts/2020-04-04-Full-list-of-Chromium-Puppeteer-flags/
+https://cri.dev/posts/2020-04-04-Full-list-of-Chromium-Puppeteer-flags/
+"C:\Program Files\Vivaldi\Application\vivaldi.exe" --disk-cache-size=4294967296 ----cast-app-background-color=282a3600 --force-dark-mode --default-background-color=282a3600 --dark --process-per-site --disable-new-content-rendering-timeout --disable-extensions-file-access-check --disable-backgrounding-occluded-windows
+
+--flag-switches-begin --debug-packed-apps --silent-debugger-extension-api --flag-switches-end
+*/
+/* maybe --disable-renderer-backgrounding */
+/* body {background-color: --colorBg !important;} */
+html, body {background-color: #282a36 !important;}
+/* body {background-color: #fff !important;} */
+/* applies the theme color on about:blank page (dark flickering on dark themes) */
+webview[src="about:blank"] {opacity:0;}

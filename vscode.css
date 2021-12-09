@@ -80,6 +80,28 @@ div.menubar, .part.titlebar {
 
 .tabs-and-actions-container>.monaco-scrollable-element>.tabs-container {
   height: auto !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  height: auto !important;
+}
+
+.tabs-and-actions-container>.monaco-scrollable-element>.tabs-container::before,
+.tabs-and-actions-container>.monaco-scrollable-element>.tabs-container::after {
+  content: "" !important;
+  width: 100% !important;
+  order: 1 !important;
+}
+
+.tab {
+  display: flex !important;
+}
+
+.tab.sticky {
+  font-weight: 600 !important;
+}
+
+.tab:not(.sticky) {
+  order: 1 !important;
 }
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
