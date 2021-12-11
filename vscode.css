@@ -72,9 +72,12 @@ div.menubar, .part.titlebar {
   background-color: #26446c !important;
 }
 
+
 /* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
 
-.tabs-and-actions-container>.monaco-scrollable-element {
+.tabs-and-actions-container>.monaco-scrollable-element,
+.tabs,
+.tabs .tabs-and-actions-container {
   height: auto !important;
 }
 
@@ -83,6 +86,9 @@ div.menubar, .part.titlebar {
   display: flex !important;
   flex-wrap: wrap !important;
   height: auto !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  align-content: flex-start !important;
 }
 
 .tabs-and-actions-container>.monaco-scrollable-element>.tabs-container::before,
