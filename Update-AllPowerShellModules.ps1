@@ -20,18 +20,15 @@ $modules = Get-InstalledModule
 
 foreach ($module in $modules.Name) {
     $currentVersion = $null
-	
     if ($null -ne (Get-InstalledModule -Name $module -ErrorAction SilentlyContinue)) {
         $currentVersion = (Get-InstalledModule -Name $module -AllVersions).Version
     }
-	
     $moduleInfos = Find-Module -Name $module
-	
     if ($null -eq $currentVersion) {
         Write-Host -ForegroundColor Cyan "$($moduleInfos.Name) - Install from PowerShellGallery version $($moduleInfos.Version). Release date: $($moduleInfos.PublishedDate)"  
-		
+
         try {
-            Install-Module -Name $module -Force
+            Install-Module -Name $module -Force -AcceptLicense -SkipPublisherCheck
         }
         catch {
             Write-Host -ForegroundColor red "$_.Exception.Message"
@@ -43,27 +40,24 @@ foreach ($module in $modules.Name) {
     elseif ($currentVersion.count -gt 1) {
         Write-Warning "$module is installed in $($currentVersion.count) versions (versions: $($currentVersion -join ' | '))"
         Write-Host -ForegroundColor Cyan "Uninstall previous $module versions"
-        
         try {
             Get-InstalledModule -Name $module -AllVersions | Where-Object {$_.Version -ne $moduleInfos.Version} | Uninstall-Module -Force
         }
         catch {
             Write-Host -ForegroundColor red "$_.Exception.Message"
         }
-        
         Write-Host -ForegroundColor Cyan "$($moduleInfos.Name) - Install from PowerShellGallery version $($moduleInfos.Version). Release date: $($moduleInfos.PublishedDate)"  
-    
         try {
-            Install-Module -Name $module -Force
+            Install-Module -Name $module -Force -AcceptLicense -SkipPublisherCheck
         }
         catch {
             Write-Host -ForegroundColor red "$_.Exception.Message"
         }
     }
-    else {       
+    else {
         Write-Host -ForegroundColor Cyan "$($moduleInfos.Name) - Update from PowerShellGallery from version $currentVersion to $($moduleInfos.Version). Release date: $($moduleInfos.PublishedDate)" 
         try {
-            Update-Module -Name $module -Force
+            Update-Module -Name $module -Force -AcceptLicense
         }
         catch {
             Write-Host -ForegroundColor red "$_.Exception.Message"

@@ -1,15 +1,24 @@
 Import-Module PSReadLine
 # zsh-like menu complete, for bash-like use `Complete`
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
-Set-PSReadlineOption -ShowToolTips
-Set-PSReadlineOption -BellStyle None
+# Show auto-complete predictions from history
+
+$PSReadLineOptions = @{
+    BellStyle = "None"
+    HistoryNoDuplicates = $true
+    HistorySearchCursorMovesToEnd = $true
+    ShowToolTips = $true
+    PredictionSource = "history"
+}
+
+Set-PSReadLineOption @PSReadLineOptions
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 Import-Module posh-git
 
 # FZF bindings for powershell, should be imported after PSReadLine - https://github.com/kelleyma49/PSFzf
-# Install-Module -Name PSFzf 
+# Install-Module -Name PSFzf
 # also choco install fzf fd
 Remove-PSReadlineKeyHandler 'Ctrl+r'
 Remove-PSReadlineKeyHandler 'Ctrl+t'
@@ -21,7 +30,7 @@ $env:FZF__OPTS = "--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=
 # https://github.com/nickcox/cd-extras
 $cde = @{
     AUTO_CD  = $false
-    CD_PATH  = 'C:\\code\\servicetitan', 'C:\\code\\vchirikov'
+    CD_PATH  = 'C:\\code\\Actual-Chat', 'C:\\code\\vchirikov'
     NOARG_CD = 'C:\\code'
 }
 Import-Module cd-extras
@@ -31,6 +40,7 @@ Set-PSReadLineKeyHandler -Key Tab -ScriptBlock { Invoke-FzfTabCompletion }
 Set-PsFzfOption -EnableFd -TabExpansion -GitKeyBindings -EnableAliasFuzzyEdit -EnableAliasFuzzyHistory -EnableAliasFuzzyKillProcess -EnableAliasFuzzySetLocation -EnableAliasFuzzySetEverything
 
 Set-Alias fzf Invoke-Fzf
+Set-Alias whereis Get-Command
 # https://github.com/chawyehsu/base16-concfg colors
 $GitPromptSettings.DefaultPromptPath.ForegroundColor = 0x61F053 ;
 $GitPromptSettings.DefaultPromptBeforeSuffix.Text = ''
@@ -72,6 +82,39 @@ function mouse_off{
     $unixCmd = 'printf "\e[?1000l"';
     wsl $unixCmd.Split(' ')
 }
+
+function far {
+    $dir = [System.IO.Path]::GetFullPath($PWD);
+    mouse_on;
+    & "C:\Program Files\Far Manager\Far.exe" $dir
+    mouse_off;
+}
+
+function br {
+    mouse_on;
+    $tempFile = New-TemporaryFile
+    try {
+        $broot = $env:BROOT
+        if (-not $broot) {
+             $broot = 'broot'
+        }
+        & $broot --outcmd $tempFile $args
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "$broot exited with code $LASTEXITCODE"
+            return
+        }
+        $command = Get-Content $tempFile
+        if ($command) {
+            # broot returns extended-length paths but not all PowerShell/Windows
+            # versions might handle this so strip the '\\?'
+            Invoke-Expression $command.Replace("\\?\", "")
+        }
+    } finally {
+        mouse_off;
+        Remove-Item -force $tempFile
+    }
+}
+
 function br {
     mouse_on;
     $tempFile = New-TemporaryFile
@@ -118,7 +161,7 @@ Register-ArgumentCompleter -Native -CommandName "dotnet" -ScriptBlock {
     param($commandName, $wordToComplete, $cursorPosition)
     [string] $cmd = $wordToComplete.Extent.ToString().Replace('"', '\"');
     if ($cmd.StartsWith("dotnet slngen", [System.StringComparison]::OrdinalIgnoreCase)) {
-        
+
         [string] $configPath = $([System.IO.Path]::Combine([System.IO.Path]::GetFullPath($PWD), ".config"));
         [string] $lastArg = $cmd.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries) | Select-Object -Last 1 ;
         if ($lastArg -eq "slngen" -or $cmd.EndsWith(' ') -or [System.IO.File]::Exists([System.IO.Path]::Combine($configPath, $lastArg + ".yaml"))) {
@@ -156,6 +199,21 @@ function killall {
     stop-process -Name $ProcessName
 }
 
+function killDebugProxy {
+    $stdOutTask = $(tasklist /fi "modules eq BrowserDebugHost.dll" /fo "csv" /nh)
+    if ($stdOutTask.Contains("No tasks")) {
+        Write-Host "`e[93mDebugProxy not found`e[0m";
+    }
+    else{
+        try{
+            $toKillPid = $stdOutTask.Split(',')[1].Trim('"');
+            Write-Host "`e[93mKill DebugProxy with pid $($toKillPid)`e[0m";
+            stop-process -Id $toKillPid
+        }
+        catch{}
+    }
+}
+
 # spindown hdd
 
 function spindown {
@@ -179,7 +237,7 @@ function spindown {
     }
     else {
         Write-Host "`e[93msmartctl -s standby,now $($device)`e[0m";
-        smartctl -s standby,now $device 
+        smartctl -s standby,now $device
     }
 }
 
@@ -191,14 +249,14 @@ function vs {
                 param($cmd, $param, $values)
                 Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" |
                 Where-Object { $_.Name.StartsWith($values, [StringComparison]::OrdinalIgnoreCase) } |
-                ForEach-Object { $([System.IO.Path]::GetFileName($_)) } | 
+                ForEach-Object { $([System.IO.Path]::GetFileName($_)) } |
                 Sort-Object |
                 ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
             }
         )]
         [string] $path)
-        
-    [string] $vsPath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Preview\Common7\IDE\devenv.exe"
+
+    [string] $vsPath = "${env:ProgramFiles}\Microsoft Visual Studio\2022\Preview\Common7\IDE\devenv.exe"
     if ([string]::IsNullOrWhiteSpace($path)) {
         $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" | Select-Object -First 1;
     }
@@ -208,6 +266,134 @@ function vs {
         }
     }
     Start-Process -FilePath $vsPath -ArgumentList $([System.IO.Path]::GetFullPath($path))
+}
+
+# run debug msedge
+function edgeDbg {
+    param([string] $url)
+
+    if ([string]::IsNullOrWhiteSpace($url)) {
+        $url = "http://localhost:7080"
+    }
+    & "runas" /trustlevel:0x20000 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-renderer-backgrounding --disable-sync --metrics-recording-only --no-first-run --no-default-browser-check --remote-debugging-port=9222  --profile-directory=Default $url"
+}
+
+function kubeDotnetDebug(){
+    param(
+        [ArgumentCompleter(
+            {
+                param($cmd, $param, $values)
+                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)){
+                    return;
+                }
+                & kubectl get nodes --all-namespaces -o name |
+                ForEach-Object { $_.Substring(5) } |
+                Sort-Object |
+                ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
+            }
+        )]
+        [string] $node,
+        [string] $app,
+        [ArgumentCompletions('verysimplenick/dotnet-debug-image:6.0.101-bullseye-slim-amd64')]
+        [string] $image,
+        [ArgumentCompletions('IfNotPresent','Always','Never')]
+        [string] $imagePullPolicy
+    )
+    if ([string]::IsNullOrWhiteSpace($image)) {
+        $image = 'verysimplenick/dotnet-debug-image:6.0.101-bullseye-slim-amd64';
+    }
+    if ([string]::IsNullOrWhiteSpace($app)) {
+        $app = 'dotnet';
+    }
+    # if something went wrong with access files - read related issue: https://github.com/moby/moby/issues/2259
+    # [string] $command = '[ "/bin/bash", "-c", "dotnetPid=$(ps auxww | grep '+ $app +' | grep -v grep | awk ''{print $2}'') && find /proc/$dotnetPid/root/tmp/ -maxdepth 1 ! -name ''tmp'' ! -name  ''system-commandline-sentinel-files'' -exec sh -c ''ln -s {} /tmp/ > /dev/null 2>&1 || exit 0'' \\;  ; exec /bin/bash"]';
+    [string] $command = '["/bin/bash", "-c", "' +
+        'export dotnetPid=$(ps auxww | grep ' + $app + ' | grep -v grep | awk ''{print $2}'') ' +
+        '&& echo $dotnetPid > /dotnetPid ' +
+        '; ln -s /proc/$dotnetPid/root/tmp/ /tmp_external ' +
+        '; cp -u -r /root/vsdbg /proc/$dotnetPid/root/root/ > /dev/null 2>&1 ' +
+        '; cp -u /bin/ps /proc/$dotnetPid/root/bin/ps > /dev/null 2>&1 '+
+        '; exec /bin/bash' +
+        '"]';
+    kubeNodeExec $node 'dotnet-debug' $command $image $imagePullPolicy 'true' ;
+}
+
+function kubeNodeShell(){
+       param(
+        [ArgumentCompleter(
+            {
+                param($cmd, $param, $values)
+                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)){
+                    return;
+                }
+                & kubectl get nodes --all-namespaces -o name |
+                ForEach-Object { $_.Substring(5) } |
+                Sort-Object |
+                ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
+            }
+        )]
+        [string] $node,
+        [ArgumentCompletions('/bin/bash','/bin/ash','/bin/sh', '/bin/zsh')]
+        [string] $shell
+    )
+    if ([string]::IsNullOrWhiteSpace($shell)) {
+        $shell = '/bin/bash';
+    }
+    [string] $command = "[ ""/nsenter"", ""--target"", ""1"", ""--mount"", ""--uts"", ""--ipc"", ""--net"", ""--pid"", ""--"", ""$shell"" ]";
+    kubeNodeExec $node 'node-shell' $command "alexeiled/nsenter:2.37.2" 'IfNotPresent' 'true' ;
+}
+
+function kubeNodeExec {
+    param(
+        [string] $node,
+        [string] $pod,
+        [string] $command,
+        [string] $image,
+        [ArgumentCompletions('IfNotPresent','Always','Never')]
+        [string] $imagePullPolicy,
+        [ArgumentCompletions('true','false')]
+        [string] $tty
+    )
+
+    if ([string]::IsNullOrWhiteSpace($node)) {
+        Write-Output 'Specify a node';
+        return;
+    }
+    if ([string]::IsNullOrWhiteSpace($pod)) {
+        Write-Output 'Specify a pod name';
+        return;
+    }
+    if ([string]::IsNullOrWhiteSpace($command)) {
+        Write-Output 'Specify a command';
+        return;
+    }
+    if ([string]::IsNullOrWhiteSpace($image)) {
+        Write-Output 'Specify an image';
+        return;
+    }
+    if ([string]::IsNullOrWhiteSpace($imagePullPolicy)) {
+        $imagePullPolicy = 'IfNotPresent';
+    }
+    if ([string]::IsNullOrWhiteSpace($tty)) {
+        $tty = 'true';
+    }
+    [string] $json = "{ ""spec"": { ""nodeName"": ""$node"", ""hostPID"": true, ""hostNetwork"": true, ""hostIPC"": true, ""privileged"": true, ""allowPrivilegeEscalation"": true, ""containers"": [ { ""securityContext"": { ""privileged"": true, ""capabilities"": {""add"": [""SYS_PTRACE"", ""SYS_CHROOT"", ""SYS_ADMIN"", ""SETGID"", ""SETUID"", ""CHOWN"", ""IPC_LOCK"", ""IPC_OWNER""]} }, ""image"": ""$image"", ""imagePullPolicy"":""$imagePullPolicy"", ""name"": ""$pod"", ""stdin"": true, ""stdinOnce"": true, ""tty"": $tty, ""command"": $command } ], ""tolerations"": [ { ""key"": ""CriticalAddonsOnly"", ""operator"": ""Exists"" },{ ""effect"": ""NoExecute"", ""operator"": ""Exists""}]}}";
+    [string] $ctlArgs = "run ""$pod"" --pod-running-timeout=5m0s  --image-pull-policy=""$imagePullPolicy"" --attach --namespace=default -it --image=""$image"" --restart=Never --rm=true --overrides=""$($json.Replace('"','\"'))""";
+    Write-Host "`e[93mkubectl $ctlArgs`e[0m"
+    & "kubectl" $ctlArgs.Split(' ')
+}
+
+function touch {
+    param([string] $path)
+
+    if ([string]::IsNullOrWhiteSpace($path)) {
+        Write-Host "`e[93mEmpty path. NOP.`e[0m";
+        return;
+    }
+    if (!$path.Contains(':')) {
+        $path = $([System.IO.Path]::Combine($PWD, $path))
+    }
+    $(Get-Item $path).lastwritetime=$(Get-Date)
 }
 # diff catalog
 function diff_dir([string] $path1, [string] $path2) {
@@ -238,7 +424,7 @@ function bs {
         return;
     }
     if($args[0] -eq "restore"){
-        dotnet restore -nologo -maxCpuCount -nodeReuse:false -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false 
+        dotnet restore -nologo -maxCpuCount -nodeReuse:false -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
         return;
     }
     [string] $path = "build";
@@ -249,15 +435,15 @@ function bs {
 }
 # recursive removes bin/obj 
 function cleanBinObj() {
-    Get-ChildItem $PWD -include bin, obj -Recurse | ForEach-Object ($_) { remove-item $_.fullname -Force -Recurse }
+    (Get-ChildItem $PWD -include bin, obj -Recurse).fullname -inotmatch '\\node_modules\\' | ForEach-Object ($_) { remove-item $_ -Force -Recurse }
 }
 
 # creates lnk file, this is useful for paths > 260, which explorer can't create, for example (be careful about WoW64)
 # for example for vivaldi
-# createLnk "C:\Program Files\Vivaldi\Application\vivaldi.exe" -args "--disk-cache-size=4294967296 --cast-app-background-color=282a3600 --force-dark-mode --default-background-color=282a3600 --dark --process-per-site --disable-new-content-rendering-timeout --disable-extensions-file-access-check --disable-backgrounding-occluded-windows --remote-debugging-port=9222"
+# createLnk "C:\Program Files\Vivaldi\Application\vivaldi.exe" -args "--disk-cache-size=4294967296 --cast-app-background-color=282a3600 --force-dark-mode --default-background-color=282a3600 --dark --process-per-site --disable-new-content-rendering-timeout --disable-extensions-file-access-check --disable-backgrounding-occluded-windows --remote-debugging-port=9223"
 function createLnk {
     [CmdletBinding()]
-    Param( 
+    Param(
         [Parameter(Mandatory = $True)]
         [string] $path,
         [Parameter(Mandatory = $False)]
@@ -289,6 +475,13 @@ Set-Alias import Import-Module
 
 # Import-Module PSGitHub
 # Import-Module DockerCompletion
+
+function choco_print_backup {
+    Write-Output "<?xml version=`"1.0`" encoding=`"utf-8`"?>"
+    Write-Output "<packages>"
+    choco list -lo -r -y | % { "   <package id=`"$($_.SubString(0, $_.IndexOf("|")))`" version=`"$($_.SubString($_.IndexOf("|") + 1))`" />" }
+    Write-Output "</packages>"
+}
 
 Remove-Alias ls
 [bool] $__shouldImportIcons = $True;
