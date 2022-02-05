@@ -549,7 +549,9 @@ function crd2jsonschema() {
                 ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
             }
         )]
-        [string] $crd)
+        [string] $crd,
+        [int] $debug = 0
+    )
 
     if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)) {
         Write-Host "`e[93mSpecify KUBECONFIG env variable`e[0m";
@@ -564,7 +566,7 @@ function crd2jsonschema() {
     required: .spec.versions[0].schema.openAPIV3Schema.required,
     title: .metadata.name,
     type: "object",
-    "`$schema": "http://json-schema.org/draft/2019-09/schema#",
+    "`$schema": "http://json-schema.org/draft-07/schema",
     "x-kubernetes-group-version-kind.group": .spec.group,
     "x-kubernetes-group-version-kind.kind": .spec.names.kind,
     "x-kubernetes-group-version-kind.version": .spec.versions[0].name
@@ -572,18 +574,37 @@ function crd2jsonschema() {
 "@;
     [string] $tempFile = [System.IO.Path]::GetTempFileName();
     try {
-        Write-Host "Write query to $tempFile"
+        if ($debug -eq 1) {
+            Write-Host "Write query to $tempFile"
+        }
         [System.IO.File]::WriteAllText($tempFile, $query);
         Write-Host "`e[93mWrite $crd.schema.json`e[0m";
         $json | jq -S -f $tempFile > "$crd.schema.json"
     }
     finally {
         if ([System.IO.File]::Exists($tempFile)) {
-            Write-Host "Remove query file $tempFile"
+            if ($debug -eq 1) {
+                Write-Host "Remove query file $tempFile"
+            }
             Remove-Item -Path $tempFile
         }
     }
-    Write-Host "`e[93mDone`e[0m";
+    if ($debug -eq 1) {
+        Write-Host "`e[93mDone`e[0m";
+    }
+}
+
+function kubeGenerateCrdJsonSchemas {
+    [System.Text.StringBuilder] $sb = [System.Text.StringBuilder]::new();
+    [void] $sb.AppendLine("{");
+    [void] $sb.AppendLine("  ""`$schema"": ""http://json-schema.org/draft-07/schema"",");
+    [void] $sb.AppendLine("  ""type"": ""object"",");
+    [void] $sb.AppendLine("  ""oneOf"": [");
+    kubectl get crd --all-namespaces -o name | ForEach-Object { $name = $_.Replace("customresourcedefinition.apiextensions.k8s.io/", "") ; [void]$sb.AppendLine("    {""`$ref"": ""$name.schema.json"" },"); crd2jsonschema $name 0 ; }
+    [void]$sb.Remove($sb.Length - 3, 2);
+    [void]$sb.AppendLine("  ]");
+    [void]$sb.AppendLine("}");
+    [void][System.IO.File]::WriteAllText("crd.json", $sb.ToString());
 }
 
 <#
@@ -662,3 +683,9 @@ function TabExpansion2 {
     }
 }
 #>
+
+# Chocolatey profile
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+    Import-Module "$ChocolateyProfile"
+}

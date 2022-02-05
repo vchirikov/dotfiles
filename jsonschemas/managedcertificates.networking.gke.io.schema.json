@@ -1,57 +1,59 @@
 {
-  "definitions": {
-    "managedcertificates.networking.gke.io": {
-      "description": null,
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": null,
+  "properties": {
+    "spec": {
       "properties": {
-        "spec": {
-          "properties": {
-            "domains": {
-              "items": {
-                "maxLength": 63,
-                "pattern": "^(([a-z0-9]+|[a-z0-9][-a-z0-9]*[a-z0-9])\\.)+[a-z][-a-z0-9]*[a-z0-9]$",
-                "type": "string"
-              },
-              "maxItems": 1,
-              "type": "array"
-            }
+        "domains": {
+          "items": {
+            "maxLength": 63,
+            "pattern": "^(([a-z0-9]+|[a-z0-9][-a-z0-9]*[a-z0-9])\\.)+[a-z][-a-z0-9]*[a-z0-9]$",
+            "type": "string"
           },
-          "type": "object"
-        },
-        "status": {
-          "properties": {
-            "certificateName": {
-              "type": "string"
-            },
-            "certificateStatus": {
-              "type": "string"
-            },
-            "domainStatus": {
-              "items": {
-                "properties": {
-                  "domain": {
-                    "type": "string"
-                  },
-                  "status": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "domain",
-                  "status"
-                ],
-                "type": "object"
-              },
-              "type": "array"
-            },
-            "expireTime": {
-              "format": "date-time",
-              "type": "string"
-            }
-          },
-          "type": "object"
+          "maxItems": 1,
+          "type": "array"
         }
       },
-      "required": null
+      "type": "object"
+    },
+    "status": {
+      "properties": {
+        "certificateName": {
+          "type": "string"
+        },
+        "certificateStatus": {
+          "type": "string"
+        },
+        "domainStatus": {
+          "items": {
+            "properties": {
+              "domain": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "domain",
+              "status"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "expireTime": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object"
     }
-  }
+  },
+  "required": null,
+  "title": "managedcertificates.networking.gke.io",
+  "type": "object",
+  "x-kubernetes-group-version-kind.group": "networking.gke.io",
+  "x-kubernetes-group-version-kind.kind": "ManagedCertificate",
+  "x-kubernetes-group-version-kind.version": "v1beta1"
 }
