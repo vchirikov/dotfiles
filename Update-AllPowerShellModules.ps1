@@ -4,11 +4,9 @@
 # This script provides informations about the module version (current and the latest available on PowerShell Gallery) and update to the latest version
 # If you have a module with two or more versions, the script delete them and reinstall only the latest.
 
-# PowerShell 5.0 for PowerShell Gallery  
-#Requires -Version 5.0
+#Requires -Version 7.0
 #Requires -RunAsAdministrator
 
-Write-Host -ForegroundColor cyan 'Define PowerShell to use TLS1.2 in this session, needed since 1st April 2020 (https://devblogs.microsoft.com/powershell/powershell-gallery-tls-support/)'
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
 # if needed
@@ -23,7 +21,7 @@ foreach ($module in $modules.Name) {
     if ($null -ne (Get-InstalledModule -Name $module -ErrorAction SilentlyContinue)) {
         $currentVersion = (Get-InstalledModule -Name $module -AllVersions).Version
     }
-    $moduleInfos = Find-Module -Name $module
+    $moduleInfos = Find-Module -Name $module -AllowPrerelease
     if ($null -eq $currentVersion) {
         Write-Host -ForegroundColor Cyan "$($moduleInfos.Name) - Install from PowerShellGallery version $($moduleInfos.Version). Release date: $($moduleInfos.PublishedDate)"  
 

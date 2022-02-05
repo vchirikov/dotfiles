@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "description": null,
+  "properties": {
+    "spec": {
+      "properties": {
+        "Type": {
+          "type": "string"
+        },
+        "instanceGroupUrl": {
+          "type": "string"
+        },
+        "surgeNode": {
+          "type": "string"
+        },
+        "targetNode": {
+          "type": "string"
+        },
+        "validUntil": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": null,
+  "title": "updateinfos.nodemanagement.gke.io",
+  "type": "object",
+  "x-kubernetes-group-version-kind.group": "nodemanagement.gke.io",
+  "x-kubernetes-group-version-kind.kind": "UpdateInfo",
+  "x-kubernetes-group-version-kind.version": "v1alpha1"
+}

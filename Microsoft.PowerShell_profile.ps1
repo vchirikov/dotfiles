@@ -4,11 +4,11 @@ Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 # Show auto-complete predictions from history
 
 $PSReadLineOptions = @{
-    BellStyle = "None"
-    HistoryNoDuplicates = $true
+    BellStyle                     = "None"
+    HistoryNoDuplicates           = $true
     HistorySearchCursorMovesToEnd = $true
-    ShowToolTips = $true
-    PredictionSource = "history"
+    ShowToolTips                  = $true
+    PredictionSource              = "history"
 }
 
 Set-PSReadLineOption @PSReadLineOptions
@@ -73,12 +73,12 @@ function prompt {
 }
 
 # https://github.com/Canop/broot
-function mouse_on{
+function mouse_on {
     $unixCmd = 'printf "\x1B[?1003h\x1B[?1006h"';
     wsl $unixCmd.Split(' ')
 }
 
-function mouse_off{
+function mouse_off {
     $unixCmd = 'printf "\e[?1000l"';
     wsl $unixCmd.Split(' ')
 }
@@ -96,7 +96,7 @@ function br {
     try {
         $broot = $env:BROOT
         if (-not $broot) {
-             $broot = 'broot'
+            $broot = 'broot'
         }
         & $broot --outcmd $tempFile $args
         if ($LASTEXITCODE -ne 0) {
@@ -109,7 +109,8 @@ function br {
             # versions might handle this so strip the '\\?'
             Invoke-Expression $command.Replace("\\?\", "")
         }
-    } finally {
+    }
+    finally {
         mouse_off;
         Remove-Item -force $tempFile
     }
@@ -121,7 +122,7 @@ function br {
     try {
         $broot = $env:BROOT
         if (-not $broot) {
-             $broot = 'broot'
+            $broot = 'broot'
         }
         & $broot --outcmd $tempFile $args
         if ($LASTEXITCODE -ne 0) {
@@ -134,7 +135,8 @@ function br {
             # versions might handle this so strip the '\\?'
             Invoke-Expression $command.Replace("\\?\", "")
         }
-    } finally {
+    }
+    finally {
         mouse_off;
         Remove-Item -force $tempFile
     }
@@ -204,13 +206,13 @@ function killDebugProxy {
     if ($stdOutTask.Contains("No tasks")) {
         Write-Host "`e[93mDebugProxy not found`e[0m";
     }
-    else{
-        try{
+    else {
+        try {
             $toKillPid = $stdOutTask.Split(',')[1].Trim('"');
             Write-Host "`e[93mKill DebugProxy with pid $($toKillPid)`e[0m";
             stop-process -Id $toKillPid
         }
-        catch{}
+        catch {}
     }
 }
 
@@ -221,9 +223,9 @@ function spindown {
         [ArgumentCompleter(
             {
                 param($cmd, $param, $values)
-                smartctl --scan-open | 
-                Where-Object { $_.Contains("ATA device") } | 
-                ForEach-Object { $_.Split()[0] }  | 
+                smartctl --scan-open |
+                Where-Object { $_.Contains("ATA device") } |
+                ForEach-Object { $_.Split()[0] }  |
                 Where-Object { $_.StartsWith($values, [StringComparison]::OrdinalIgnoreCase) } |
                 Sort-Object |
                 ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
@@ -233,11 +235,11 @@ function spindown {
 
     if ([string]::IsNullOrWhiteSpace($device)) {
         # stop all hdd
-        smartctl --scan-open | Where-Object { $_.Contains("ATA device") } | ForEach-Object { $_.Split()[0] } | ForEach-Object { Write-Host "`e[93msmartctl -s standby,now $($_)`e[0m"; smartctl -s standby,now $($_) }
+        smartctl --scan-open | Where-Object { $_.Contains("ATA device") } | ForEach-Object { $_.Split()[0] } | ForEach-Object { Write-Host "`e[93msmartctl -s standby,now $($_)`e[0m"; smartctl -s standby, now $($_) }
     }
     else {
         Write-Host "`e[93msmartctl -s standby,now $($device)`e[0m";
-        smartctl -s standby,now $device
+        smartctl -s standby, now $device
     }
 }
 
@@ -278,12 +280,12 @@ function edgeDbg {
     & "runas" /trustlevel:0x20000 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-renderer-backgrounding --disable-sync --metrics-recording-only --no-first-run --no-default-browser-check --remote-debugging-port=9222  --profile-directory=Default $url"
 }
 
-function kubeDotnetDebug(){
+function kubeDotnetDebug() {
     param(
         [ArgumentCompleter(
             {
                 param($cmd, $param, $values)
-                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)){
+                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)) {
                     return;
                 }
                 & kubectl get nodes --all-namespaces -o name |
@@ -296,7 +298,7 @@ function kubeDotnetDebug(){
         [string] $app,
         [ArgumentCompletions('verysimplenick/dotnet-debug-image:6.0.101-bullseye-slim-amd64')]
         [string] $image,
-        [ArgumentCompletions('IfNotPresent','Always','Never')]
+        [ArgumentCompletions('IfNotPresent', 'Always', 'Never')]
         [string] $imagePullPolicy
     )
     if ([string]::IsNullOrWhiteSpace($image)) {
@@ -308,22 +310,22 @@ function kubeDotnetDebug(){
     # if something went wrong with access files - read related issue: https://github.com/moby/moby/issues/2259
     # [string] $command = '[ "/bin/bash", "-c", "dotnetPid=$(ps auxww | grep '+ $app +' | grep -v grep | awk ''{print $2}'') && find /proc/$dotnetPid/root/tmp/ -maxdepth 1 ! -name ''tmp'' ! -name  ''system-commandline-sentinel-files'' -exec sh -c ''ln -s {} /tmp/ > /dev/null 2>&1 || exit 0'' \\;  ; exec /bin/bash"]';
     [string] $command = '["/bin/bash", "-c", "' +
-        'export dotnetPid=$(ps auxww | grep ' + $app + ' | grep -v grep | awk ''{print $2}'') ' +
-        '&& echo $dotnetPid > /dotnetPid ' +
-        '; ln -s /proc/$dotnetPid/root/tmp/ /tmp_external ' +
-        '; cp -u -r /root/vsdbg /proc/$dotnetPid/root/root/ > /dev/null 2>&1 ' +
-        '; cp -u /bin/ps /proc/$dotnetPid/root/bin/ps > /dev/null 2>&1 '+
-        '; exec /bin/bash' +
-        '"]';
+    'export dotnetPid=$(ps auxww | grep ' + $app + ' | grep -v grep | awk ''{print $2}'') ' +
+    '&& echo $dotnetPid > /dotnetPid ' +
+    '; ln -s /proc/$dotnetPid/root/tmp/ /tmp_external ' +
+    '; cp -u -r /root/vsdbg /proc/$dotnetPid/root/root/ > /dev/null 2>&1 ' +
+    '; cp -u /bin/ps /proc/$dotnetPid/root/bin/ps > /dev/null 2>&1 ' +
+    '; exec /bin/bash' +
+    '"]';
     kubeNodeExec $node 'dotnet-debug' $command $image $imagePullPolicy 'true' ;
 }
 
-function kubeNodeShell(){
-       param(
+function kubeNodeShell() {
+    param(
         [ArgumentCompleter(
             {
                 param($cmd, $param, $values)
-                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)){
+                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)) {
                     return;
                 }
                 & kubectl get nodes --all-namespaces -o name |
@@ -333,7 +335,7 @@ function kubeNodeShell(){
             }
         )]
         [string] $node,
-        [ArgumentCompletions('/bin/bash','/bin/ash','/bin/sh', '/bin/zsh')]
+        [ArgumentCompletions('/bin/bash', '/bin/ash', '/bin/sh', '/bin/zsh')]
         [string] $shell
     )
     if ([string]::IsNullOrWhiteSpace($shell)) {
@@ -349,9 +351,9 @@ function kubeNodeExec {
         [string] $pod,
         [string] $command,
         [string] $image,
-        [ArgumentCompletions('IfNotPresent','Always','Never')]
+        [ArgumentCompletions('IfNotPresent', 'Always', 'Never')]
         [string] $imagePullPolicy,
-        [ArgumentCompletions('true','false')]
+        [ArgumentCompletions('true', 'false')]
         [string] $tty
     )
 
@@ -393,7 +395,7 @@ function touch {
     if (!$path.Contains(':')) {
         $path = $([System.IO.Path]::Combine($PWD, $path))
     }
-    $(Get-Item $path).lastwritetime=$(Get-Date)
+    $(Get-Item $path).lastwritetime = $(Get-Date)
 }
 # diff catalog
 function diff_dir([string] $path1, [string] $path2) {
@@ -423,7 +425,7 @@ function bs {
         dotnet build -nologo -maxCpuCount -nodeReuse:false -clp:ErrorsOnly -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
         return;
     }
-    if($args[0] -eq "restore"){
+    if ($args[0] -eq "restore") {
         dotnet restore -nologo -maxCpuCount -nodeReuse:false -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
         return;
     }
@@ -511,6 +513,77 @@ if ($env:TEMP) {
 else {
     # Linux doesn't have TEMP
     $script:debuggingTabFile = New-TemporaryFile
+}
+
+function rndpass {
+    param (
+        [int] $length = 16,
+        [int] $useExtra = 1
+    )
+    $charSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{]+-[*=@:)}$^%;(_!&amp;#?>/|.'.ToCharArray()
+    if ($useExtra -eq 0) {
+        $charSet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.ToCharArray()
+    }
+    $rng = New-Object System.Security.Cryptography.RNGCryptoServiceProvider;
+    $bytes = New-Object byte[]($length);
+    $rng.GetBytes($bytes);
+    $result = New-Object char[]($length);
+    for ($i = 0 ; $i -lt $length ; $i++) {
+        $result[$i] = $charSet[$bytes[$i] % $charSet.Length]
+    }
+    return (-join $result)
+}
+
+# choco install jq
+function crd2jsonschema() {
+    param(
+        [ArgumentCompleter(
+            {
+                param($cmd, $param, $values)
+                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)) {
+                    return;
+                }
+                & kubectl get crd --all-namespaces -o name |
+                ForEach-Object { $_.Substring("customresourcedefinition.apiextensions.k8s.io/".Length) } |
+                Sort-Object |
+                ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
+            }
+        )]
+        [string] $crd)
+
+    if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)) {
+        Write-Host "`e[93mSpecify KUBECONFIG env variable`e[0m";
+        return;
+    }
+    $crd = $crd.Replace("customresourcedefinition.apiextensions.k8s.io/", "");
+    $json = $(kubectl get -o json customresourcedefinition.apiextensions.k8s.io/$crd)
+    $query = @"
+    {
+    properties: .spec.versions[0].schema.openAPIV3Schema.properties,
+    description: .spec.versions[0].schema.openAPIV3Schema.description,
+    required: .spec.versions[0].schema.openAPIV3Schema.required,
+    title: .metadata.name,
+    type: "object",
+    "`$schema": "http://json-schema.org/draft/2019-09/schema#",
+    "x-kubernetes-group-version-kind.group": .spec.group,
+    "x-kubernetes-group-version-kind.kind": .spec.names.kind,
+    "x-kubernetes-group-version-kind.version": .spec.versions[0].name
+}
+"@;
+    [string] $tempFile = [System.IO.Path]::GetTempFileName();
+    try {
+        Write-Host "Write query to $tempFile"
+        [System.IO.File]::WriteAllText($tempFile, $query);
+        Write-Host "`e[93mWrite $crd.schema.json`e[0m";
+        $json | jq -S -f $tempFile > "$crd.schema.json"
+    }
+    finally {
+        if ([System.IO.File]::Exists($tempFile)) {
+            Write-Host "Remove query file $tempFile"
+            Remove-Item -Path $tempFile
+        }
+    }
+    Write-Host "`e[93mDone`e[0m";
 }
 
 <#
