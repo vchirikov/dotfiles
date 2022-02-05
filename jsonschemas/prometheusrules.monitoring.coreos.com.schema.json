@@ -90,7 +90,7 @@
   "required": [
     "spec"
   ],
-  "title": "prometheusrules.monitoring.coreos.com",
+  "title": "PrometheusRule",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "monitoring.coreos.com",
   "x-kubernetes-group-version-kind.kind": "PrometheusRule",

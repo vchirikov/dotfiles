@@ -87,7 +87,7 @@
     }
   },
   "required": null,
-  "title": "storageversionmigrations.migration.k8s.io",
+  "title": "StorageVersionMigration",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "migration.k8s.io",
   "x-kubernetes-group-version-kind.kind": "StorageVersionMigration",

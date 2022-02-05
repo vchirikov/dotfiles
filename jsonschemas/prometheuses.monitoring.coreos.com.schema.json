@@ -7609,7 +7609,7 @@
   "required": [
     "spec"
   ],
-  "title": "prometheuses.monitoring.coreos.com",
+  "title": "Prometheus",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "monitoring.coreos.com",
   "x-kubernetes-group-version-kind.kind": "Prometheus",

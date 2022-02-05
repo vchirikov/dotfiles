@@ -63,7 +63,7 @@
     }
   },
   "required": null,
-  "title": "storagestates.migration.k8s.io",
+  "title": "StorageState",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "migration.k8s.io",
   "x-kubernetes-group-version-kind.kind": "StorageState",

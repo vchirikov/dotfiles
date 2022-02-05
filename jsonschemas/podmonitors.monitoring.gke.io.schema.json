@@ -240,7 +240,7 @@
   "required": [
     "spec"
   ],
-  "title": "podmonitors.monitoring.gke.io",
+  "title": "PodMonitor",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "monitoring.gke.io",
   "x-kubernetes-group-version-kind.kind": "PodMonitor",

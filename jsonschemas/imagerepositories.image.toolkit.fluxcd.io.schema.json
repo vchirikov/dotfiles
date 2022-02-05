@@ -152,7 +152,7 @@
     }
   },
   "required": null,
-  "title": "imagerepositories.image.toolkit.fluxcd.io",
+  "title": "ImageRepository",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "image.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "ImageRepository",

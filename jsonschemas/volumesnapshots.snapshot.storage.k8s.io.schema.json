@@ -93,7 +93,7 @@
   "required": [
     "spec"
   ],
-  "title": "volumesnapshots.snapshot.storage.k8s.io",
+  "title": "VolumeSnapshot",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "snapshot.storage.k8s.io",
   "x-kubernetes-group-version-kind.kind": "VolumeSnapshot",

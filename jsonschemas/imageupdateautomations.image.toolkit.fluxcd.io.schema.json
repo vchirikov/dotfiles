@@ -221,7 +221,7 @@
     }
   },
   "required": null,
-  "title": "imageupdateautomations.image.toolkit.fluxcd.io",
+  "title": "ImageUpdateAutomation",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "image.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "ImageUpdateAutomation",

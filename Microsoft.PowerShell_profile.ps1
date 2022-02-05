@@ -561,15 +561,15 @@ function crd2jsonschema() {
     $json = $(kubectl get -o json customresourcedefinition.apiextensions.k8s.io/$crd)
     $query = @"
     {
-    properties: .spec.versions[0].schema.openAPIV3Schema.properties,
-    description: .spec.versions[0].schema.openAPIV3Schema.description,
-    required: .spec.versions[0].schema.openAPIV3Schema.required,
-    title: .metadata.name,
-    type: "object",
     "`$schema": "http://json-schema.org/draft-07/schema",
     "x-kubernetes-group-version-kind.group": .spec.group,
     "x-kubernetes-group-version-kind.kind": .spec.names.kind,
-    "x-kubernetes-group-version-kind.version": .spec.versions[0].name
+    "x-kubernetes-group-version-kind.version": .spec.versions[0].name,
+    title: .spec.names.kind,
+    type: "object",
+    properties: .spec.versions[0].schema.openAPIV3Schema.properties,
+    description: .spec.versions[0].schema.openAPIV3Schema.description,
+    required: .spec.versions[0].schema.openAPIV3Schema.required
 }
 "@;
     [string] $tempFile = [System.IO.Path]::GetTempFileName();

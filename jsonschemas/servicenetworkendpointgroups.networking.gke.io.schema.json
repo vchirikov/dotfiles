@@ -106,7 +106,7 @@
     }
   },
   "required": null,
-  "title": "servicenetworkendpointgroups.networking.gke.io",
+  "title": "ServiceNetworkEndpointGroup",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "networking.gke.io",
   "x-kubernetes-group-version-kind.kind": "ServiceNetworkEndpointGroup",

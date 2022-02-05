@@ -43,7 +43,7 @@
     }
   },
   "required": null,
-  "title": "frontendconfigs.networking.gke.io",
+  "title": "FrontendConfig",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "networking.gke.io",
   "x-kubernetes-group-version-kind.kind": "FrontendConfig",

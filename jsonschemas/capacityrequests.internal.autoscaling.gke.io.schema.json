@@ -3756,7 +3756,7 @@
     }
   },
   "required": null,
-  "title": "capacityrequests.internal.autoscaling.gke.io",
+  "title": "CapacityRequest",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "internal.autoscaling.gke.io",
   "x-kubernetes-group-version-kind.kind": "CapacityRequest",

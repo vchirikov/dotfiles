@@ -5479,7 +5479,7 @@
   "required": [
     "spec"
   ],
-  "title": "thanosrulers.monitoring.coreos.com",
+  "title": "ThanosRuler",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "monitoring.coreos.com",
   "x-kubernetes-group-version-kind.kind": "ThanosRuler",

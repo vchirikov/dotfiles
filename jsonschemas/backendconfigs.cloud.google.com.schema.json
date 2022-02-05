@@ -209,7 +209,7 @@
     }
   },
   "required": null,
-  "title": "backendconfigs.cloud.google.com",
+  "title": "BackendConfig",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "cloud.google.com",
   "x-kubernetes-group-version-kind.kind": "BackendConfig",

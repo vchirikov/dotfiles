@@ -169,7 +169,7 @@
     }
   },
   "required": null,
-  "title": "imagepolicies.image.toolkit.fluxcd.io",
+  "title": "ImagePolicy",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "image.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "ImagePolicy",

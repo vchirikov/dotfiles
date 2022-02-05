@@ -623,7 +623,7 @@
   "required": [
     "spec"
   ],
-  "title": "servicemonitors.monitoring.coreos.com",
+  "title": "ServiceMonitor",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "monitoring.coreos.com",
   "x-kubernetes-group-version-kind.kind": "ServiceMonitor",

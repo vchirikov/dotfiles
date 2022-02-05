@@ -216,7 +216,7 @@
     }
   },
   "required": null,
-  "title": "buckets.source.toolkit.fluxcd.io",
+  "title": "Bucket",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "source.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "Bucket",

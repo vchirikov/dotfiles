@@ -142,7 +142,7 @@
     }
   },
   "required": null,
-  "title": "serviceattachments.networking.gke.io",
+  "title": "ServiceAttachment",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "networking.gke.io",
   "x-kubernetes-group-version-kind.kind": "ServiceAttachment",

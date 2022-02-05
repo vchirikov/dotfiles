@@ -687,7 +687,7 @@
     }
   },
   "required": null,
-  "title": "helmreleases.helm.toolkit.fluxcd.io",
+  "title": "HelmRelease",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "helm.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "HelmRelease",

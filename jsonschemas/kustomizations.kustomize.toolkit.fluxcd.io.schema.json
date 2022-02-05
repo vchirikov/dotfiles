@@ -532,7 +532,7 @@
     }
   },
   "required": null,
-  "title": "kustomizations.kustomize.toolkit.fluxcd.io",
+  "title": "Kustomization",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "kustomize.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "Kustomization",

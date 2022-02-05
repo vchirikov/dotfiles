@@ -5260,7 +5260,7 @@
   "required": [
     "spec"
   ],
-  "title": "alertmanagers.monitoring.coreos.com",
+  "title": "Alertmanager",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "monitoring.coreos.com",
   "x-kubernetes-group-version-kind.kind": "Alertmanager",

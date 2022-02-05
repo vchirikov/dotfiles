@@ -600,7 +600,7 @@
   "required": [
     "spec"
   ],
-  "title": "podmonitors.monitoring.coreos.com",
+  "title": "PodMonitor",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "monitoring.coreos.com",
   "x-kubernetes-group-version-kind.kind": "PodMonitor",

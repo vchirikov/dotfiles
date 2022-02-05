@@ -327,7 +327,7 @@
     }
   },
   "required": null,
-  "title": "gitrepositories.source.toolkit.fluxcd.io",
+  "title": "GitRepository",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "source.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "GitRepository",
