@@ -75,39 +75,46 @@ div.menubar, .part.titlebar {
 
 /* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
 
-.tabs-and-actions-container>.monaco-scrollable-element,
-.tabs,
-.tabs .tabs-and-actions-container {
+.title.tabs {
   height: auto !important;
 }
 
-.tabs-and-actions-container>.monaco-scrollable-element>.tabs-container {
+.title.tabs .tabs-and-actions-container {
   height: auto !important;
+}
+
+.title.tabs .tabs-and-actions-container .monaco-scrollable-element {
+  height: auto !important;
+}
+
+.title.tabs .tabs-container {
   display: flex !important;
   flex-wrap: wrap !important;
   height: auto !important;
+
   flex-direction: row !important;
   justify-content: flex-start !important;
   align-content: flex-start !important;
 }
 
-.tabs-and-actions-container>.monaco-scrollable-element>.tabs-container::before,
-.tabs-and-actions-container>.monaco-scrollable-element>.tabs-container::after {
+.title.tabs .tabs-container::before,
+.title.tabs .tabs-container::after {
   content: "" !important;
   width: 100% !important;
   order: 1 !important;
 }
 
-.tab {
+.title.tabs .tabs-container .tab {
   display: flex !important;
 }
 
-.tab.sticky {
-  font-weight: 600 !important;
+.title.tabs .tabs-container .tab:not(.sticky) {
+  order: 1 !important;
 }
 
-.tab:not(.sticky) {
-  order: 1 !important;
+/* for some reason sometimes last tab is stretched 100%. This is a fix. */
+.title.tabs .tabs-container .tab.last-in-row:not(:last-child) {
+  flex-grow: 0 !important;
 }
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
