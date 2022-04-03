@@ -117,6 +117,10 @@ div.menubar, .part.titlebar {
   flex-grow: 0 !important;
 }
 
+.tab.sticky {
+  font-weight: 600 !important;
+}
+
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
 
 div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-container>div:nth-child(3) {
