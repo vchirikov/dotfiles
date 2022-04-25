@@ -2,33 +2,16 @@
     "$schema": "https://aka.ms/terminal-profiles-schema",
     "actions": 
     [
-        // https://docs.microsoft.com/en-us/windows/terminal/customize-settings/actions#global-commands
-        // dropdownDuration doesn't work well with default 200, maybe later they fix it.
-        { "command": { "action": "globalSummon", "name": "_quake", "dropdownDuration": 1, "toggleVisibility": true, "monitor": "toMouse", "desktop": "toCurrent"}, "keys": "win+`"},
-        // { "keys": "win+`", "command": { "action": "globalSummon", "monitor": "toMouse" } },
-        { "command": "unbound", "keys": "alt+enter" },
-        { "command": { "action": "commandPalette" }, "keys": "f1"},
-        { "command": { "action": "switchToTab", "index": 8 }, "keys": "alt+9" },
-        { "command": { "action": "resizePane", "direction": "up" }, "keys": "alt+shift+up" },
-        { "command": { "action": "splitPane", "split": "horizontal", "splitMode": "duplicate" }, "keys": "ctrl+shift+-" },
-        { "command": "find", "keys": "ctrl+f" },
-        { "command":  { "action": "moveFocus", "direction": "up" }, "keys": "ctrl+alt+up" },
         {
             "command": 
             {
-                "action": "splitPane",
-                "split": "vertical",
-                "splitMode": "duplicate"
+                "action": "globalSummon",
+                "desktop": "toCurrent",
+                "monitor": "toMouse",
+                "name": "_quake",
+                "toggleVisibility": true
             },
-            "keys": "ctrl+shift+\\"
-        },
-        {
-            "command": 
-            {
-                "action": "switchToTab",
-                "index": 1
-            },
-            "keys": "alt+2"
+            "keys": "win+`"
         },
         {
             "command": 
@@ -42,6 +25,103 @@
         {
             "command": 
             {
+                "action": "splitPane",
+                "split": "horizontal",
+                "splitMode": "duplicate"
+            },
+            "keys": "ctrl+shift+minus"
+        },
+        {
+            "command": 
+            {
+                "action": "resizePane",
+                "direction": "up"
+            },
+            "keys": "alt+shift+up"
+        },
+        {
+            "command": 
+            {
+                "action": "switchToTab",
+                "index": 3
+            },
+            "keys": "alt+4"
+        },
+        {
+            "command": 
+            {
+                "action": "commandPalette"
+            },
+            "keys": "f1"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+enter"
+        },
+        {
+            "command": 
+            {
+                "action": "switchToTab",
+                "index": 7
+            },
+            "keys": "alt+8"
+        },
+        {
+            "command": 
+            {
+                "action": "switchToTab",
+                "index": 8
+            },
+            "keys": "alt+9"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+f"
+        },
+        {
+            "command": 
+            {
+                "action": "moveFocus",
+                "direction": "up"
+            },
+            "keys": "ctrl+alt+up"
+        },
+        {
+            "command": 
+            {
+                "action": "splitPane",
+                "split": "vertical",
+                "splitMode": "duplicate"
+            },
+            "keys": "ctrl+shift+\\"
+        },
+        {
+            "command": 
+            {
+                "action": "switchToTab",
+                "index": 0
+            },
+            "keys": "alt+1"
+        },
+        {
+            "command": 
+            {
+                "action": "switchToTab",
+                "index": 1
+            },
+            "keys": "alt+2"
+        },
+        {
+            "command": 
+            {
+                "action": "switchToTab",
+                "index": 4
+            },
+            "keys": "alt+5"
+        },
+        {
+            "command": 
+            {
                 "action": "moveFocus",
                 "direction": "left"
             },
@@ -51,17 +131,17 @@
             "command": 
             {
                 "action": "moveFocus",
-                "direction": "down"
+                "direction": "right"
             },
-            "keys": "ctrl+alt+down"
+            "keys": "ctrl+alt+right"
         },
         {
             "command": 
             {
                 "action": "moveFocus",
-                "direction": "right"
+                "direction": "down"
             },
-            "keys": "ctrl+alt+right"
+            "keys": "ctrl+alt+down"
         },
         {
             "command": 
@@ -82,14 +162,6 @@
         {
             "command": "scrollDownPage",
             "keys": "ctrl+shift+pgdn"
-        },
-        {
-            "command": 
-            {
-                "action": "switchToTab",
-                "index": 0
-            },
-            "keys": "alt+1"
         },
         {
             "command": 
@@ -120,7 +192,10 @@
             "keys": "ctrl+v"
         },
         {
-            "command": "closeTab",
+            "command": 
+            {
+                "action": "closeTab"
+            },
             "keys": "ctrl+w"
         },
         {
@@ -146,6 +221,10 @@
             "keys": "alt+6"
         },
         {
+            "command": "scrollUpPage",
+            "keys": "ctrl+shift+pgup"
+        },
+        {
             "command": 
             {
                 "action": "scrollDown"
@@ -163,26 +242,6 @@
             "command": 
             {
                 "action": "switchToTab",
-                "index": 3
-            },
-            "keys": "alt+4"
-        },
-        {
-            "command": 
-            {
-                "action": "switchToTab",
-                "index": 7
-            },
-            "keys": "alt+8"
-        },
-        {
-            "command": "scrollUpPage",
-            "keys": "ctrl+shift+pgup"
-        },
-        {
-            "command": 
-            {
-                "action": "switchToTab",
                 "index": 2
             },
             "keys": "alt+3"
@@ -191,20 +250,10 @@
             "command": 
             {
                 "action": "switchToTab",
-                "index": 4
-            },
-            "keys": "alt+5"
-        },
-        {
-            "command": 
-            {
-                "action": "switchToTab",
                 "index": 6
             },
             "keys": "alt+7"
-
         }
-        
     ],
     "alwaysShowTabs": true,
     "centerOnLaunch": true,
@@ -227,8 +276,11 @@
             "colorScheme": "Dracula",
             "cursorColor": "#FFC600",
             "cursorShape": "bar",
-            "fontFace": "Consolas NF",
-            "fontSize": 9,
+            "font": 
+            {
+                "face": "Consolas NF",
+                "size": 9
+            },
             "startingDirectory": "./",
             "useAcrylic": true
         },
@@ -258,8 +310,11 @@
             },
             {
                 "commandline": "cmd.exe",
-                "fontFace": "Consolas",
-                "fontSize": 10,
+                "font": 
+                {
+                    "face": "Consolas",
+                    "size": 10
+                },
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": false,
                 "name": "cmd"
@@ -559,6 +614,7 @@
     ],
     "showTabsInTitlebar": true,
     "showTerminalTitleInTitlebar": true,
+    "startOnUserLogin": false,
     "tabWidthMode": "titleLength",
     "theme": "dark",
     "windowingBehavior": "useAnyExisting",

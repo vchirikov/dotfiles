@@ -1,3 +1,6 @@
+# for profiling
+# Import-Module PSProfiler
+# Measure-Script {
 Import-Module PSReadLine
 # zsh-like menu complete, for bash-like use `Complete`
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
@@ -30,7 +33,7 @@ $env:FZF__OPTS = "--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=
 # https://github.com/nickcox/cd-extras
 $cde = @{
     AUTO_CD  = $false
-    CD_PATH  = 'C:\\code\\Actual-Chat', 'C:\\code\\vchirikov'
+    CD_PATH  = 'C:\\code\\Telgorithm', 'C:\\code\\vchirikov'
     NOARG_CD = 'C:\\code'
 }
 Import-Module cd-extras
@@ -142,21 +145,13 @@ function br {
     }
 }
 
-# dotnet tool install --global dotnet-suggest --version 1.1.142701
-# dotnet suggest shell start
-$availableToComplete = (dotnet-suggest list) | Out-String
-$availableToCompleteArray = $availableToComplete.Split([Environment]::NewLine, [System.StringSplitOptions]::RemoveEmptyEntries) 
-Register-ArgumentCompleter -Native -CommandName $availableToCompleteArray -ScriptBlock {
+# PowerShell parameter completion shim for the dotnet CLI
+Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
     param($commandName, $wordToComplete, $cursorPosition)
-    $fullpath = (Get-Command $wordToComplete.CommandElements[0]).Source
-
-    $arguments = $wordToComplete.Extent.ToString().Replace('"', '\"')
-    dotnet-suggest get -e $fullpath --position $cursorPosition -- "$arguments" | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-    }
+        dotnet complete --position $cursorPosition "$wordToComplete" | ForEach-Object {
+           [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+        }
 }
-$env:DOTNET_SUGGEST_SCRIPT_VERSION = "1.0.0"
-# dotnet suggest script end
 
 # PowerShell parameter completion for the dotnet CLI and slngen local tool
 Register-ArgumentCompleter -Native -CommandName "dotnet" -ScriptBlock {
@@ -235,11 +230,11 @@ function spindown {
 
     if ([string]::IsNullOrWhiteSpace($device)) {
         # stop all hdd
-        smartctl --scan-open | Where-Object { $_.Contains("ATA device") } | ForEach-Object { $_.Split()[0] } | ForEach-Object { Write-Host "`e[93msmartctl -s standby,now $($_)`e[0m"; smartctl -s standby, now $($_) }
+        smartctl --scan-open | Where-Object { $_.Contains("ATA device") } | ForEach-Object { $_.Split()[0] } | ForEach-Object { Write-Host "`e[93msmartctl -s standby,now $($_)`e[0m"; smartctl -s "standby,now" $($_) }
     }
     else {
         Write-Host "`e[93msmartctl -s standby,now $($device)`e[0m";
-        smartctl -s standby, now $device
+        smartctl -s "standby,now" $device
     }
 }
 
@@ -443,6 +438,8 @@ function cleanBinObj() {
 # creates lnk file, this is useful for paths > 260, which explorer can't create, for example (be careful about WoW64)
 # for example for vivaldi
 # createLnk "C:\Program Files\Vivaldi\Application\vivaldi.exe" -args "--disk-cache-size=4294967296 --cast-app-background-color=282a3600 --force-dark-mode --default-background-color=282a3600 --dark --process-per-site --disable-new-content-rendering-timeout --disable-extensions-file-access-check --disable-backgrounding-occluded-windows --remote-debugging-port=9223"
+# new version:
+# createLnk "C:\Program Files\Vivaldi\Application\vivaldi.exe" -args "--disk-cache-size=4294967296 --cast-app-background-color=282a3600 --force-dark-mode --default-background-color=282a3600 --dark --disable-extensions-file-access-check"
 function createLnk {
     [CmdletBinding()]
     Param(
@@ -683,9 +680,4 @@ function TabExpansion2 {
     }
 }
 #>
-
-# Chocolatey profile
-$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-if (Test-Path($ChocolateyProfile)) {
-    Import-Module "$ChocolateyProfile"
-}
+#}

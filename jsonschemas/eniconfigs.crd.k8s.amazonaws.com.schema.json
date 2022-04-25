@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": null,
+  "properties": null,
+  "required": null,
+  "title": "ENIConfig",
+  "type": "object",
+  "x-kubernetes-group-version-kind.group": "crd.k8s.amazonaws.com",
+  "x-kubernetes-group-version-kind.kind": "ENIConfig",
+  "x-kubernetes-group-version-kind.version": "v1alpha1"
+}
