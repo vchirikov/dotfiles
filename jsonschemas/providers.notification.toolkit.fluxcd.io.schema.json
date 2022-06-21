@@ -81,7 +81,8 @@
             "matrix",
             "opsgenie",
             "alertmanager",
-            "grafana"
+            "grafana",
+            "githubdispatch"
           ],
           "type": "string"
         },
