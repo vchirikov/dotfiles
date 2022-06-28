@@ -1,4 +1,6 @@
 {
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "AWS IAM Policy schema",
   "type": "object",
   "required": [
     "Statement"
