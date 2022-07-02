@@ -148,9 +148,9 @@ function br {
 # PowerShell parameter completion shim for the dotnet CLI
 Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
     param($commandName, $wordToComplete, $cursorPosition)
-        dotnet complete --position $cursorPosition "$wordToComplete" | ForEach-Object {
-           [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-        }
+    dotnet complete --position $cursorPosition "$wordToComplete" | ForEach-Object {
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    }
 }
 
 # PowerShell parameter completion for the dotnet CLI and slngen local tool
@@ -209,6 +209,20 @@ function killDebugProxy {
         }
         catch {}
     }
+}
+
+function pod() {
+    # id = _quake doesn't work well with admin rights
+    # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" wt_main.lnk "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.12.10983.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe" "-w main -d C:\code"
+    kubectl get pods --all-namespaces | fzf.exe --info=inline --height 100% --layout=reverse --header-lines=1 `
+        --prompt "$(kubectl config current-context | sed 's/-context$//')> " `
+        --header "Enter (kubectl exec) / CTRL-O (open log in editor) / CTRL-R (reload) / CTRL+E change view`n`n" `
+        --bind 'ctrl-e:change-preview-window(down,follow,90%,wrap,border-top|)' `
+        --bind 'enter:execute-silent(wt.exe -w main sp -V pwsh -NoLogo -NoProfile -c kubectl exec -i -t -n {1} {2} -- sh)+abort' `
+        --bind 'ctrl-o:execute(kubectl logs --all-containers --namespace {1} {2} | code -)' `
+        --bind 'ctrl-r:reload(kubectl get pods --all-namespaces)' `
+        --preview-window 'down,follow,50%,wrap,border-top' `
+        --preview 'kubectl logs --all-containers --tail=300 --namespace {1} {2}'
 }
 
 # spindown hdd
@@ -665,7 +679,7 @@ function TabExpansion2 {
         [System.Management.Automation.CommandCompletion] $result = $null;
         if ($psCmdlet.ParameterSetName -eq 'ScriptInputSet') {
             $result = [System.Management.Automation.CommandCompletion]::CompleteInput(
-                 $inputScript,
+                $inputScript,
                 $cursorColumn,
                 $options)
         }
