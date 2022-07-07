@@ -4,18 +4,18 @@
     {
       "alignment": "left",
       "segments": [
-        {
-          "background": "p:yellow",
-          "foreground": "p:black",
-          "leading_diamond": "\ue0b6",
-          "properties": {
-            "display_host": false
-          },
-          "style": "diamond",
-          "template": " {{ if .SSHSession }}\uf817 {{ end }}{{ .UserName }} ",
-          "trailing_diamond": "\ue0b0",
-          "type": "session"
-        },
+        // {
+        //   "background": "p:yellow",
+        //   "foreground": "p:black",
+        //   "leading_diamond": "\ue0b6",
+        //   "properties": {
+        //     "display_host": false
+        //   },
+        //   "style": "diamond",
+        //   "template": " {{ if .SSHSession }}\uf817 {{ end }}{{ .UserName }} ",
+        //   "trailing_diamond": "\ue0b0",
+        //   "type": "session"
+        // },
         {
           "background": "p:orange",
           "foreground": "p:white",
@@ -24,7 +24,7 @@
             "home_icon": "~",
             "style": "folder"
           },
-          "style": "powerline",
+          "style": "diamond",
           "template": " \uf74a {{ path .Path .Location }} ",
           "type": "path"
         },
@@ -70,7 +70,7 @@
             "{{ if gt .Code 0 }}p:red{{ end }}"
           ],
           "foreground": "p:white",
-          "leading_diamond": "<transparent,background>\ue0b0</>",
+          //"leading_diamond": "<transparent,background>\ue0b0</>",
           "properties": {
             "always_enabled": true
           },
@@ -161,7 +161,7 @@
         "display_default": true
       },
       "style": "diamond",
-      "template": " \ue7ad {{ .Profile }}{{ if .Region }}@{{ .Region }}{{ end }} ",
+      "template": "\ue7ad {{ .Profile }}{{ if .Region }}@{{ .Region }}{{ end }} ",
       "tips": [
         "aws"
       ],

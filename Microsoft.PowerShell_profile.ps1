@@ -1,3 +1,6 @@
+oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
+Enable-PoshTransientPrompt
+
 # for profiling
 # Import-Module PSProfiler
 # Measure-Script {
@@ -54,26 +57,26 @@ $GitPromptSettings.DefaultPromptTimingFormat = "`e[93m[{0}ms]`e[0m";
 # disable posh-git title logic
 $GitPromptSettings.WindowTitle = $null;
 
-function prompt {
-    # add posh-git default prompt
-    $prompt = ""
-    $command = Get-History -Count 1
-    $prompt += & $GitPromptScriptBlock
-    if ($command) {
-        [TimeSpan] $span = $command.EndExecutionTime - $command.StartExecutionTime;
-        $prompt += "`e[93m 祥 ";
-        $format = "N2";
-        $prompt += $($span.TotalMilliseconds -lt 1000 ? $span.TotalMilliseconds.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "ms"
-            : ($span.TotalSeconds -lt 60 ? $span.TotalSeconds.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "s"
-                : ($span.TotalMinutes -lt 60 ? $span.TotalMinutes.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "m"
-                    : ($span.TotalHours -lt 24 ? $span.TotalHours.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "h"
-                        : $span.TotalDays.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "d")))).ToString();
-        $prompt += "`e[0m";
-    }
-    $prompt += "`e[31m>`e[0m"
-    $host.ui.RawUI.WindowTitle = Get-Location | Split-Path -leaf
-    "$prompt "
-}
+# function prompt {
+#     # add posh-git default prompt
+#     $prompt = ""
+#     $command = Get-History -Count 1
+#     $prompt += & $GitPromptScriptBlock
+#     if ($command) {
+#         [TimeSpan] $span = $command.EndExecutionTime - $command.StartExecutionTime;
+#         $prompt += "`e[93m 祥 ";
+#         $format = "N2";
+#         $prompt += $($span.TotalMilliseconds -lt 1000 ? $span.TotalMilliseconds.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "ms"
+#             : ($span.TotalSeconds -lt 60 ? $span.TotalSeconds.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "s"
+#                 : ($span.TotalMinutes -lt 60 ? $span.TotalMinutes.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "m"
+#                     : ($span.TotalHours -lt 24 ? $span.TotalHours.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "h"
+#                         : $span.TotalDays.ToString($format, [System.Globalization.CultureInfo]::InvariantCulture) + "d")))).ToString();
+#         $prompt += "`e[0m";
+#     }
+#     $prompt += "`e[31m>`e[0m"
+#     $host.ui.RawUI.WindowTitle = Get-Location | Split-Path -leaf
+#     "$prompt "
+# }
 
 # https://github.com/Canop/broot
 function mouse_on {
