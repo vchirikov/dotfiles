@@ -217,7 +217,7 @@ function killDebugProxy {
 
 function pod() {
     # id = _quake doesn't work well with admin rights
-    # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" wt_main.lnk "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.12.10983.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe" "-w main -d C:\code"
+    # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" -output "$PWD\wt_main.lnk" -iconPath "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2713.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe" -args "-w main -d C:\code"
     kubectl get pods --all-namespaces | fzf.exe --info=inline --height 100% --layout=reverse --header-lines=1 `
         --prompt "$(kubectl config current-context | sed 's/-context$//')> " `
         --header "Enter (kubectl exec) / CTRL-O (open log in editor) / CTRL-R (reload) / CTRL+E change view`n`n" `
