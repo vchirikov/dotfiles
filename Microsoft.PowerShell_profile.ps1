@@ -1,4 +1,4 @@
-oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
+oh-my-posh init pwsh --config="C:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
 Enable-PoshTransientPrompt
 
 # for profiling
@@ -32,6 +32,7 @@ Remove-PSReadlineKeyHandler 'Ctrl+t'
 $env:FZF_DEFAULT_COMMAND = 'fd --color=always --type file --follow --hidden --exclude .git'
 $env:FZF_DEFAULT_OPTS = "--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse";
 $env:FZF__OPTS = "--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse";
+$env:BAT_PAGER = ""
 
 # https://github.com/nickcox/cd-extras
 $cde = @{
@@ -282,6 +283,19 @@ function vs {
     Start-Process -FilePath $vsPath -ArgumentList $([System.IO.Path]::GetFullPath($path))
 }
 
+function base64 {
+    param([string] $str)
+    $byte = [System.Text.Encoding]::UTF8.GetBytes($str);
+    $result = [System.Convert]::ToBase64String($byte);
+    Write-Output $result;
+}
+function unbase64 {
+    param([string] $str)
+    $decode = [System.Convert]::FromBase64String($str)
+    $result = [System.Text.Encoding]::UTF8.GetString($decode)
+    Write-Output $result;
+}
+
 # run debug msedge
 function edgeDbg {
     param([string] $url)
@@ -290,6 +304,12 @@ function edgeDbg {
         $url = "http://localhost:7080"
     }
     & "runas" /trustlevel:0x20000 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-renderer-backgrounding --disable-sync --metrics-recording-only --no-first-run --no-default-browser-check --remote-debugging-port=9222  --profile-directory=Default $url"
+}
+
+function removeFkingCreativeDrivers() {
+    foreach ($dev in (Get-PnpDevice | Where-Object { $_.Name?.Contains("Sound Blaster", [System.StringComparison]::OrdinalIgnoreCase) -or ($_.Status -eq "Unknown" -and $_.Name?.Contains("Audio", [System.StringComparison]::OrdinalIgnoreCase) ) } )) {
+        & "pnputil" /remove-device $dev.InstanceId
+    }
 }
 
 function kubeDotnetDebug() {
