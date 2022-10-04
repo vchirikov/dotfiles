@@ -10,6 +10,10 @@
 [init]
     defaultBranch = master
 [core]
+    fsyncMethod = batch
+    # also you can use fs-enable/fs-disable aliases
+    # https://github.com/git-for-windows/git/discussions/3251
+    fsmonitor = true
     autocrlf = input
     eol = lf
     sparseCheckout = true
@@ -22,9 +26,6 @@
     # https://github.com/git-for-windows/git/wiki/Symbolic-Links#allowing-non-administrators-to-create-symbolic-links
     # it may also be useful to set the env variable MSYS=winsymlinks:nativestrict
     symlinks = true
-    # https://github.com/git-for-windows/git/discussions/3251
-    # use fs-enable/fs-disable aliases
-    useBuiltinFSMonitor = false
     untrackedcache = true
 [alias]
     fs-status = fsmonitor--daemon status
@@ -35,13 +36,11 @@
     }; f"
     fs-enable = "!f() { \
         echo -e \"\\e[1;34mEnable git file system monitoring\\e[0m\" ; \
-        git config core.useBuiltinFSMonitor true ; \
         git config --unset core.fsmonitor ; \
         git update-index --fsmonitor ; \
     }; f"
     fs-disable = "!f() { \
         echo -e \"\\e[1;34mDisable git file system monitoring\\e[0m\" ; \
-        git config --unset core.useBuiltinFSMonitor ; \
         git config --unset core.fsmonitor ; \
         git update-index --no-fsmonitor ; \
         git fsmonitor--daemon stop ; \
@@ -64,8 +63,10 @@
     # Line of code - diff with empty tree
     loc = diff --shortstat 4b825dc642cb6eb9a060e54bf8d69288fbee4904
     f = fetch --force --tags --prune --prune-tags --jobs=12 --progress --all
+    # u == update
+    u = !git f && git rebase
     pf = push --force-with-lease
-    # How it works: [git fixup: --amend for older commits](https://blog.filippo.io/git-fixup-amending-an-older-commit/)  
+    # How it works: [git fixup: --amend for older commits](https://blog.filippo.io/git-fixup-amending-an-older-commit/)
     fixup = "!f() { \
         TARGET="" ; \
         if [ -z \"${1+x}\" ] || [ \"${1}\" == \"fzf\" ]; then \
@@ -73,18 +74,18 @@
         else \
             TARGET=$(git rev-parse "HEAD~${1}" &> /dev/null ; if [ $? -eq 0 ]; then git rev-parse "HEAD~${1}" ; else git rev-parse "${1}" ; fi ;) ; \
         fi ; \
-        echo -e \"\\e[1;34mFixup '${TARGET}' commit\\e[0m\" ; \
+        echo -e \"\\e[1;34mFixup '${TARGET}' commit\\e[0m. Additional args: ${@:2}\" ; \
         git commit --fixup=$TARGET ${@:2} && GIT_EDITOR=true git rebase -i --autostash --autosquash $TARGET^ ; \
     }; f"
-    lg = "!f() { git log --color --oneline -n ${1-10} ; }; f"
-    fzf = "!f() { git log -n ${1-50} --pretty=format:'%h %s' --no-merges | fzf | cut -c -7 | xargs -o echo ; }; f"
+    fzf = "!f() { git log --color -n ${1-75} --pretty=format:'%h %s' | fzf | cut -c -7 | xargs -o echo ; }; f"
+    lg = "!f() { git log --color --oneline --pretty=format:'%C(#ffff00)%h%Creset %C(#00cd00)(%cr)%Creset%C(#ff8a53)%d%Creset %s %Cred%(trailers:key=Closes,key=Fixes,key=Refs,valueonly,separator=%x2C)%Creset' -n ${1-10} ; }; f"
     it = !git init && git commit -m root --allow-empty
     st = status --short --branch
     filelog = log -u
     flg = log -u
     r = reset
     ri = "!f() { echo rebase interactive back to ${1-3}; git rebase -i HEAD~${1-3} ; }; f"
-    rc = rebase --continue
+    rc = "!f() { echo -e \"\\e[1;34mRebase continue...\\e[0m\" ; GIT_EDITOR=true git rebase --continue ; }; f"
     ra = rebase --abort
     rs = rebase --skip
     rst ="!f() { echo -e \"\\e[1;34mReset soft back ${1-1}\\e[0m\" ; git reset --soft HEAD~${1-1} ; }; f"
@@ -97,7 +98,7 @@
     # branch
     branches = branch --all -vv
     bpwd = rev-parse --abbrev-ref HEAD
-    bls = branch --all -vv 
+    bls = branch --all -vv
     brm = branch --delete
     brmf = branch -D
     bmv = branch --move
@@ -127,10 +128,12 @@
 [rebase]
     autoStash = true
     autoSquash = true
+    updateRefs = true
 [worktree]
     guessRemote = true
 [push]
     default = current
+    autoSetupRemote = true
     followTags = true
 [url "https://github.com/"]
     insteadOf = github:
@@ -145,17 +148,21 @@
     useBuiltin = true
     singleKey = true
 [feature]
-    # because it also turns on core.useBuiltinFSMonitor
-    experimental = false
+    # it also turns on core.fsmonitor
+    # https://github.com/git-for-windows/git/discussions/3251
+    experimental = true
     manyFiles = true
 [rerere]
     enabled = 1
     autoUpdate = true
 [merge]
-    conflictstyle = diff3
+    ff = true
+    conflictstyle = zdiff3
     autoStash = true
 [status]
     submodulesummary = 1
+[gc]
+    cruftPacks = true
 [submodule]
     recurse = true
 [color "status"]
@@ -163,7 +170,9 @@
     changed = red bold strike
     untracked = cyan
     branch = yellow black bold ul
-[pull] 
+[pull]
     # https://github.blog/2021-08-16-highlights-from-git-2-33/
     # this is used for any merge, not just git pull, ort == new recursive
     twohead = ort
+[safe]
+	directory = *
