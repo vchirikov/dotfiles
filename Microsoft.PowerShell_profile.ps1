@@ -1,9 +1,11 @@
+Import-Module posh-git
+$env:POSH_GIT_ENABLED = $true
 oh-my-posh init pwsh --config="C:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
 Enable-PoshTransientPrompt
 
 # for profiling
-# Import-Module PSProfiler
-# Measure-Script {
+#Import-Module PSProfiler
+#Measure-Script {
 Import-Module PSReadLine
 # zsh-like menu complete, for bash-like use `Complete`
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
@@ -20,8 +22,6 @@ $PSReadLineOptions = @{
 Set-PSReadLineOption @PSReadLineOptions
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
-
-Import-Module posh-git
 
 # FZF bindings for powershell, should be imported after PSReadLine - https://github.com/kelleyma49/PSFzf
 # Install-Module -Name PSFzf
@@ -217,7 +217,7 @@ function killDebugProxy {
 
 function pod() {
     # id = _quake doesn't work well with admin rights
-    # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" -output "$PWD\wt_main.lnk" -iconPath "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2713.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe" -args "-w main -d C:\code"
+    # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" wt_main.lnk "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.12.10983.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe" "-w main -d C:\code"
     kubectl get pods --all-namespaces | fzf.exe --info=inline --height 100% --layout=reverse --header-lines=1 `
         --prompt "$(kubectl config current-context | sed 's/-context$//')> " `
         --header "Enter (kubectl exec) / CTRL-O (open log in editor) / CTRL-R (reload) / CTRL+E change view`n`n" `
@@ -602,8 +602,8 @@ function crd2jsonschema() {
     title: .spec.names.kind,
     type: "object",
     properties: .spec.versions[0].schema.openAPIV3Schema.properties,
-    description: .spec.versions[0].schema.openAPIV3Schema.description,
-    required: .spec.versions[0].schema.openAPIV3Schema.required
+    description: (.spec.versions[0].schema.openAPIV3Schema.description // ""),
+    required: (.spec.versions[0].schema.openAPIV3Schema.required // [])
 }
 "@;
     [string] $tempFile = [System.IO.Path]::GetTempFileName();

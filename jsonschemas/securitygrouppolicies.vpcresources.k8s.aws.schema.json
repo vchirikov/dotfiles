@@ -119,7 +119,7 @@
       "type": "object"
     }
   },
-  "required": null,
+  "required": [],
   "title": "SecurityGroupPolicy",
   "type": "object",
   "x-kubernetes-group-version-kind.group": "vpcresources.k8s.aws",
