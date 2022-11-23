@@ -1,6 +1,6 @@
 Import-Module posh-git
 $env:POSH_GIT_ENABLED = $true
-oh-my-posh init pwsh --config="C:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
+oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
 Enable-PoshTransientPrompt
 
 # for profiling
@@ -37,8 +37,8 @@ $env:BAT_PAGER = ""
 # https://github.com/nickcox/cd-extras
 $cde = @{
     AUTO_CD  = $false
-    CD_PATH  = 'C:\\code\\Telgorithm', 'C:\\code\\vchirikov'
-    NOARG_CD = 'C:\\code'
+    CD_PATH  = 'q:\\code\\Telgorithm', 'q:\\code\\vchirikov'
+    NOARG_CD = 'q:\\code'
 }
 Import-Module cd-extras
 Import-Module PSFzf
@@ -78,6 +78,11 @@ $GitPromptSettings.WindowTitle = $null;
 #     $host.ui.RawUI.WindowTitle = Get-Location | Split-Path -leaf
 #     "$prompt "
 # }
+
+# returns is current user an admin or not via checking well-known SID of the admin group
+function isAdmin {
+    [Security.Principal.WindowsIdentity]::GetCurrent().Groups -contains 'S-1-5-32-544'
+}
 
 # https://github.com/Canop/broot
 function mouse_on {
@@ -217,7 +222,7 @@ function killDebugProxy {
 
 function pod() {
     # id = _quake doesn't work well with admin rights
-    # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" wt_main.lnk "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.12.10983.0_x64__8wekyb3d8bbwe\WindowsTerminal.exe" "-w main -d C:\code"
+    # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" "$PWD\wt_main.lnk" "q:\code\vchirikov\dotfiles\windows_terminal\terminal.ico" "-w main -d q:\code"
     kubectl get pods --all-namespaces | fzf.exe --info=inline --height 100% --layout=reverse --header-lines=1 `
         --prompt "$(kubectl config current-context | sed 's/-context$//')> " `
         --header "Enter (kubectl exec) / CTRL-O (open log in editor) / CTRL-R (reload) / CTRL+E change view`n`n" `
@@ -477,6 +482,7 @@ function cleanBinObj() {
 # createLnk "C:\Program Files\Vivaldi\Application\vivaldi.exe" -args "--disk-cache-size=4294967296 --cast-app-background-color=282a3600 --force-dark-mode --default-background-color=282a3600 --dark --process-per-site --disable-new-content-rendering-timeout --disable-extensions-file-access-check --disable-backgrounding-occluded-windows --remote-debugging-port=9223"
 # new version:
 # createLnk "C:\Program Files\Vivaldi\Application\vivaldi.exe" -args "--disk-cache-size=4294967296 --cast-app-background-color=282a3600 --force-dark-mode --default-background-color=282a3600 --dark --disable-extensions-file-access-check"
+# createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" "$PWD\wt_main.lnk" "q:\code\vchirikov\dotfiles\windows_terminal\terminal.ico" "-w main -d q:\code"
 function createLnk {
     [CmdletBinding()]
     Param(

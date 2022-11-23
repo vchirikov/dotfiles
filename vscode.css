@@ -5,6 +5,10 @@
   You can change file "C:\Program Files\Microsoft VS Code\resources\app\out\vs\code\electron-browser\workbench\workbench.html" for the same result + fix checksums
 */
 
+:root {
+  --tab-height: 26px;
+}
+
 .loopText tspan {
   fill: white;
   background: white;
@@ -56,16 +60,16 @@ a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Spl
 /* Menu size */
 
 body>div.file-icons-enabled.monaco-workbench>div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-container>div:nth-child(2) {
-  top: 26px !important;
+  top: var(--tab-height) !important;
 }
 
 div.menubar, .part.titlebar {
-  height: 26px !important;
-  line-height: 26px;
+  height: var(--tab-height) !important;
+  line-height: var(--tab-height);
 }
 
 .monaco-workbench .part.titlebar>.window-appicon {
-  width: 26px !important;
+  width: var(--tab-height) !important;
 }
 
 .tabs-container>.tab.active {
@@ -128,7 +132,7 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
 }
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
-  height: 26px !important;
+  height: var(--tab-height) !important;
   padding-left: 4px !important;
   font-size: 0.9em !important;
   /* smaller font-size for tab icons and label */
@@ -144,14 +148,14 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
 }
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title.tabs .monaco-icon-label:after {
-  line-height: 25px;
+  line-height: calc(var(--tab-height) - 1px);
   font-size: 0.8em !important;
 }
 
 /* Following CSS for smaller close button on tabs: */
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-close {
-  width: 20px !important;
+  width: calc(var(--tab-height) - 6px) !important;
 }
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-close .action-label {
@@ -165,7 +169,7 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
 }
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .monaco-icon-label:before {
-  height: 26px !important;
+  height: var(--tab-height) !important;
 }
 
 /* OPTIONAL: Following CSS for smaller action-bar (beside the tab-bar) with menu, split, etc. */
