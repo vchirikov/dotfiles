@@ -16,12 +16,21 @@
     "spec": {
       "description": "TargetGroupBindingSpec defines the desired state of TargetGroupBinding",
       "properties": {
+        "ipAddressType": {
+          "description": "ipAddressType specifies whether the target group is of type IPv4 or IPv6. If unspecified, it will be automatically inferred.",
+          "enum": [
+            "ipv4",
+            "ipv6"
+          ],
+          "type": "string"
+        },
         "networking": {
-          "description": "networking provides the networking setup for ELBV2 LoadBalancer to access targets in TargetGroup.",
+          "description": "networking defines the networking rules to allow ELBV2 LoadBalancer to access targets in TargetGroup.",
           "properties": {
             "ingress": {
               "description": "List of ingress rules to allow ELBV2 LoadBalancer to access targets in TargetGroup.",
               "items": {
+                "description": "NetworkingIngressRule defines a particular set of traffic that is allowed to access TargetGroup's targets.",
                 "properties": {
                   "from": {
                     "description": "List of peers which should be able to access the targets in TargetGroup. At least one NetworkingPeer should be specified.",
@@ -62,6 +71,7 @@
                   "ports": {
                     "description": "List of ports which should be made accessible on the targets in TargetGroup. If ports is empty or unspecified, it defaults to all ports with TCP.",
                     "items": {
+                      "description": "NetworkingPort defines the port and protocol for networking rules.",
                       "properties": {
                         "port": {
                           "anyOf": [
@@ -100,6 +110,48 @@
           },
           "type": "object"
         },
+        "nodeSelector": {
+          "description": "node selector for instance type target groups to only register certain nodes",
+          "properties": {
+            "matchExpressions": {
+              "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+              "items": {
+                "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                "properties": {
+                  "key": {
+                    "description": "key is the label key that the selector applies to.",
+                    "type": "string"
+                  },
+                  "operator": {
+                    "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                    "type": "string"
+                  },
+                  "values": {
+                    "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "key",
+                  "operator"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "matchLabels": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
         "serviceRef": {
           "description": "serviceRef is a reference to a Kubernetes Service and ServicePort.",
           "properties": {
@@ -128,6 +180,7 @@
         },
         "targetGroupARN": {
           "description": "targetGroupARN is the Amazon Resource Name (ARN) for the TargetGroup.",
+          "minLength": 1,
           "type": "string"
         },
         "targetType": {
@@ -162,5 +215,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "elbv2.k8s.aws",
   "x-kubernetes-group-version-kind.kind": "TargetGroupBinding",
-  "x-kubernetes-group-version-kind.version": "v1alpha1"
+  "x-kubernetes-group-version-kind.version": "v1beta1"
 }

@@ -16,88 +16,140 @@
     "spec": {
       "description": "ImageUpdateAutomationSpec defines the desired state of ImageUpdateAutomation",
       "properties": {
-        "checkout": {
-          "description": "Checkout gives the parameters for cloning the git repository, ready to make changes.",
+        "git": {
+          "description": "GitSpec contains all the git-specific definitions. This is technically optional, but in practice mandatory until there are other kinds of source allowed.",
           "properties": {
-            "branch": {
-              "description": "Branch gives the branch to clone from the git repository. If `.spec.push` is not supplied, commits will also be pushed to this branch.",
-              "type": "string"
-            },
-            "gitRepositoryRef": {
-              "description": "GitRepositoryRef refers to the resource giving access details to a git repository to update files in.",
+            "checkout": {
+              "description": "Checkout gives the parameters for cloning the git repository, ready to make changes. If not present, the `spec.ref` field from the referenced `GitRepository` or its default will be used.",
               "properties": {
-                "name": {
-                  "description": "Name of the referent.",
+                "ref": {
+                  "description": "Reference gives a branch, tag or commit to clone from the Git repository.",
+                  "properties": {
+                    "branch": {
+                      "description": "Branch to check out, defaults to 'master' if no other field is defined. \n When GitRepositorySpec.GitImplementation is set to 'go-git', a shallow clone of the specified branch is performed.",
+                      "type": "string"
+                    },
+                    "commit": {
+                      "description": "Commit SHA to check out, takes precedence over all reference fields. \n When GitRepositorySpec.GitImplementation is set to 'go-git', this can be combined with Branch to shallow clone the branch, in which the commit is expected to exist.",
+                      "type": "string"
+                    },
+                    "semver": {
+                      "description": "SemVer tag expression to check out, takes precedence over Tag.",
+                      "type": "string"
+                    },
+                    "tag": {
+                      "description": "Tag to check out, takes precedence over Branch.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "ref"
+              ],
+              "type": "object"
+            },
+            "commit": {
+              "description": "Commit specifies how to commit to the git repository.",
+              "properties": {
+                "author": {
+                  "description": "Author gives the email and optionally the name to use as the author of commits.",
+                  "properties": {
+                    "email": {
+                      "description": "Email gives the email to provide when making a commit.",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "Name gives the name to provide when making a commit.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ],
+                  "type": "object"
+                },
+                "messageTemplate": {
+                  "description": "MessageTemplate provides a template for the commit message, into which will be interpolated the details of the change made.",
+                  "type": "string"
+                },
+                "signingKey": {
+                  "description": "SigningKey provides the option to sign commits with a GPG key",
+                  "properties": {
+                    "secretRef": {
+                      "description": "SecretRef holds the name to a secret that contains a 'git.asc' key corresponding to the ASCII Armored file containing the GPG signing keypair as the value. It must be in the same namespace as the ImageUpdateAutomation.",
+                      "properties": {
+                        "name": {
+                          "description": "Name of the referent.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "author"
+              ],
+              "type": "object"
+            },
+            "push": {
+              "description": "Push specifies how and where to push commits made by the automation. If missing, commits are pushed (back) to `.spec.checkout.branch` or its default.",
+              "properties": {
+                "branch": {
+                  "description": "Branch specifies that commits should be pushed to the branch named. The branch is created using `.spec.checkout.branch` as the starting point, if it doesn't already exist.",
                   "type": "string"
                 }
               },
               "required": [
-                "name"
+                "branch"
               ],
               "type": "object"
             }
           },
           "required": [
-            "branch",
-            "gitRepositoryRef"
-          ],
-          "type": "object"
-        },
-        "commit": {
-          "description": "Commit specifies how to commit to the git repository.",
-          "properties": {
-            "authorEmail": {
-              "description": "AuthorEmail gives the email to provide when making a commit",
-              "type": "string"
-            },
-            "authorName": {
-              "description": "AuthorName gives the name to provide when making a commit",
-              "type": "string"
-            },
-            "messageTemplate": {
-              "description": "MessageTemplate provides a template for the commit message, into which will be interpolated the details of the change made.",
-              "type": "string"
-            },
-            "signingKey": {
-              "description": "SigningKey provides the option to sign commits with a GPG key",
-              "properties": {
-                "secretRef": {
-                  "description": "SecretRef holds the name to a secret that contains a 'git.asc' key corresponding to the ASCII Armored file containing the GPG signing keypair as the value. It must be in the same namespace as the ImageUpdateAutomation.",
-                  "properties": {
-                    "name": {
-                      "description": "Name of the referent.",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name"
-                  ],
-                  "type": "object"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "required": [
-            "authorEmail",
-            "authorName"
+            "commit"
           ],
           "type": "object"
         },
         "interval": {
           "description": "Interval gives an lower bound for how often the automation run should be attempted.",
+          "pattern": "^([0-9]+(\\.[0-9]+)?(ms|s|m|h))+$",
           "type": "string"
         },
-        "push": {
-          "description": "Push specifies how and where to push commits made by the automation. If missing, commits are pushed (back) to `.spec.checkout.branch`.",
+        "sourceRef": {
+          "description": "SourceRef refers to the resource giving access details to a git repository.",
           "properties": {
-            "branch": {
-              "description": "Branch specifies that commits should be pushed to the branch named. The branch is created using `.spec.checkout.branch` as the starting point, if it doesn't already exist.",
+            "apiVersion": {
+              "description": "API version of the referent.",
+              "type": "string"
+            },
+            "kind": {
+              "default": "GitRepository",
+              "description": "Kind of the referent.",
+              "enum": [
+                "GitRepository"
+              ],
+              "type": "string"
+            },
+            "name": {
+              "description": "Name of the referent.",
+              "type": "string"
+            },
+            "namespace": {
+              "description": "Namespace of the referent, defaults to the namespace of the Kubernetes resource object that contains the reference.",
               "type": "string"
             }
           },
           "required": [
-            "branch"
+            "kind",
+            "name"
           ],
           "type": "object"
         },
@@ -131,18 +183,20 @@
         }
       },
       "required": [
-        "checkout",
-        "commit",
-        "interval"
+        "interval",
+        "sourceRef"
       ],
       "type": "object"
     },
     "status": {
+      "default": {
+        "observedGeneration": -1
+      },
       "description": "ImageUpdateAutomationStatus defines the observed state of ImageUpdateAutomation",
       "properties": {
         "conditions": {
           "items": {
-            "description": "Condition contains details for one aspect of the current state of this API Resource. --- This struct is intended for direct use as an array at the field path .status.conditions.  For example, \n \ttype FooStatus struct{ \t    // Represents the observations of a foo's current state. \t    // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\" \t    // +patchMergeKey=type \t    // +patchStrategy=merge \t    // +listType=map \t    // +listMapKey=type \t    Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"` \n \t    // other fields \t}",
+            "description": "Condition contains details for one aspect of the current state of this API Resource. --- This struct is intended for direct use as an array at the field path .status.conditions.  For example, \n type FooStatus struct{ // Represents the observations of a foo's current state. // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge // +listType=map // +listMapKey=type Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }",
             "properties": {
               "lastTransitionTime": {
                 "description": "lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
@@ -225,5 +279,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "image.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "ImageUpdateAutomation",
-  "x-kubernetes-group-version-kind.version": "v1alpha1"
+  "x-kubernetes-group-version-kind.version": "v1beta1"
 }

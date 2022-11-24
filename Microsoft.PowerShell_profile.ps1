@@ -48,6 +48,8 @@ Set-PsFzfOption -EnableFd -TabExpansion -GitKeyBindings -EnableAliasFuzzyEdit -E
 
 Set-Alias fzf Invoke-Fzf
 Set-Alias whereis Get-Command
+Set-Alias sed 'C:\Program Files\Git\usr\bin\sed.exe'
+
 # https://github.com/chawyehsu/base16-concfg colors
 $GitPromptSettings.DefaultPromptPath.ForegroundColor = 0x61F053 ;
 $GitPromptSettings.DefaultPromptBeforeSuffix.Text = ''
@@ -379,7 +381,7 @@ function kubeNodeShell() {
         $shell = '/bin/bash';
     }
     [string] $command = "[ ""/nsenter"", ""--target"", ""1"", ""--mount"", ""--uts"", ""--ipc"", ""--net"", ""--pid"", ""--"", ""$shell"" ]";
-    kubeNodeExec $node 'node-shell' $command "alexeiled/nsenter:2.37.2" 'IfNotPresent' 'true' ;
+    kubeNodeExec $node 'node-shell' $command "alexeiled/nsenter:2.38.1" 'IfNotPresent' 'true' ;
 }
 
 function kubeNodeExec {
@@ -417,7 +419,7 @@ function kubeNodeExec {
         $tty = 'true';
     }
     [string] $json = "{ ""spec"": { ""nodeName"": ""$node"", ""hostPID"": true, ""hostNetwork"": true, ""hostIPC"": true, ""privileged"": true, ""allowPrivilegeEscalation"": true, ""containers"": [ { ""securityContext"": { ""privileged"": true, ""capabilities"": {""add"": [""SYS_PTRACE"", ""SYS_CHROOT"", ""SYS_ADMIN"", ""SETGID"", ""SETUID"", ""CHOWN"", ""IPC_LOCK"", ""IPC_OWNER""]} }, ""image"": ""$image"", ""imagePullPolicy"":""$imagePullPolicy"", ""name"": ""$pod"", ""stdin"": true, ""stdinOnce"": true, ""tty"": $tty, ""command"": $command } ], ""tolerations"": [ { ""key"": ""CriticalAddonsOnly"", ""operator"": ""Exists"" },{ ""effect"": ""NoExecute"", ""operator"": ""Exists""}]}}";
-    [string] $ctlArgs = "run ""$pod"" --pod-running-timeout=5m0s  --image-pull-policy=""$imagePullPolicy"" --attach --namespace=default -it --image=""$image"" --restart=Never --rm=true --overrides=""$($json.Replace('"','\"'))""";
+    [string] $ctlArgs = "run ""$pod"" --pod-running-timeout=5m0s  --image-pull-policy=""$imagePullPolicy"" --attach --namespace=default -it --image=""$image"" --restart=Never --rm=true --overrides=""$($json.Replace('"',"\""))""";
     Write-Host "`e[93mkubectl $ctlArgs`e[0m"
     & "kubectl" $ctlArgs.Split(' ')
 }
@@ -604,13 +606,13 @@ function crd2jsonschema() {
     "`$schema": "http://json-schema.org/draft-07/schema",
     "x-kubernetes-group-version-kind.group": .spec.group,
     "x-kubernetes-group-version-kind.kind": .spec.names.kind,
-    "x-kubernetes-group-version-kind.version": .spec.versions[0].name,
+    "x-kubernetes-group-version-kind.version": (.spec.versions[-1].name),
     title: .spec.names.kind,
     type: "object",
-    properties: .spec.versions[0].schema.openAPIV3Schema.properties,
-    description: (.spec.versions[0].schema.openAPIV3Schema.description // ""),
-    required: (.spec.versions[0].schema.openAPIV3Schema.required // [])
-}
+    properties: .spec.versions[-1].schema.openAPIV3Schema.properties,
+    description: (.spec.versions[-1].schema.openAPIV3Schema.description // ""),
+    required: (.spec.versions[-1].schema.openAPIV3Schema.required // [])
+    }
 "@;
     [string] $tempFile = [System.IO.Path]::GetTempFileName();
     try {
