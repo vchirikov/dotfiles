@@ -4,18 +4,6 @@
     {
       "alignment": "left",
       "segments": [
-        // {
-        //   "background": "p:yellow",
-        //   "foreground": "p:black",
-        //   "leading_diamond": "\ue0b6",
-        //   "properties": {
-        //     "display_host": false
-        //   },
-        //   "style": "diamond",
-        //   "template": " {{ if .SSHSession }}\uf817 {{ end }}{{ .UserName }} ",
-        //   "trailing_diamond": "\ue0b0",
-        //   "type": "session"
-        // },
         {
           "background": "p:orange",
           "foreground": "p:white",
@@ -54,23 +42,11 @@
           "type": "git"
         },
         {
-          "background": "p:yellow",
-          "foreground": "p:white",
-          "powerline_symbol": "\ue0b0",
-          "properties": {
-            "root_icon": "\uf0ad"
-          },
-          "style": "powerline",
-          "template": " \uf0e7 ",
-          "type": "root"
-        },
-        {
           "background": "p:blue",
           "background_templates": [
             "{{ if gt .Code 0 }}p:red{{ end }}"
           ],
           "foreground": "p:white",
-          //"leading_diamond": "<transparent,background>\ue0b0</>",
           "properties": {
             "always_enabled": true
           },
@@ -85,51 +61,23 @@
     {
       "segments": [
         {
-          "background": "transparent",
-          "foreground": "p:green",
+          "foreground": "#b8ff75",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}#E06C75{{ end }}"
+          ],
           "properties": {
-            "display_mode": "files",
-            "fetch_package_manager": false,
-            "home_enabled": false
+            "style": "roundrock",
+            "always_enabled": true
           },
-          "style": "plain",
-          "template": "\uf898 ",
-          "type": "node"
-        },
-        {
-          "background": "transparent",
-          "foreground": "p:blue",
-          "properties": {
-            "fetch_version": false
-          },
-          "style": "powerline",
-          "template": "\ufcd1 ",
-          "type": "go"
-        },
-        {
-          "background": "transparent",
-          "foreground": "p:yellow",
-          "properties": {
-            "display_mode": "files",
-            "fetch_version": true,
-            "fetch_virtual_env": false
-          },
-          "style": "plain",
-          "template": "\ue235 ",
-          "type": "python"
+          "style": "diamond",
+          "template": " \ue384 {{ .FormattedMs }} ",
+          "type": "executiontime"
         },
         {
           "background": "transparent",
           "foreground": "p:white",
           "style": "plain",
-          "template": "in <p:blue><b>{{ .Name }}</b></> ",
-          "type": "shell"
-        },
-        {
-          "background": "transparent",
-          "foreground": "p:white",
-          "style": "plain",
-          "template": "at <p:blue><b>{{ .CurrentDate | date \"15:04:05\" }}</b></>",
+          "template": " <p:blue><b>{{ .CurrentDate | date \"15:04:05\" }}</b></>",
           "type": "time"
         }
       ],
@@ -146,11 +94,6 @@
     "red": "#D81E5B",
     "white": "#E0DEF4",
     "yellow": "#F3AE35"
-  },
-  "secondary_prompt": {
-    "background": "transparent",
-    "foreground": "p:black",
-    "template": "<p:yellow,transparent>\ue0b6</><,p:yellow> > </><p:yellow,transparent>\ue0b0</> "
   },
   "tooltips": [
     {
@@ -182,9 +125,11 @@
     }
   ],
   "transient_prompt": {
-    "background": "transparent",
-    "foreground": "p:black",
-    "template": "<p:yellow,transparent>\ue0b6</><,p:yellow> {{ .Folder }} </><p:yellow,transparent>\ue0b0</> "
+    "foreground": "#49bd5c",
+    "foreground_templates": [
+      "{{ if gt .Code 0 }}#BF616A{{ end }}"
+    ],
+    "template": "\u276f "
   },
   "version": 2
 }
