@@ -78,8 +78,8 @@ div.menubar, .part.titlebar {
 
 
 /* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
-
-.title.tabs {
+/* Multiline doesn't work well because of electron bug */
+/* .title.tabs {
   height: auto !important;
 }
 
@@ -114,16 +114,16 @@ div.menubar, .part.titlebar {
 
 .title.tabs .tabs-container .tab:not(.sticky) {
   order: 1 !important;
-}
+} */
 
 /* for some reason sometimes last tab is stretched 100%. This is a fix. */
-.title.tabs .tabs-container .tab.last-in-row:not(:last-child) {
+/* .title.tabs .tabs-container .tab.last-in-row:not(:last-child) {
   flex-grow: 0 !important;
 }
 
 .tab.sticky {
   font-weight: 600 !important;
-}
+} */
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
 
