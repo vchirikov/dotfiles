@@ -39,6 +39,11 @@
     {"$ref": "updateinfos.nodemanagement.gke.io.schema.json" },
     {"$ref": "volumesnapshotclasses.snapshot.storage.k8s.io.schema.json" },
     {"$ref": "volumesnapshotcontents.snapshot.storage.k8s.io.schema.json" },
-    {"$ref": "volumesnapshots.snapshot.storage.k8s.io.schema.json" }
+    {"$ref": "volumesnapshots.snapshot.storage.k8s.io.schema.json" },
+    {"$ref": "grafanadashboards.integreatly.org.schema.json" },
+    {"$ref": "grafanadatasources.integreatly.org.schema.json" },
+    {"$ref": "grafanafolders.integreatly.org.schema.json" },
+    {"$ref": "grafananotificationchannels.integreatly.org.schema.json" },
+    {"$ref": "grafanas.integreatly.org.schema.json" }
   ]
 }
