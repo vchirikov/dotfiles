@@ -222,6 +222,10 @@ function killDebugProxy {
     }
 }
 
+function kubeBusybox() {
+    kubectl debug -it --target $(kubectl get pods -o name --all-namespaces | fzf) --image=busybox
+}
+
 function pod() {
     # id = _quake doesn't work well with admin rights
     # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" "$PWD\wt_main.lnk" "q:\code\vchirikov\dotfiles\windows_terminal\terminal.ico" "-w main -d q:\code"
@@ -278,7 +282,7 @@ function vs {
         )]
         [string] $path)
 
-    [string] $vsPath = "${env:ProgramFiles}\Microsoft Visual Studio\2022\Preview\Common7\IDE\devenv.exe"
+    [string] $vsPath = "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe"
     if ([string]::IsNullOrWhiteSpace($path)) {
         $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" | Select-Object -First 1;
     }
@@ -380,8 +384,9 @@ function kubeNodeShell() {
     if ([string]::IsNullOrWhiteSpace($shell)) {
         $shell = '/bin/bash';
     }
-    [string] $command = "[ ""/nsenter"", ""--target"", ""1"", ""--mount"", ""--uts"", ""--ipc"", ""--net"", ""--pid"", ""--"", ""$shell"" ]";
-    kubeNodeExec $node 'node-shell' $command "alexeiled/nsenter:2.38.1" 'IfNotPresent' 'true' ;
+    # do not use spaces here, it will break .Split(' ')
+    [string] $command = "[""/nsenter"",""--target"",""1"",""--mount"",""--uts"",""--ipc"",""--net"",""--pid"",""--"",""$shell""]";
+    kubeNodeExec "$node" 'node-shell' "$command" "alexeiled/nsenter:2.38.1" 'IfNotPresent' 'true' ;
 }
 
 function kubeNodeExec {
@@ -418,8 +423,10 @@ function kubeNodeExec {
     if ([string]::IsNullOrWhiteSpace($tty)) {
         $tty = 'true';
     }
-    [string] $json = "{ ""spec"": { ""nodeName"": ""$node"", ""hostPID"": true, ""hostNetwork"": true, ""hostIPC"": true, ""privileged"": true, ""allowPrivilegeEscalation"": true, ""containers"": [ { ""securityContext"": { ""privileged"": true, ""capabilities"": {""add"": [""SYS_PTRACE"", ""SYS_CHROOT"", ""SYS_ADMIN"", ""SETGID"", ""SETUID"", ""CHOWN"", ""IPC_LOCK"", ""IPC_OWNER""]} }, ""image"": ""$image"", ""imagePullPolicy"":""$imagePullPolicy"", ""name"": ""$pod"", ""stdin"": true, ""stdinOnce"": true, ""tty"": $tty, ""command"": $command } ], ""tolerations"": [ { ""key"": ""CriticalAddonsOnly"", ""operator"": ""Exists"" },{ ""effect"": ""NoExecute"", ""operator"": ""Exists""}]}}";
-    [string] $ctlArgs = "run ""$pod"" --pod-running-timeout=5m0s  --image-pull-policy=""$imagePullPolicy"" --attach --namespace=default -it --image=""$image"" --restart=Never --rm=true --overrides=""$($json.Replace('"',"\""))""";
+    # do not use spaces here, it will break .Split(' ')
+    [string] $json = "{""spec"":{""nodeName"":""$node"",""hostPID"":true,""hostNetwork"":true,""hostIPC"":true,""privileged"":true,""allowPrivilegeEscalation"":true,""allowedUnsafeSysctls"":[""*""],""containers"":[{""securityContext"":{""privileged"":true,""capabilities"":{""add"":[""SYS_PTRACE"",""SYS_CHROOT"",""SYS_ADMIN"",""SETGID"",""SETUID"",""CHOWN"",""IPC_LOCK"",""IPC_OWNER"",""CAP_SYS_ADMIN""]}},""image"":""$image"",""imagePullPolicy"":""$imagePullPolicy"",""name"":""$pod"",""stdin"":true,""stdinOnce"":true,""tty"":$tty,""command"":$command}],""tolerations"":[{""operator"":""Exists""}]}}";
+
+    [string] $ctlArgs = "run $pod --pod-running-timeout=5m0s --image-pull-policy=$imagePullPolicy --attach --namespace=default -it --image=$image --restart=Never --rm=true --overrides=$json";
     Write-Host "`e[93mkubectl $ctlArgs`e[0m"
     & "kubectl" $ctlArgs.Split(' ')
 }
