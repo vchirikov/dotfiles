@@ -14,7 +14,7 @@
       "type": "object"
     },
     "spec": {
-      "description": "ImagePolicySpec defines the parameters for calculating the ImagePolicy",
+      "description": "ImagePolicySpec defines the parameters for calculating the ImagePolicy.",
       "properties": {
         "filterTags": {
           "description": "FilterTags enables filtering for only a subset of tags based on a set of rules. If no rules are provided, all the tags from the repository will be ordered and compared.",
@@ -170,6 +170,10 @@
         "observedGeneration": {
           "format": "int64",
           "type": "integer"
+        },
+        "observedPreviousImage": {
+          "description": "ObservedPreviousImage is the observed previous LatestImage. It is used to keep track of the previous and current images.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -180,5 +184,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "image.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "ImagePolicy",
-  "x-kubernetes-group-version-kind.version": "v1beta1"
+  "x-kubernetes-group-version-kind.version": "v1beta2"
 }

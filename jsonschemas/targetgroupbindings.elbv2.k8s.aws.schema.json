@@ -150,7 +150,8 @@
               "type": "object"
             }
           },
-          "type": "object"
+          "type": "object",
+          "x-kubernetes-map-type": "atomic"
         },
         "serviceRef": {
           "description": "serviceRef is a reference to a Kubernetes Service and ServicePort.",

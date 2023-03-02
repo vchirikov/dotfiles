@@ -14,11 +14,11 @@
       "type": "object"
     },
     "spec": {
-      "description": "AlertSpec defines an alerting rule for events involving a list of objects",
+      "description": "AlertSpec defines an alerting rule for events involving a list of objects.",
       "properties": {
         "eventSeverity": {
           "default": "info",
-          "description": "Filter events based on severity, defaults to ('info'). If set to 'info' no events will be filtered.",
+          "description": "EventSeverity specifies how to filter events based on severity. If set to 'info' no events will be filtered.",
           "enum": [
             "info",
             "error"
@@ -26,16 +26,16 @@
           "type": "string"
         },
         "eventSources": {
-          "description": "Filter events based on the involved objects.",
+          "description": "EventSources specifies how to filter events based on the involved object kind, name and namespace.",
           "items": {
             "description": "CrossNamespaceObjectReference contains enough information to let you locate the typed referenced object at cluster level",
             "properties": {
               "apiVersion": {
-                "description": "API version of the referent",
+                "description": "API version of the referent.",
                 "type": "string"
               },
               "kind": {
-                "description": "Kind of the referent",
+                "description": "Kind of the referent.",
                 "enum": [
                   "Bucket",
                   "GitRepository",
@@ -58,13 +58,13 @@
                 "type": "object"
               },
               "name": {
-                "description": "Name of the referent",
+                "description": "Name of the referent.",
                 "maxLength": 53,
                 "minLength": 1,
                 "type": "string"
               },
               "namespace": {
-                "description": "Namespace of the referent",
+                "description": "Namespace of the referent.",
                 "maxLength": 53,
                 "minLength": 1,
                 "type": "string"
@@ -78,14 +78,14 @@
           "type": "array"
         },
         "exclusionList": {
-          "description": "A list of Golang regular expressions to be used for excluding messages.",
+          "description": "ExclusionList specifies a list of Golang regular expressions to be used for excluding messages.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "providerRef": {
-          "description": "Send events using this provider.",
+          "description": "ProviderRef specifies which Provider this Alert should use.",
           "properties": {
             "name": {
               "description": "Name of the referent.",
@@ -98,11 +98,12 @@
           "type": "object"
         },
         "summary": {
-          "description": "Short description of the impact and affected cluster.",
+          "description": "Summary holds a short description of the impact and affected cluster.",
+          "maxLength": 255,
           "type": "string"
         },
         "suspend": {
-          "description": "This flag tells the controller to suspend subsequent events dispatching. Defaults to false.",
+          "description": "Suspend tells the controller to suspend subsequent events handling for this Alert.",
           "type": "boolean"
         }
       },
@@ -116,9 +117,10 @@
       "default": {
         "observedGeneration": -1
       },
-      "description": "AlertStatus defines the observed state of Alert",
+      "description": "AlertStatus defines the observed state of the Alert.",
       "properties": {
         "conditions": {
+          "description": "Conditions holds the conditions for the Alert.",
           "items": {
             "description": "Condition contains details for one aspect of the current state of this API Resource. --- This struct is intended for direct use as an array at the field path .status.conditions.  For example, \n type FooStatus struct{ // Represents the observations of a foo's current state. // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge // +listType=map // +listMapKey=type Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }",
             "properties": {
@@ -172,6 +174,10 @@
           },
           "type": "array"
         },
+        "lastHandledReconcileAt": {
+          "description": "LastHandledReconcileAt holds the value of the most recent reconcile request value, so a change of the annotation value can be detected.",
+          "type": "string"
+        },
         "observedGeneration": {
           "description": "ObservedGeneration is the last observed generation.",
           "format": "int64",
@@ -186,5 +192,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "notification.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "Alert",
-  "x-kubernetes-group-version-kind.version": "v1beta1"
+  "x-kubernetes-group-version-kind.version": "v1beta2"
 }

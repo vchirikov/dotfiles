@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "description": "Receiver is the Schema for the receivers API",
+  "description": "Receiver is the Schema for the receivers API.",
   "properties": {
     "apiVersion": {
       "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
@@ -14,14 +14,19 @@
       "type": "object"
     },
     "spec": {
-      "description": "ReceiverSpec defines the desired state of Receiver",
+      "description": "ReceiverSpec defines the desired state of the Receiver.",
       "properties": {
         "events": {
-          "description": "A list of events to handle, e.g. 'push' for GitHub or 'Push Hook' for GitLab.",
+          "description": "Events specifies the list of event types to handle, e.g. 'push' for GitHub or 'Push Hook' for GitLab.",
           "items": {
             "type": "string"
           },
           "type": "array"
+        },
+        "interval": {
+          "description": "Interval at which to reconcile the Receiver with its Secret references.",
+          "pattern": "^([0-9]+(\\.[0-9]+)?(ms|s|m|h))+$",
+          "type": "string"
         },
         "resources": {
           "description": "A list of resources to be notified about changes.",
@@ -29,11 +34,11 @@
             "description": "CrossNamespaceObjectReference contains enough information to let you locate the typed referenced object at cluster level",
             "properties": {
               "apiVersion": {
-                "description": "API version of the referent",
+                "description": "API version of the referent.",
                 "type": "string"
               },
               "kind": {
-                "description": "Kind of the referent",
+                "description": "Kind of the referent.",
                 "enum": [
                   "Bucket",
                   "GitRepository",
@@ -56,13 +61,13 @@
                 "type": "object"
               },
               "name": {
-                "description": "Name of the referent",
+                "description": "Name of the referent.",
                 "maxLength": 53,
                 "minLength": 1,
                 "type": "string"
               },
               "namespace": {
-                "description": "Namespace of the referent",
+                "description": "Namespace of the referent.",
                 "maxLength": 53,
                 "minLength": 1,
                 "type": "string"
@@ -76,7 +81,7 @@
           "type": "array"
         },
         "secretRef": {
-          "description": "Secret reference containing the token used to validate the payload authenticity",
+          "description": "SecretRef specifies the Secret containing the token used to validate the payload authenticity.",
           "properties": {
             "name": {
               "description": "Name of the referent.",
@@ -89,7 +94,7 @@
           "type": "object"
         },
         "suspend": {
-          "description": "This flag tells the controller to suspend subsequent events handling. Defaults to false.",
+          "description": "Suspend tells the controller to suspend subsequent events handling for this receiver.",
           "type": "boolean"
         },
         "type": {
@@ -120,9 +125,10 @@
       "default": {
         "observedGeneration": -1
       },
-      "description": "ReceiverStatus defines the observed state of Receiver",
+      "description": "ReceiverStatus defines the observed state of the Receiver.",
       "properties": {
         "conditions": {
+          "description": "Conditions holds the conditions for the Receiver.",
           "items": {
             "description": "Condition contains details for one aspect of the current state of this API Resource. --- This struct is intended for direct use as an array at the field path .status.conditions.  For example, \n type FooStatus struct{ // Represents the observations of a foo's current state. // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge // +listType=map // +listMapKey=type Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }",
             "properties": {
@@ -176,13 +182,21 @@
           },
           "type": "array"
         },
+        "lastHandledReconcileAt": {
+          "description": "LastHandledReconcileAt holds the value of the most recent reconcile request value, so a change of the annotation value can be detected.",
+          "type": "string"
+        },
         "observedGeneration": {
-          "description": "ObservedGeneration is the last observed generation.",
+          "description": "ObservedGeneration is the last observed generation of the Receiver object.",
           "format": "int64",
           "type": "integer"
         },
         "url": {
-          "description": "Generated webhook URL in the format of '/hook/sha256sum(token+name+namespace)'.",
+          "description": "URL is the generated incoming webhook address in the format of '/hook/sha256sum(token+name+namespace)'. Deprecated: Replaced by WebhookPath.",
+          "type": "string"
+        },
+        "webhookPath": {
+          "description": "WebhookPath is the generated incoming webhook address in the format of '/hook/sha256sum(token+name+namespace)'.",
           "type": "string"
         }
       },
@@ -194,5 +208,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "notification.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "Receiver",
-  "x-kubernetes-group-version-kind.version": "v1beta1"
+  "x-kubernetes-group-version-kind.version": "v1beta2"
 }

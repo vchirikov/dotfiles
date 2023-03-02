@@ -99,7 +99,8 @@
               "type": "object"
             }
           },
-          "type": "object"
+          "type": "object",
+          "x-kubernetes-map-type": "atomic"
         },
         "scheme": {
           "description": "Scheme defines the scheme for all Ingresses that belong to IngressClass with this IngressClassParams.",

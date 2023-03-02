@@ -56,10 +56,14 @@
           "type": "object"
         },
         "exclusionList": {
+          "default": [
+            "^.*\\.sig$"
+          ],
           "description": "ExclusionList is a list of regex strings used to exclude certain tags from being stored in the database.",
           "items": {
             "type": "string"
           },
+          "maxItems": 25,
           "type": "array"
         },
         "image": {
@@ -69,6 +73,17 @@
         "interval": {
           "description": "Interval is the length of time to wait between scans of the image repository.",
           "pattern": "^([0-9]+(\\.[0-9]+)?(ms|s|m|h))+$",
+          "type": "string"
+        },
+        "provider": {
+          "default": "generic",
+          "description": "The provider used for authentication, can be 'aws', 'azure', 'gcp' or 'generic'. When not specified, defaults to 'generic'.",
+          "enum": [
+            "generic",
+            "aws",
+            "azure",
+            "gcp"
+          ],
           "type": "string"
         },
         "secretRef": {
@@ -172,6 +187,12 @@
         "lastScanResult": {
           "description": "LastScanResult contains the number of fetched tags.",
           "properties": {
+            "latestTags": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "scanTime": {
               "format": "date-time",
               "type": "string"
@@ -184,6 +205,13 @@
             "tagCount"
           ],
           "type": "object"
+        },
+        "observedExclusionList": {
+          "description": "ObservedExclusionList is a list of observed exclusion list. It reflects the exclusion rules used for the observed scan result in spec.lastScanResult.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "observedGeneration": {
           "description": "ObservedGeneration is the last reconciled generation.",
@@ -199,5 +227,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "image.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "ImageRepository",
-  "x-kubernetes-group-version-kind.version": "v1beta1"
+  "x-kubernetes-group-version-kind.version": "v1beta2"
 }

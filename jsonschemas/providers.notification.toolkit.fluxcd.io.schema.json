@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "description": "Provider is the Schema for the providers API",
+  "description": "Provider is the Schema for the providers API.",
   "properties": {
     "apiVersion": {
       "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
@@ -14,15 +14,16 @@
       "type": "object"
     },
     "spec": {
-      "description": "ProviderSpec defines the desired state of Provider",
+      "description": "ProviderSpec defines the desired state of the Provider.",
       "properties": {
         "address": {
-          "description": "HTTP/S webhook address of this provider",
-          "pattern": "^(http|https)://",
+          "description": "Address specifies the HTTP/S incoming webhook address of this Provider.",
+          "maxLength": 2048,
+          "pattern": "^(http|https)://.*$",
           "type": "string"
         },
         "certSecretRef": {
-          "description": "CertSecretRef can be given the name of a secret containing a PEM-encoded CA certificate (`caFile`)",
+          "description": "CertSecretRef specifies the Secret containing a PEM-encoded CA certificate (`caFile`).",
           "properties": {
             "name": {
               "description": "Name of the referent.",
@@ -35,16 +36,23 @@
           "type": "object"
         },
         "channel": {
-          "description": "Alert channel for this provider",
+          "description": "Channel specifies the destination channel where events should be posted.",
+          "maxLength": 2048,
+          "type": "string"
+        },
+        "interval": {
+          "description": "Interval at which to reconcile the Provider with its Secret references.",
+          "pattern": "^([0-9]+(\\.[0-9]+)?(ms|s|m|h))+$",
           "type": "string"
         },
         "proxy": {
-          "description": "HTTP/S address of the proxy",
-          "pattern": "^(http|https)://",
+          "description": "Proxy the HTTP/S address of the proxy server.",
+          "maxLength": 2048,
+          "pattern": "^(http|https)://.*$",
           "type": "string"
         },
         "secretRef": {
-          "description": "Secret reference containing the provider webhook URL using \"address\" as data key",
+          "description": "SecretRef specifies the Secret containing the authentication credentials for this Provider.",
           "properties": {
             "name": {
               "description": "Name of the referent.",
@@ -57,16 +65,16 @@
           "type": "object"
         },
         "suspend": {
-          "description": "This flag tells the controller to suspend subsequent events handling. Defaults to false.",
+          "description": "Suspend tells the controller to suspend subsequent events handling for this Provider.",
           "type": "boolean"
         },
         "timeout": {
-          "description": "Timeout for sending alerts to the provider.",
+          "description": "Timeout for sending alerts to the Provider.",
           "pattern": "^([0-9]+(\\.[0-9]+)?(ms|s|m))+$",
           "type": "string"
         },
         "type": {
-          "description": "Type of provider",
+          "description": "Type specifies which Provider implementation to use.",
           "enum": [
             "slack",
             "discord",
@@ -76,6 +84,7 @@
             "generic-hmac",
             "github",
             "gitlab",
+            "gitea",
             "bitbucket",
             "azuredevops",
             "googlechat",
@@ -93,7 +102,8 @@
           "type": "string"
         },
         "username": {
-          "description": "Bot username for this provider",
+          "description": "Username specifies the name under which events are posted.",
+          "maxLength": 2048,
           "type": "string"
         }
       },
@@ -106,9 +116,10 @@
       "default": {
         "observedGeneration": -1
       },
-      "description": "ProviderStatus defines the observed state of Provider",
+      "description": "ProviderStatus defines the observed state of the Provider.",
       "properties": {
         "conditions": {
+          "description": "Conditions holds the conditions for the Provider.",
           "items": {
             "description": "Condition contains details for one aspect of the current state of this API Resource. --- This struct is intended for direct use as an array at the field path .status.conditions.  For example, \n type FooStatus struct{ // Represents the observations of a foo's current state. // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge // +listType=map // +listMapKey=type Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }",
             "properties": {
@@ -162,6 +173,10 @@
           },
           "type": "array"
         },
+        "lastHandledReconcileAt": {
+          "description": "LastHandledReconcileAt holds the value of the most recent reconcile request value, so a change of the annotation value can be detected.",
+          "type": "string"
+        },
         "observedGeneration": {
           "description": "ObservedGeneration is the last reconciled generation.",
           "format": "int64",
@@ -176,5 +191,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "notification.toolkit.fluxcd.io",
   "x-kubernetes-group-version-kind.kind": "Provider",
-  "x-kubernetes-group-version-kind.version": "v1beta1"
+  "x-kubernetes-group-version-kind.version": "v1beta2"
 }
