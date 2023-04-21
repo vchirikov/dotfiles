@@ -3,6 +3,11 @@ $env:POSH_GIT_ENABLED = $true
 oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
 Enable-PoshTransientPrompt
 
+# color helpers
+[string] $color_red="`e[0;31m";
+[string] $color_green="`e[0;32m";
+[string] $color_off="`e[0m";
+
 # for profiling
 #Import-Module PSProfiler
 #Measure-Script {
@@ -30,17 +35,17 @@ Remove-PSReadlineKeyHandler 'Ctrl+r'
 Remove-PSReadlineKeyHandler 'Ctrl+t'
 
 $env:FZF_DEFAULT_COMMAND = 'fd --color=always --type file --follow --hidden --exclude .git'
-$env:FZF_DEFAULT_OPTS = "--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse";
-$env:FZF__OPTS = "--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse";
-$env:BAT_PAGER = ""
+$env:FZF_DEFAULT_OPTS = '--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse';
+$env:FZF__OPTS = '--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse';
+$env:BAT_PAGER = ''
 
 # https://github.com/nickcox/cd-extras
+Import-Module cd-extras
 $cde = @{
-    AUTO_CD  = $false
+    AUTO_CD  = $true
     CD_PATH  = 'q:\\code\\Telgorithm', 'q:\\code\\vchirikov'
     NOARG_CD = 'q:\\code'
 }
-Import-Module cd-extras
 Import-Module PSFzf
 # Fzf tab completion
 Set-PSReadLineKeyHandler -Key Tab -ScriptBlock { Invoke-FzfTabCompletion }
@@ -285,6 +290,9 @@ function vs {
     [string] $vsPath = "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe"
     if ([string]::IsNullOrWhiteSpace($path)) {
         $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" | Select-Object -First 1;
+        if ([string]::IsNullOrWhiteSpace($path)) {
+            $path = $([System.IO.Path]::GetFullPath($PWD))
+        }
     }
     else {
         if (!$path.Contains(':')) {
@@ -292,6 +300,42 @@ function vs {
         }
     }
     Start-Process -FilePath $vsPath -ArgumentList $([System.IO.Path]::GetFullPath($path))
+}
+
+function rider {
+    param(
+        [ArgumentCompleter(
+            {
+                param($cmd, $param, $values)
+                Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" |
+                Where-Object { $_.Name.StartsWith($values, [StringComparison]::OrdinalIgnoreCase) } |
+                ForEach-Object { $([System.IO.Path]::GetFileName($_)) } |
+                Sort-Object |
+                ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
+            }
+        )]
+        [string] $path)
+
+    $env:JETBRAINS_CLIENT_VM_OPTIONS = 'C:\Program Files\JetBrains\_\vmoptions\jetbrains_client.vmoptions';
+    $env:JETBRAINSCLIENT_VM_OPTIONS = 'C:\Program Files\JetBrains\_\vmoptions\jetbrainsclient.vmoptions';
+    $env:RIDER_VM_OPTIONS = 'C:\Program Files\JetBrains\_\vmoptions\rider.vmoptions';
+    $env:STUDIO_VM_OPTIONS = 'C:\Program Files\JetBrains\_\vmoptions\studio.vmoptions';
+
+
+
+    [string] $riderPath = "${env:ProgramFiles}\JetBrains\Rider\bin\rider64.exe"
+    if ([string]::IsNullOrWhiteSpace($path)) {
+        $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" | Select-Object -First 1;
+        if ([string]::IsNullOrWhiteSpace($path)) {
+            $path = $([System.IO.Path]::GetFullPath($PWD))
+        }
+    }
+    else {
+        if (!$path.Contains(':')) {
+            $path = $([System.IO.Path]::Combine($PWD, $path))
+        }
+    }
+    Start-Process -FilePath $riderPath -ArgumentList $([System.IO.Path]::GetFullPath($path))
 }
 
 function base64 {
@@ -391,6 +435,18 @@ function kubeNodeShell() {
 
 function kubeNodeExec {
     param(
+        [ArgumentCompleter(
+            {
+                param($cmd, $param, $values)
+                if ([string]::IsNullOrWhiteSpace($env:KUBECONFIG)) {
+                    return;
+                }
+                & kubectl get nodes --all-namespaces -o name |
+                ForEach-Object { $_.Substring(5) } |
+                Sort-Object |
+                ForEach-Object { $([System.Management.Automation.CompletionResult]::new($_)) }
+            }
+        )]
         [string] $node,
         [string] $pod,
         [string] $command,
