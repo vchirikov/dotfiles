@@ -1,4 +1,9 @@
 --[[
+
+
+Path: C:\Program Files\VideoLAN\VLC\lua\extensions\
+
+
 Program: File Management
 Purpose: Delete, copy or move the current playing file
 
@@ -35,7 +40,7 @@ Configure the actions in this 'actions' variable. You can put as many buttons as
 
 actions = {
 { column="1", actiontype="delete", button="Delete permanently", folder="", duplicate="", copystyle="" },
-{ column="1", actiontype="move", button="Move to phone", folder="drive:/music/phone", duplicate="overwrite", copystyle="windowsrealmove" },
+{ column="1", actiontype="copy", button="Copy to phone", folder="drive:/music/phone", duplicate="overwrite", copystyle="windowsrealmove" },
 -- { column="1", actiontype="move", button="Delete", folder="drive:/Wastebasket", duplicate="both", copystyle="windowsrealmove" },
 -- { column="1", actiontype="move", button="Move to testmove", folder="drive:/Data/media/test move", duplicate="both", copystyle="windowsrealmove" },
 -- { column="2", actiontype="copy", button="Copy to testcopy", folder="drive:/Data/media/test copy", duplicate="both", copystyle="windowsrealmove" },
