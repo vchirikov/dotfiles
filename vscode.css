@@ -136,9 +136,9 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
   top: 26px !important;
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container {
+/* .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container {
   height: var(--tab-height) !important;
-}
+} */
 
 .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
   height: var(--tab-height) !important;
