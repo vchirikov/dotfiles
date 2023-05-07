@@ -16,7 +16,8 @@
 
 /* removes underscore style on links */
 
-.mtku, .detected-link {
+.mtku,
+.detected-link {
   text-decoration: none !important;
 }
 
@@ -53,7 +54,10 @@
 
 /* hides editor group icons. https://github.com/microsoft/vscode/issues/46403 */
 
-a[title="Open Changes"], a[title="Git: View File History (Alt+H)"], a[title="Split Editor Right (Ctrl+\)"], a[title="Split Editor Right (Ctrl+\\)"] {
+a[title="Open Changes"],
+a[title="Git: View File History (Alt+H)"],
+a[title="Split Editor Right (Ctrl+\)"],
+a[title="Split Editor Right (Ctrl+\\)"] {
   display: none !important;
 }
 
@@ -63,7 +67,8 @@ body>div.file-icons-enabled.monaco-workbench>div.monaco-grid-view>div>div>div.mo
   top: var(--tab-height) !important;
 }
 
-div.menubar, .part.titlebar {
+div.menubar,
+.part.titlebar {
   height: var(--tab-height) !important;
   line-height: var(--tab-height);
 }
@@ -79,7 +84,7 @@ div.menubar, .part.titlebar {
 
 /* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
 /* Multiline doesn't work well because of electron bug */
-/* .title.tabs {
+.title.tabs {
   height: auto !important;
 }
 
@@ -114,16 +119,16 @@ div.menubar, .part.titlebar {
 
 .title.tabs .tabs-container .tab:not(.sticky) {
   order: 1 !important;
-} */
+}
 
 /* for some reason sometimes last tab is stretched 100%. This is a fix. */
-/* .title.tabs .tabs-container .tab.last-in-row:not(:last-child) {
+.title.tabs .tabs-container .tab.last-in-row:not(:last-child) {
   flex-grow: 0 !important;
 }
 
 .tab.sticky {
   font-weight: 600 !important;
-} */
+}
 
 /* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
 
@@ -168,7 +173,8 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
   background-size: 12px !important;
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-close .action-label.codicon, .monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-actions .action-label.codicon {
+.monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-close .action-label.codicon,
+.monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-actions .action-label.codicon {
   font-size: 14px !important;
 }
 
@@ -183,7 +189,8 @@ div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-contai
   padding: 2px !important;
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions .action-label, .monaco-workbench .part.editor>.content .editor-group-container>.title .title-actions .action-label {
+.monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions .action-label,
+.monaco-workbench .part.editor>.content .editor-group-container>.title .title-actions .action-label {
   height: 20px !important;
   line-height: 20px !important;
   min-width: 14px !important;
