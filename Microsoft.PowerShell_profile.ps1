@@ -4,9 +4,9 @@ oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.
 Enable-PoshTransientPrompt
 
 # color helpers
-[string] $color_red="`e[0;31m";
-[string] $color_green="`e[0;32m";
-[string] $color_off="`e[0m";
+[string] $color_red = "`e[0;31m";
+[string] $color_green = "`e[0;32m";
+[string] $color_off = "`e[0m";
 
 # for profiling
 #Import-Module PSProfiler
@@ -40,12 +40,21 @@ $env:FZF__OPTS = '--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=
 $env:BAT_PAGER = ''
 
 # https://github.com/nickcox/cd-extras
+# https://github.com/nickcox/cd-extras/issues/40
+# $cde = @{
+#     AUTO_CD  = $true
+#     CD_PATH  = 'q:\\code\\Telgorithm', 'q:\\code\\vchirikov'
+#     NOARG_CD = 'q:\\code'
+# }
 Import-Module cd-extras
-$cde = @{
-    AUTO_CD  = $true
-    CD_PATH  = 'q:\\code\\Telgorithm', 'q:\\code\\vchirikov'
-    NOARG_CD = 'q:\\code'
-}
+
+setocd AUTO_CD $true
+setocd CD_PATH 'q:\\code\\Telgorithm', 'q:\\code\\vchirikov'
+setocd NOARG_CD 'q:\\code'
+# https://github.com/DHowett/DirColors, maybe later
+setocd ColorCompletion $false
+
+
 Import-Module PSFzf
 # Fzf tab completion
 Set-PSReadLineKeyHandler -Key Tab -ScriptBlock { Invoke-FzfTabCompletion }
