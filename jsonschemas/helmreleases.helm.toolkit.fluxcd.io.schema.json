@@ -19,6 +19,26 @@
         "chart": {
           "description": "Chart defines the template of the v1beta2.HelmChart that should be created for this HelmRelease.",
           "properties": {
+            "metadata": {
+              "description": "ObjectMeta holds the template for metadata like labels and annotations.",
+              "properties": {
+                "annotations": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Annotations is an unstructured key value map stored with a resource that may be set by external tools to store and retrieve arbitrary metadata. They are not queryable and should be preserved when modifying objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+                  "type": "object"
+                },
+                "labels": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "description": "Map of string keys and values that can be used to organize and categorize (scope and select) objects. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
             "spec": {
               "description": "Spec holds the template for the v1beta2.HelmChartSpec for this HelmRelease.",
               "properties": {
@@ -229,7 +249,7 @@
           "description": "KubeConfig for reconciling the HelmRelease on a remote cluster. When used in combination with HelmReleaseSpec.ServiceAccountName, forces the controller to act on behalf of that Service Account at the target cluster. If the --default-service-account flag is set, its value will be used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.",
           "properties": {
             "secretRef": {
-              "description": "SecretRef holds the name to a secret that contains a key with the kubeconfig file as the value. If no key is specified the key will default to 'value'. The secret must be in the same namespace as the HelmRelease. It is recommended that the kubeconfig is self-contained, and the secret is regularly updated if credentials such as a cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and credentials to the Pod that is responsible for reconciling the HelmRelease.",
+              "description": "SecretRef holds the name of a secret that contains a key with the kubeconfig file as the value. If no key is set, the key will default to 'value'. It is recommended that the kubeconfig is self-contained, and the secret is regularly updated if credentials such as a cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and credentials to the Pod that is responsible for reconciling Kubernetes resources.",
               "properties": {
                 "key": {
                   "description": "Key in the Secret, when not specified an implementation-specific default key is used.",
@@ -246,11 +266,18 @@
               "type": "object"
             }
           },
+          "required": [
+            "secretRef"
+          ],
           "type": "object"
         },
         "maxHistory": {
           "description": "MaxHistory is the number of revisions saved by Helm for this HelmRelease. Use '0' for an unlimited number of revisions; defaults to '10'.",
           "type": "integer"
+        },
+        "persistentClient": {
+          "description": "PersistentClient tells the controller to use a persistent Kubernetes client for this release. When enabled, the client will be reused for the duration of the reconciliation, instead of being created and destroyed for each (step of a) Helm action. \n This can improve performance, but may cause issues with some Helm charts that for example do create Custom Resource Definitions during installation outside Helm's CRD lifecycle hooks, which are then not observed to be available by e.g. post-install hooks. \n If not set, it defaults to true.",
+          "type": "boolean"
         },
         "postRenderers": {
           "description": "PostRenderers holds an array of Helm PostRenderers, which will be applied in order of their definition.",
@@ -333,6 +360,9 @@
                           "type": "object"
                         }
                       },
+                      "required": [
+                        "patch"
+                      ],
                       "type": "object"
                     },
                     "type": "array"
@@ -650,7 +680,7 @@
               "targetPath": {
                 "description": "TargetPath is the YAML dot notation path the value should be merged at. When set, the ValuesKey is expected to be a single flat value. Defaults to 'None', which results in the values getting merged at the root.",
                 "maxLength": 250,
-                "pattern": "^([a-zA-Z0-9_\\-.\\\\\\/]|\\[[0-9]{1,5}\\])+$",
+                "pattern": "^([a-zA-Z0-9_\\-.\\/]|\\[[0-9]{1,5}\\])+$",
                 "type": "string"
               },
               "valuesKey": {

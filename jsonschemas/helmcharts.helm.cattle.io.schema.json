@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "",
+  "properties": {
+    "spec": {
+      "properties": {
+        "authPassCredentials": {
+          "type": "boolean"
+        },
+        "authSecret": {
+          "nullable": true,
+          "properties": {
+            "name": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "bootstrap": {
+          "type": "boolean"
+        },
+        "chart": {
+          "nullable": true,
+          "type": "string"
+        },
+        "chartContent": {
+          "nullable": true,
+          "type": "string"
+        },
+        "failurePolicy": {
+          "nullable": true,
+          "type": "string"
+        },
+        "helmVersion": {
+          "nullable": true,
+          "type": "string"
+        },
+        "jobImage": {
+          "nullable": true,
+          "type": "string"
+        },
+        "repo": {
+          "nullable": true,
+          "type": "string"
+        },
+        "repoCA": {
+          "nullable": true,
+          "type": "string"
+        },
+        "repoCAConfigMap": {
+          "nullable": true,
+          "properties": {
+            "name": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "set": {
+          "additionalProperties": {
+            "x-kubernetes-int-or-string": true
+          },
+          "nullable": true,
+          "type": "object"
+        },
+        "targetNamespace": {
+          "nullable": true,
+          "type": "string"
+        },
+        "timeout": {
+          "nullable": true,
+          "type": "string"
+        },
+        "valuesContent": {
+          "nullable": true,
+          "type": "string"
+        },
+        "version": {
+          "nullable": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "status": {
+      "properties": {
+        "jobName": {
+          "nullable": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [],
+  "title": "HelmChart",
+  "type": "object",
+  "x-kubernetes-group-version-kind.group": "helm.cattle.io",
+  "x-kubernetes-group-version-kind.kind": "HelmChart",
+  "x-kubernetes-group-version-kind.version": "v1"
+}

@@ -177,7 +177,8 @@
             }
           },
           "required": [
-            "mode"
+            "mode",
+            "secretRef"
           ],
           "type": "object"
         }
@@ -197,10 +198,6 @@
         "artifact": {
           "description": "Artifact represents the last successful GitRepository reconciliation.",
           "properties": {
-            "checksum": {
-              "description": "Checksum is the SHA256 checksum of the Artifact file. Deprecated: use Artifact.Digest instead.",
-              "type": "string"
-            },
             "digest": {
               "description": "Digest is the digest of the file in the form of '<algorithm>:<checksum>'.",
               "pattern": "^[a-z0-9]+(?:[.+_-][a-z0-9]+)*:[a-zA-Z0-9=_-]+$",
@@ -237,7 +234,9 @@
             }
           },
           "required": [
+            "lastUpdateTime",
             "path",
+            "revision",
             "url"
           ],
           "type": "object"
@@ -306,10 +305,6 @@
           "items": {
             "description": "Artifact represents the output of a Source reconciliation.",
             "properties": {
-              "checksum": {
-                "description": "Checksum is the SHA256 checksum of the Artifact file. Deprecated: use Artifact.Digest instead.",
-                "type": "string"
-              },
               "digest": {
                 "description": "Digest is the digest of the file in the form of '<algorithm>:<checksum>'.",
                 "pattern": "^[a-z0-9]+(?:[.+_-][a-z0-9]+)*:[a-zA-Z0-9=_-]+$",
@@ -346,7 +341,9 @@
               }
             },
             "required": [
+              "lastUpdateTime",
               "path",
+              "revision",
               "url"
             ],
             "type": "object"

@@ -16,6 +16,16 @@
     "spec": {
       "description": "Specification of desired Service selection for target discovery by Prometheus.",
       "properties": {
+        "attachMetadata": {
+          "description": "Attaches node metadata to discovered targets. Requires Prometheus v2.37.0 and above.",
+          "properties": {
+            "node": {
+              "description": "When set to true, Prometheus must have permissions to get Nodes.",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
         "endpoints": {
           "description": "A list of endpoints allowed as part of this ServiceMonitor.",
           "items": {
@@ -133,6 +143,10 @@
                 "description": "Whether to enable HTTP2.",
                 "type": "boolean"
               },
+              "filterRunning": {
+                "description": "Drop pods that are not running. (Failed, Succeeded). Enabled by default. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase",
+                "type": "boolean"
+              },
               "followRedirects": {
                 "description": "FollowRedirects configures whether scrape requests follow HTTP 3xx redirects.",
                 "type": "boolean"
@@ -176,7 +190,11 @@
                         "lowercase",
                         "Lowercase",
                         "uppercase",
-                        "Uppercase"
+                        "Uppercase",
+                        "keepequal",
+                        "KeepEqual",
+                        "dropequal",
+                        "DropEqual"
                       ],
                       "type": "string"
                     },
@@ -365,7 +383,11 @@
                         "lowercase",
                         "Lowercase",
                         "uppercase",
-                        "Uppercase"
+                        "Uppercase",
+                        "keepequal",
+                        "KeepEqual",
+                        "dropequal",
+                        "DropEqual"
                       ],
                       "type": "string"
                     },
@@ -405,7 +427,11 @@
                 "type": "array"
               },
               "scheme": {
-                "description": "HTTP scheme to use for scraping.",
+                "description": "HTTP scheme to use for scraping. `http` and `https` are the expected values unless you rewrite the `__scheme__` label via relabeling. If empty, Prometheus uses the default value `http`.",
+                "enum": [
+                  "http",
+                  "https"
+                ],
                 "type": "string"
               },
               "scrapeTimeout": {
@@ -429,7 +455,7 @@
                 "description": "TLS configuration to use when scraping the endpoint",
                 "properties": {
                   "ca": {
-                    "description": "Struct containing the CA cert to use for the targets.",
+                    "description": "Certificate authority used when verifying server certificates.",
                     "properties": {
                       "configMap": {
                         "description": "ConfigMap containing data to use for the targets.",
@@ -483,7 +509,7 @@
                     "type": "string"
                   },
                   "cert": {
-                    "description": "Struct containing the client cert file for the targets.",
+                    "description": "Client certificate to present when doing client-authentication.",
                     "properties": {
                       "configMap": {
                         "description": "ConfigMap containing data to use for the targets.",
