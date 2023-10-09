@@ -1,8 +1,5 @@
 /*
   https://marketplace.visualstudio.com/items?itemName=be5invis.vscode-custom-css
-  https://marketplace.visualstudio.com/items?itemName=lehni.vscode-fix-checksums
-  after 1.58 the vscode-custom-css doesn't work https://github.com/be5invis/vscode-custom-css/issues/144
-  You can change file "C:\Program Files\Microsoft VS Code\resources\app\out\vs\code\electron-browser\workbench\workbench.html" for the same result + fix checksums
 */
 
 :root {
@@ -15,191 +12,37 @@
 }
 
 /* removes underscore style on links */
-
 .mtku,
 .detected-link {
   text-decoration: none !important;
 }
 
 /* sets better width of debugger hover widget */
-
 /* Disabled due to https://code.visualstudio.com/updates/v1_50#_debug-hover-improvements */
-
-.monaco-editor .debug-hover-widget .complex-value {
+/* .monaco-editor .debug-hover-widget .complex-value {
   min-width: 648px !important;
-}
+} */
 
 /* intellisense width fix */
-
-.editor-widget.suggest-widget.visible {
+/* .editor-widget.suggest-widget.visible {
   width: 500px;
   min-width: 500px !important;
-}
+} */
 
-/* old, can be deleted? */
-
-.monaco-editor .parameter-hints-widget>.wrapper,
-/* new version */
-
-.monaco-editor .parameter-hints-widget>.phwrapper {
+/* .monaco-editor .parameter-hints-widget>.phwrapper {
   max-width: 60vw !important;
-}
+} */
 
 /* editor-hover */
-
-.monaco-editor .overflowingContentWidgets .monaco-hover-content {
+/* .monaco-editor .overflowingContentWidgets .monaco-hover-content {
   max-width: 60vw !important;
   max-height: 50vh !important;
-}
+} */
 
 /* hides editor group icons. https://github.com/microsoft/vscode/issues/46403 */
-
-a[title="Open Changes"],
+/* a[title="Open Changes"],
 a[title="Git: View File History (Alt+H)"],
 a[title="Split Editor Right (Ctrl+\)"],
 a[title="Split Editor Right (Ctrl+\\)"] {
   display: none !important;
-}
-
-/* Menu size */
-
-body>div.file-icons-enabled.monaco-workbench>div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-container>div:nth-child(2) {
-  top: var(--tab-height) !important;
-}
-
-div.menubar,
-.part.titlebar {
-  height: var(--tab-height) !important;
-  line-height: var(--tab-height);
-}
-
-.monaco-workbench .part.titlebar>.window-appicon {
-  width: var(--tab-height) !important;
-}
-
-.tabs-container>.tab.active {
-  background-color: #26446c !important;
-}
-
-
-/* Following CSS to wrap the tab-bar into multiple rows: https://stackoverflow.com/questions/42462777/multirow-tabs-for-vscode */
-/* Multiline doesn't work well because of electron bug */
-.title.tabs {
-  height: auto !important;
-}
-
-.title.tabs .tabs-and-actions-container {
-  height: auto !important;
-}
-
-.title.tabs .tabs-and-actions-container .monaco-scrollable-element {
-  height: auto !important;
-}
-
-.title.tabs .tabs-container {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  height: auto !important;
-
-  flex-direction: row !important;
-  justify-content: flex-start !important;
-  align-content: flex-start !important;
-}
-
-.title.tabs .tabs-container::before,
-.title.tabs .tabs-container::after {
-  content: "" !important;
-  width: 100% !important;
-  order: 1 !important;
-}
-
-.title.tabs .tabs-container .tab {
-  display: flex !important;
-}
-
-.title.tabs .tabs-container .tab:not(.sticky) {
-  order: 1 !important;
-}
-
-/* for some reason sometimes last tab is stretched 100%. This is a fix. */
-.title.tabs .tabs-container .tab.last-in-row:not(:last-child) {
-  flex-grow: 0 !important;
-}
-
-.tab.sticky {
-  font-weight: 600 !important;
-}
-
-/* Following CSS to make the tabs thinner/smaller (so that they take lesser vertical space): */
-
-div.monaco-grid-view>div>div>div.monaco-scrollable-element>div.split-view-container>div:nth-child(3) {
-  top: 26px !important;
-}
-
-/* .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container {
-  height: var(--tab-height) !important;
 } */
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
-  height: var(--tab-height) !important;
-  padding-left: 4px !important;
-  font-size: 0.9em !important;
-  /* smaller font-size for tab icons and label */
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .label-name {
-  font-size: inherit !important;
-  /* inherit updated font-size fo111r label */
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label {
-  line-height: 22px;
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title.tabs .monaco-icon-label:after {
-  line-height: calc(var(--tab-height) - 1px);
-  font-size: 0.8em !important;
-}
-
-/* Following CSS for smaller close button on tabs: */
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-close {
-  width: calc(var(--tab-height) - 6px) !important;
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-close .action-label {
-  height: 12px !important;
-  width: 12px !important;
-  background-size: 12px !important;
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-close .action-label.codicon,
-.monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-actions .action-label.codicon {
-  font-size: 14px !important;
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .monaco-icon-label:before {
-  height: var(--tab-height) !important;
-}
-
-/* OPTIONAL: Following CSS for smaller action-bar (beside the tab-bar) with menu, split, etc. */
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions {
-  height: 20px !important;
-  padding: 2px !important;
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions .action-label,
-.monaco-workbench .part.editor>.content .editor-group-container>.title .title-actions .action-label {
-  height: 20px !important;
-  line-height: 20px !important;
-  min-width: 14px !important;
-}
-
-.tabs-breadcrumbs {
-  font-size: 0.9em !important;
-}
-
-.monaco-workbench {
-  background-color: #191d24;
-}
