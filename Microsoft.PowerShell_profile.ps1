@@ -533,20 +533,20 @@ function bs {
     # Use -p:UseSharedCompilation=false to disable the Roslyn (vbcscompiler) server.
     # Use /nodeReuse:false for MSBuild to disable node re-use.
     if ($args -eq $null -or $args.Length -eq 0) {
-        dotnet build -nologo -maxCpuCount -nodeReuse:false -clp:ErrorsOnly -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
+        dotnet build -nologo -maxCpuCount -nodeReuse:false -tl -clp:ErrorsOnly -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
         return;
     }
     if ($args[0] -eq "restore") {
-        dotnet restore -nologo -maxCpuCount -nodeReuse:false -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
+        dotnet restore -nologo -maxCpuCount -nodeReuse:false -tl -p:UseRazorBuildServer=false -p:UseSharedCompilation=false -p:EnableAnalyzer=false -p:EnableNETAnalyzers=false
         return;
     }
     [string] $path = "build";
     if ([System.IO.Directory]::Exists($([System.IO.Path]::Combine($PWD, "_build")))) {
         $path = "_build";
     }
-    dotnet run --project $path -- $args
+    dotnet run --project $path -tl -- $args
 }
-# recursive removes bin/obj 
+# recursive removes bin/obj
 function cleanBinObj() {
     (Get-ChildItem $PWD -include bin, obj -Recurse).fullname -inotmatch '\\node_modules\\' | ForEach-Object ($_) { remove-item $_ -Force -Recurse }
 }

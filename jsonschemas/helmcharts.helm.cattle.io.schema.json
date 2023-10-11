@@ -17,6 +17,10 @@
           },
           "type": "object"
         },
+        "backOffLimit": {
+          "nullable": true,
+          "type": "integer"
+        },
         "bootstrap": {
           "type": "boolean"
         },
@@ -27,6 +31,19 @@
         "chartContent": {
           "nullable": true,
           "type": "string"
+        },
+        "createNamespace": {
+          "type": "boolean"
+        },
+        "dockerRegistrySecret": {
+          "nullable": true,
+          "properties": {
+            "name": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          "type": "object"
         },
         "failurePolicy": {
           "nullable": true,
