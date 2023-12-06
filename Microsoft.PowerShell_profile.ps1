@@ -62,7 +62,17 @@ Set-PsFzfOption -EnableFd -TabExpansion -GitKeyBindings -EnableAliasFuzzyEdit -E
 
 Set-Alias fzf Invoke-Fzf
 Set-Alias whereis Get-Command
-Set-Alias sed 'C:\Program Files\Git\usr\bin\sed.exe'
+
+# Set-Alias sed 'C:\Program Files\Git\usr\bin\sed.exe'
+# Set-Alias nano 'C:\Program Files\Git\usr\bin\nano.exe'
+
+# it's better to use [ShimGen](https://docs.chocolatey.org/en-us/features/shim) for sed/nano etc (note, path must be relative)
+
+# c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\sed.exe --path="..\..\..\Program Files\Git\usr\bin\sed.exe"
+# c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\nano.exe --path="..\..\..\Program Files\Git\usr\bin\nano.exe"
+# c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\vim.exe --path="..\..\..\Program Files\Git\usr\bin\vim.exe"
+# c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\vi.exe --path="..\..\..\Program Files\Git\usr\bin\vim.exe"
+
 
 # https://github.com/chawyehsu/base16-concfg colors
 $GitPromptSettings.DefaultPromptPath.ForegroundColor = 0x61F053 ;
@@ -797,6 +807,53 @@ function readDotEnv {
 
 # read env variables
 readDotEnv 'q:\code\vchirikov\dotfiles\secrets\.env'
+# include jira-cli completion
+. 'Q:\code\vchirikov\dotfiles\_jira.ps1'
+
+function jira {
+    if ($args[0] -eq "q" -and $args.Length -ge 1) {
+        & jira.exe issue list --plain --columns "key,summary,priority,created,status" -q "summary ~ $($args[1])" $($args | Select-Object -Skip 2)
+        return;
+    }
+    # default:
+    if ($args -eq $null -or $args.Length -eq 0 -or $args[0] -eq "q" -or $args[0] -eq "my" -or ($args[0] -eq "ls" -and $args.Length -eq 1)) {
+        & jira.exe issue list --plain --columns "key,summary,priority,created,status" -q "project = `"TM`" AND (component = `"infra`" OR assignee = currentUser()) AND status not in (closed, done)"
+        return;
+    }
+    if ($args[0] -eq "h" -or $args[0] -eq "history") {
+        & jira.exe issue list --plain --columns "key,summary,created,updated,reporter,status" --created (($args.Length -eq 2) ? ("-$($args[1])") : ("-14d")) --order-by created -q "project = `"TM`" AND (component = `"infra`" OR assignee = currentUser()) AND status in (closed, done)" $($args | Select-Object -Skip 2)
+        return;
+    }
+    if (($args[0] -eq "s" -or $args[0] -eq "show" -or $args[0] -eq "cat") -and $args.Length -ge 2) {
+        & jira.exe issue view --plain ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) --comments 9999  $($args | Select-Object -Skip 2)
+        return;
+    }
+    if ($args[0] -eq "link") {
+        & jira.exe issue link $($args | Select-Object -Skip 1)
+        return;
+    }
+    if ($args[0] -eq "c" -or $args[0] -eq "create" -and $args.Length -eq 1) {
+        & jira.exe issue create --web
+        return;
+    }
+    if ($args[0] -eq "c" -or $args[0] -eq "create") {
+        & jira.exe issue create $($args | Select-Object -Skip 1)
+        return;
+    }
+    if ($args[0] -eq "cb" -or $args[0] -eq "bug") {
+        & jira.exe issue create -tBug --component infra $($args | Select-Object -Skip 1)
+        return;
+    }
+    if ($args[0] -eq "ct" -or $args[0] -eq "task") {
+        & jira.exe issue create -tTask --component infra $($args | Select-Object -Skip 1)
+        return;
+    }
+    if ($args[0] -eq "cs" -or $args[0] -eq "story") {
+        & jira.exe issue create -tStory --component infra $($args | Select-Object -Skip 1)
+        return;
+    }
+    & jira.exe $args
+}
 
 <#
 Helper function used to log parameters for tab completion scriptblock
