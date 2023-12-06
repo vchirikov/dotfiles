@@ -856,20 +856,20 @@ function jira {
         & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) $($args | Select-Object -Skip 2)
         return;
     }
-    if (($args[0] -eq "done" -or $args[0] -eq "end") -and $args.Length -eq 2) {
-        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "Done"
-        return;
+
+    [string] $state = $null
+    switch ($args[0]) {
+        'draft' { $state = "To Draft"; break }
+        'backlog' { $state = "To Backlog"; break }
+        'select' { $state = "Ready To Develop"; break }
+        'get' { $state = "Start Work"; break }
+        'start' { $state = "Start Work"; break }
+        'done' { $state = "Done"; break }
+        'close' { $state = "Close"; break }
+        default { $state = $null }
     }
-    if (($args[0] -eq "select") -and $args.Length -eq 2) {
-        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "Selected for Development"
-        return;
-    }
-    if (($args[0] -eq "get" -or $args[0] -eq "start") -and $args.Length -eq 2) {
-        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "In Development"
-        return;
-    }
-    if ($args[0] -eq "close" -and $args.Length -eq 2) {
-        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "Closed"
+    if ($null -ne $state -and $args.Length -eq 2) {
+        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) $state
         return;
     }
     & jira.exe $args
