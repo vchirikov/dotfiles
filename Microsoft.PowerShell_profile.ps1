@@ -841,15 +841,35 @@ function jira {
         return;
     }
     if ($args[0] -eq "cb" -or $args[0] -eq "bug") {
-        & jira.exe issue create -tBug --component infra $($args | Select-Object -Skip 1)
+        & jira.exe issue create -tBug --component infra --custom task-size=M $($args | Select-Object -Skip 1)
         return;
     }
     if ($args[0] -eq "ct" -or $args[0] -eq "task") {
-        & jira.exe issue create -tTask --component infra $($args | Select-Object -Skip 1)
+        & jira.exe issue create -tTask --component infra --custom task-size=XS $($args | Select-Object -Skip 1)
         return;
     }
     if ($args[0] -eq "cs" -or $args[0] -eq "story") {
-        & jira.exe issue create -tStory --component infra $($args | Select-Object -Skip 1)
+        & jira.exe issue create -tStory --component infra --custom task-size=M $($args | Select-Object -Skip 1)
+        return;
+    }
+    if (($args[0] -eq "mv" -or $args[0] -eq "move") -and $args.Length -ge 2) {
+        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) $($args | Select-Object -Skip 2)
+        return;
+    }
+    if (($args[0] -eq "done" -or $args[0] -eq "end") -and $args.Length -eq 2) {
+        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "Done"
+        return;
+    }
+    if (($args[0] -eq "select") -and $args.Length -eq 2) {
+        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "Selected for Development"
+        return;
+    }
+    if (($args[0] -eq "get" -or $args[0] -eq "start") -and $args.Length -eq 2) {
+        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "In Development"
+        return;
+    }
+    if ($args[0] -eq "close" -and $args.Length -eq 2) {
+        & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) "Closed"
         return;
     }
     & jira.exe $args
