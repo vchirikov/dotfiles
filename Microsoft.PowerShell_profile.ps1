@@ -817,11 +817,11 @@ function jira {
     }
     # default:
     if ($args -eq $null -or $args.Length -eq 0 -or $args[0] -eq "q" -or $args[0] -eq "my" -or ($args[0] -eq "ls" -and $args.Length -eq 1)) {
-        & jira.exe issue list --plain --columns "key,summary,priority,created,status" -q "project = `"TM`" AND (component = `"infra`" OR assignee = currentUser()) AND status not in (closed, done)"
+        & jira.exe issue list --plain --columns "key,summary,priority,created,status" -q "project = TM AND (component = infra OR assignee = currentUser()) AND status not in (closed, done)"
         return;
     }
-    if ($args[0] -eq "h" -or $args[0] -eq "history") {
-        & jira.exe issue list --plain --columns "key,summary,created,updated,reporter,status" --created (($args.Length -eq 2) ? ("-$($args[1])") : ("-14d")) --order-by created -q "project = `"TM`" AND (component = `"infra`" OR assignee = currentUser()) AND status in (closed, done)" $($args | Select-Object -Skip 2)
+    if ($args[0] -eq "h" -or $args[0] -eq "history" -or $args[0] -eq "lg") {
+        & jira.exe issue list --plain --columns "key,summary,created,updated,reporter,status" --updated (($args.Length -eq 2) ? ("$($args[1])") : ("-14days")) --order-by updated -q "project = TM AND (component = infra OR assignee = currentUser()) AND status in (closed, done)" $($args | Select-Object -Skip 2)
         return;
     }
     if (($args[0] -eq "s" -or $args[0] -eq "show" -or $args[0] -eq "cat") -and $args.Length -ge 2) {
@@ -854,6 +854,13 @@ function jira {
     }
     if (($args[0] -eq "mv" -or $args[0] -eq "move") -and $args.Length -ge 2) {
         & jira.exe issue move ($args[1].ToString().StartsWith("TM", [StringComparison]::OrdinalIgnoreCase) ? ($args[1].ToString()) : ("TM-$($args[1])")) $($args | Select-Object -Skip 2)
+        return;
+    }
+    if (($args[0] -eq "go") -and $args.Length -eq 2) {
+        [string ]$task = $args[1].ToString();
+        try { jira backlog "$task" } catch {}
+        try { jira select "$task" } catch {}
+        try { jira start "$task" } catch {}
         return;
     }
 
