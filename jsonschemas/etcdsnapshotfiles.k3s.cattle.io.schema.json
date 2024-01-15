@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "",
+  "properties": {
+    "spec": {
+      "properties": {
+        "location": {
+          "nullable": true,
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nullable": true,
+          "type": "object"
+        },
+        "nodeName": {
+          "nullable": true,
+          "type": "string"
+        },
+        "s3": {
+          "nullable": true,
+          "properties": {
+            "bucket": {
+              "nullable": true,
+              "type": "string"
+            },
+            "endpoint": {
+              "nullable": true,
+              "type": "string"
+            },
+            "endpointCA": {
+              "nullable": true,
+              "type": "string"
+            },
+            "insecure": {
+              "type": "boolean"
+            },
+            "prefix": {
+              "nullable": true,
+              "type": "string"
+            },
+            "region": {
+              "nullable": true,
+              "type": "string"
+            },
+            "skipSSLVerify": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "snapshotName": {
+          "nullable": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "status": {
+      "properties": {
+        "creationTime": {
+          "nullable": true,
+          "type": "string"
+        },
+        "error": {
+          "nullable": true,
+          "properties": {
+            "message": {
+              "nullable": true,
+              "type": "string"
+            },
+            "time": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "readyToUse": {
+          "nullable": true,
+          "type": "boolean"
+        },
+        "size": {
+          "nullable": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [],
+  "title": "ETCDSnapshotFile",
+  "type": "object",
+  "x-kubernetes-group-version-kind.group": "k3s.cattle.io",
+  "x-kubernetes-group-version-kind.kind": "ETCDSnapshotFile",
+  "x-kubernetes-group-version-kind.version": "v1"
+}

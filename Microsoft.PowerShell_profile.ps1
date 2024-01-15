@@ -69,6 +69,7 @@ Set-Alias whereis Get-Command
 # it's better to use [ShimGen](https://docs.chocolatey.org/en-us/features/shim) for sed/nano etc (note, path must be relative)
 
 # c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\sed.exe --path="..\..\..\Program Files\Git\usr\bin\sed.exe"
+# c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\grep.exe --path="..\..\..\Program Files\Git\usr\bin\grep.exe"
 # c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\nano.exe --path="..\..\..\Program Files\Git\usr\bin\nano.exe"
 # c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\vim.exe --path="..\..\..\Program Files\Git\usr\bin\vim.exe"
 # c:\ProgramData\chocolatey\tools\shimgen.exe --output=c:\ProgramData\Chocolatey\bin\vi.exe --path="..\..\..\Program Files\Git\usr\bin\vim.exe"
@@ -845,7 +846,7 @@ function jira {
         return;
     }
     if ($args[0] -eq "ct" -or $args[0] -eq "task") {
-        & jira.exe issue create -tTask --component infra --custom task-size=XS $($args | Select-Object -Skip 1)
+        & jira.exe issue create -tTask --component infra --custom task-size=XS --summary $($args | Select-Object -Skip 1)
         return;
     }
     if ($args[0] -eq "cs" -or $args[0] -eq "story") {

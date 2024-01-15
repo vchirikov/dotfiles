@@ -15,18 +15,6 @@
       "properties": {
         "source": {
           "description": "source specifies where a snapshot will be created from. This field is immutable after creation. Required.",
-          "oneOf": [
-            {
-              "required": [
-                "persistentVolumeClaimName"
-              ]
-            },
-            {
-              "required": [
-                "volumeSnapshotContentName"
-              ]
-            }
-          ],
           "properties": {
             "persistentVolumeClaimName": {
               "description": "persistentVolumeClaimName specifies the name of the PersistentVolumeClaim object representing the volume from which a snapshot should be created. This PVC is assumed to be in the same namespace as the VolumeSnapshot object. This field should be set if the snapshot does not exists, and needs to be created. This field is immutable.",
@@ -62,7 +50,7 @@
           "type": "string"
         },
         "error": {
-          "description": "error is the last observed error during snapshot creation, if any. This field could be helpful to upper level controllers(i.e., application controller) to decide whether they should continue on waiting for the snapshot to be created based on the type of error reported. The snapshot controller will keep retrying when an error occurrs during the snapshot creation. Upon success, this error field will be cleared.",
+          "description": "error is the last observed error during snapshot creation, if any. This field could be helpful to upper level controllers(i.e., application controller) to decide whether they should continue on waiting for the snapshot to be created based on the type of error reported. The snapshot controller will keep retrying when an error occurs during the snapshot creation. Upon success, this error field will be cleared.",
           "properties": {
             "message": {
               "description": "message is a string detailing the encountered error during snapshot creation if specified. NOTE: message may be logged, and it should not contain sensitive information.",
@@ -97,5 +85,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "snapshot.storage.k8s.io",
   "x-kubernetes-group-version-kind.kind": "VolumeSnapshot",
-  "x-kubernetes-group-version-kind.version": "v1"
+  "x-kubernetes-group-version-kind.version": "v1beta1"
 }

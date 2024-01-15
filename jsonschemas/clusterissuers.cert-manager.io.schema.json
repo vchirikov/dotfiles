@@ -396,7 +396,7 @@
                         "description": "Use RFC2136 (\"Dynamic Updates in the Domain Name System\") (https://datatracker.ietf.org/doc/rfc2136/) to manage DNS01 challenge records.",
                         "properties": {
                           "nameserver": {
-                            "description": "The IP address or hostname of an authoritative DNS server supporting RFC2136 in the form host:port. If the host is an IPv6 address it must be enclosed in square brackets (e.g [2001:db8::1])тФм╨░; port is optional. This field is required.",
+                            "description": "The IP address or hostname of an authoritative DNS server supporting RFC2136 in the form host:port. If the host is an IPv6 address it must be enclosed in square brackets (e.g [2001:db8::1])┬а; port is optional. This field is required.",
                             "type": "string"
                           },
                           "tsigAlgorithm": {

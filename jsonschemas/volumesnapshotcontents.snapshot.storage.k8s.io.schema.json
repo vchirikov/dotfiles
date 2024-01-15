@@ -27,18 +27,6 @@
         },
         "source": {
           "description": "source specifies whether the snapshot is (or should be) dynamically provisioned or already exists, and just requires a Kubernetes object representation. This field is immutable after creation. Required.",
-          "oneOf": [
-            {
-              "required": [
-                "snapshotHandle"
-              ]
-            },
-            {
-              "required": [
-                "volumeHandle"
-              ]
-            }
-          ],
           "properties": {
             "snapshotHandle": {
               "description": "snapshotHandle specifies the CSI \"snapshot_id\" of a pre-existing snapshot on the underlying storage system for which a Kubernetes object representation was (or should be) created. This field is immutable.",
@@ -146,5 +134,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "snapshot.storage.k8s.io",
   "x-kubernetes-group-version-kind.kind": "VolumeSnapshotContent",
-  "x-kubernetes-group-version-kind.version": "v1"
+  "x-kubernetes-group-version-kind.version": "v1beta1"
 }
