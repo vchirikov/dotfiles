@@ -3,6 +3,8 @@ $env:POSH_GIT_ENABLED = $true
 oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
 Enable-PoshTransientPrompt
 
+$env:RCLONE_CONFIG = "Q:\code\vchirikov\dotfiles\secrets\rclone.conf"
+
 # color helpers
 [string] $color_red = "`e[0;31m";
 [string] $color_green = "`e[0;32m";

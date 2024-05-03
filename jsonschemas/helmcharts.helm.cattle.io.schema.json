@@ -57,6 +57,114 @@
           "nullable": true,
           "type": "string"
         },
+        "podSecurityContext": {
+          "nullable": true,
+          "properties": {
+            "fsGroup": {
+              "nullable": true,
+              "type": "integer"
+            },
+            "fsGroupChangePolicy": {
+              "nullable": true,
+              "type": "string"
+            },
+            "runAsGroup": {
+              "nullable": true,
+              "type": "integer"
+            },
+            "runAsNonRoot": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "runAsUser": {
+              "nullable": true,
+              "type": "integer"
+            },
+            "seLinuxOptions": {
+              "nullable": true,
+              "properties": {
+                "level": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "role": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "user": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "seccompProfile": {
+              "nullable": true,
+              "properties": {
+                "localhostProfile": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "supplementalGroups": {
+              "items": {
+                "type": "integer"
+              },
+              "nullable": true,
+              "type": "array"
+            },
+            "sysctls": {
+              "items": {
+                "properties": {
+                  "name": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "nullable": true,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "nullable": true,
+              "type": "array"
+            },
+            "windowsOptions": {
+              "nullable": true,
+              "properties": {
+                "gmsaCredentialSpec": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "gmsaCredentialSpecName": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "hostProcess": {
+                  "nullable": true,
+                  "type": "boolean"
+                },
+                "runAsUserName": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
         "repo": {
           "nullable": true,
           "type": "string"
@@ -71,6 +179,120 @@
             "name": {
               "nullable": true,
               "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "securityContext": {
+          "nullable": true,
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "capabilities": {
+              "nullable": true,
+              "properties": {
+                "add": {
+                  "items": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "nullable": true,
+                  "type": "array"
+                },
+                "drop": {
+                  "items": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "nullable": true,
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "privileged": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "procMount": {
+              "nullable": true,
+              "type": "string"
+            },
+            "readOnlyRootFilesystem": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "runAsGroup": {
+              "nullable": true,
+              "type": "integer"
+            },
+            "runAsNonRoot": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "runAsUser": {
+              "nullable": true,
+              "type": "integer"
+            },
+            "seLinuxOptions": {
+              "nullable": true,
+              "properties": {
+                "level": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "role": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "user": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "seccompProfile": {
+              "nullable": true,
+              "properties": {
+                "localhostProfile": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "windowsOptions": {
+              "nullable": true,
+              "properties": {
+                "gmsaCredentialSpec": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "gmsaCredentialSpecName": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "hostProcess": {
+                  "nullable": true,
+                  "type": "boolean"
+                },
+                "runAsUserName": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
             }
           },
           "type": "object"

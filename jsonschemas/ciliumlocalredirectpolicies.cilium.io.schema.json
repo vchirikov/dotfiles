@@ -246,7 +246,7 @@
       "properties": {
         "ok": {
           "description": "TODO Define status(aditi)",
-          "type": "object"
+          "type": "boolean"
         }
       },
       "type": "object"

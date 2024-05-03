@@ -41,7 +41,7 @@
         "egress": {
           "description": "Egress is a list of EgressRule which are enforced at egress. If omitted or empty, this rule does not apply at egress.",
           "items": {
-            "description": "EgressRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members of the structure are specified, then all members     must match in order for the rule to take effect. The exception to this     rule is the ToRequires member; the effects of any Requires field in any     rule will apply to all other rules as well. \n   - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are     mutually exclusive. Only one of these members may be present within an     individual rule.",
+            "description": "EgressRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members of the structure are specified, then all members must match in order for the rule to take effect. The exception to this rule is the ToRequires member; the effects of any Requires field in any rule will apply to all other rules as well. \n - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are mutually exclusive. Only one of these members may be present within an individual rule.",
             "properties": {
               "authentication": {
                 "description": "Authentication is the required authentication type for the allowed traffic, if any.",
@@ -242,7 +242,7 @@
                       "type": "string"
                     },
                     "matchPattern": {
-                      "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level   www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\"   except those containing \".\" separator, subcilium.io and sub-cilium.io match,   www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\"   sub.cilium.io and subdomain.cilium.io match, www.cilium.io,   blog.cilium.io, cilium.io and google.com do not",
+                      "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\" except those containing \".\" separator, subcilium.io and sub-cilium.io match, www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\" sub.cilium.io and subdomain.cilium.io match, www.cilium.io, blog.cilium.io, cilium.io and google.com do not",
                       "pattern": "^([-a-zA-Z0-9_*]+[.]?)+$",
                       "type": "string"
                     }
@@ -252,7 +252,7 @@
                 "type": "array"
               },
               "toGroups": {
-                "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws:     securityGroupsIds:     - 'sg-XXXXXXXXXXXXX'",
+                "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                 "items": {
                   "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
                   "properties": {
@@ -342,7 +342,7 @@
                           "type": "string"
                         },
                         "secret": {
-                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                           "properties": {
                             "name": {
                               "description": "Name is the name of the secret.",
@@ -410,7 +410,7 @@
                                 "type": "string"
                               },
                               "matchPattern": {
-                                "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level   www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\"   except those containing \".\" separator, subcilium.io and sub-cilium.io match,   www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\"   sub.cilium.io and subdomain.cilium.io match, www.cilium.io,   blog.cilium.io, cilium.io and google.com do not",
+                                "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\" except those containing \".\" separator, subcilium.io and sub-cilium.io match, www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\" sub.cilium.io and subdomain.cilium.io match, www.cilium.io, blog.cilium.io, cilium.io and google.com do not",
                                 "pattern": "^([-a-zA-Z0-9_*]+[.]?)+$",
                                 "type": "string"
                               }
@@ -515,7 +515,7 @@
                                 "type": "string"
                               },
                               "role": {
-                                "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported:  - \"produce\": Allow producing to the topics specified in the rule  - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
+                                "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported: - \"produce\": Allow producing to the topics specified in the rule - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
                                 "enum": [
                                   "produce",
                                   "consume"
@@ -569,7 +569,7 @@
                           "type": "string"
                         },
                         "secret": {
-                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                           "properties": {
                             "name": {
                               "description": "Name is the name of the secret.",
@@ -748,7 +748,7 @@
         "egressDeny": {
           "description": "EgressDeny is a list of EgressDenyRule which are enforced at egress. Any rule inserted here will be denied regardless of the allowed egress rules in the 'egress' field. If omitted or empty, this rule does not apply at egress.",
           "items": {
-            "description": "EgressDenyRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members of the structure are specified, then all members     must match in order for the rule to take effect. The exception to this     rule is the ToRequires member; the effects of any Requires field in any     rule will apply to all other rules as well. \n   - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are     mutually exclusive. Only one of these members may be present within an     individual rule.",
+            "description": "EgressDenyRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members of the structure are specified, then all members must match in order for the rule to take effect. The exception to this rule is the ToRequires member; the effects of any Requires field in any rule will apply to all other rules as well. \n - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are mutually exclusive. Only one of these members may be present within an individual rule.",
             "properties": {
               "icmps": {
                 "description": "ICMPs is a list of ICMP rule identified by type number which the endpoint subject to the rule is not allowed to connect to. \n Example: Any endpoint with the label \"app=httpd\" is not allowed to initiate type 8 ICMP connections.",
@@ -922,7 +922,7 @@
                 "type": "array"
               },
               "toGroups": {
-                "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws:     securityGroupsIds:     - 'sg-XXXXXXXXXXXXX'",
+                "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                 "items": {
                   "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
                   "properties": {
@@ -1195,7 +1195,7 @@
         "ingress": {
           "description": "Ingress is a list of IngressRule which are enforced at ingress. If omitted or empty, this rule does not apply at ingress.",
           "items": {
-            "description": "IngressRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members are set, all of them need to match in order for     the rule to take effect. The exception to this rule is FromRequires field;     the effects of any Requires field in any rule will apply to all other     rules as well. \n   - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually     exclusive. Only one of these members may be present within an individual     rule.",
+            "description": "IngressRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
             "properties": {
               "authentication": {
                 "description": "Authentication is the required authentication type for the allowed traffic, if any.",
@@ -1495,7 +1495,7 @@
                           "type": "string"
                         },
                         "secret": {
-                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                           "properties": {
                             "name": {
                               "description": "Name is the name of the secret.",
@@ -1563,7 +1563,7 @@
                                 "type": "string"
                               },
                               "matchPattern": {
-                                "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level   www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\"   except those containing \".\" separator, subcilium.io and sub-cilium.io match,   www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\"   sub.cilium.io and subdomain.cilium.io match, www.cilium.io,   blog.cilium.io, cilium.io and google.com do not",
+                                "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\" except those containing \".\" separator, subcilium.io and sub-cilium.io match, www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\" sub.cilium.io and subdomain.cilium.io match, www.cilium.io, blog.cilium.io, cilium.io and google.com do not",
                                 "pattern": "^([-a-zA-Z0-9_*]+[.]?)+$",
                                 "type": "string"
                               }
@@ -1668,7 +1668,7 @@
                                 "type": "string"
                               },
                               "role": {
-                                "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported:  - \"produce\": Allow producing to the topics specified in the rule  - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
+                                "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported: - \"produce\": Allow producing to the topics specified in the rule - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
                                 "enum": [
                                   "produce",
                                   "consume"
@@ -1722,7 +1722,7 @@
                           "type": "string"
                         },
                         "secret": {
-                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                          "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                           "properties": {
                             "name": {
                               "description": "Name is the name of the secret.",
@@ -1761,7 +1761,7 @@
         "ingressDeny": {
           "description": "IngressDeny is a list of IngressDenyRule which are enforced at ingress. Any rule inserted here will be denied regardless of the allowed ingress rules in the 'ingress' field. If omitted or empty, this rule does not apply at ingress.",
           "items": {
-            "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members are set, all of them need to match in order for     the rule to take effect. The exception to this rule is FromRequires field;     the effects of any Requires field in any rule will apply to all other     rules as well. \n   - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually     exclusive. Only one of these members may be present within an individual     rule.",
+            "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
             "properties": {
               "fromCIDR": {
                 "description": "FromCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to receive connections from. Only connections which do *not* originate from the cluster or from the local host are subject to CIDR rules. In order to allow in-cluster connectivity, use the FromEndpoints field.  This will match on the source IP address of incoming connections. Adding  a prefix into FromCIDR or into FromCIDRSet with no ExcludeCIDRs is  equivalent.  Overlaps are allowed between FromCIDR and FromCIDRSet. \n Example: Any endpoint with the label \"app=my-legacy-pet\" is allowed to receive connections from 10.3.9.1",
@@ -2139,7 +2139,7 @@
           "egress": {
             "description": "Egress is a list of EgressRule which are enforced at egress. If omitted or empty, this rule does not apply at egress.",
             "items": {
-              "description": "EgressRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members of the structure are specified, then all members     must match in order for the rule to take effect. The exception to this     rule is the ToRequires member; the effects of any Requires field in any     rule will apply to all other rules as well. \n   - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are     mutually exclusive. Only one of these members may be present within an     individual rule.",
+              "description": "EgressRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members of the structure are specified, then all members must match in order for the rule to take effect. The exception to this rule is the ToRequires member; the effects of any Requires field in any rule will apply to all other rules as well. \n - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are mutually exclusive. Only one of these members may be present within an individual rule.",
               "properties": {
                 "authentication": {
                   "description": "Authentication is the required authentication type for the allowed traffic, if any.",
@@ -2340,7 +2340,7 @@
                         "type": "string"
                       },
                       "matchPattern": {
-                        "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level   www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\"   except those containing \".\" separator, subcilium.io and sub-cilium.io match,   www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\"   sub.cilium.io and subdomain.cilium.io match, www.cilium.io,   blog.cilium.io, cilium.io and google.com do not",
+                        "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\" except those containing \".\" separator, subcilium.io and sub-cilium.io match, www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\" sub.cilium.io and subdomain.cilium.io match, www.cilium.io, blog.cilium.io, cilium.io and google.com do not",
                         "pattern": "^([-a-zA-Z0-9_*]+[.]?)+$",
                         "type": "string"
                       }
@@ -2350,7 +2350,7 @@
                   "type": "array"
                 },
                 "toGroups": {
-                  "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws:     securityGroupsIds:     - 'sg-XXXXXXXXXXXXX'",
+                  "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                   "items": {
                     "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
                     "properties": {
@@ -2440,7 +2440,7 @@
                             "type": "string"
                           },
                           "secret": {
-                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                             "properties": {
                               "name": {
                                 "description": "Name is the name of the secret.",
@@ -2508,7 +2508,7 @@
                                   "type": "string"
                                 },
                                 "matchPattern": {
-                                  "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level   www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\"   except those containing \".\" separator, subcilium.io and sub-cilium.io match,   www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\"   sub.cilium.io and subdomain.cilium.io match, www.cilium.io,   blog.cilium.io, cilium.io and google.com do not",
+                                  "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\" except those containing \".\" separator, subcilium.io and sub-cilium.io match, www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\" sub.cilium.io and subdomain.cilium.io match, www.cilium.io, blog.cilium.io, cilium.io and google.com do not",
                                   "pattern": "^([-a-zA-Z0-9_*]+[.]?)+$",
                                   "type": "string"
                                 }
@@ -2613,7 +2613,7 @@
                                   "type": "string"
                                 },
                                 "role": {
-                                  "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported:  - \"produce\": Allow producing to the topics specified in the rule  - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
+                                  "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported: - \"produce\": Allow producing to the topics specified in the rule - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
                                   "enum": [
                                     "produce",
                                     "consume"
@@ -2667,7 +2667,7 @@
                             "type": "string"
                           },
                           "secret": {
-                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                             "properties": {
                               "name": {
                                 "description": "Name is the name of the secret.",
@@ -2846,7 +2846,7 @@
           "egressDeny": {
             "description": "EgressDeny is a list of EgressDenyRule which are enforced at egress. Any rule inserted here will be denied regardless of the allowed egress rules in the 'egress' field. If omitted or empty, this rule does not apply at egress.",
             "items": {
-              "description": "EgressDenyRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members of the structure are specified, then all members     must match in order for the rule to take effect. The exception to this     rule is the ToRequires member; the effects of any Requires field in any     rule will apply to all other rules as well. \n   - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are     mutually exclusive. Only one of these members may be present within an     individual rule.",
+              "description": "EgressDenyRule contains all rule types which can be applied at egress, i.e. network traffic that originates inside the endpoint and exits the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members of the structure are specified, then all members must match in order for the rule to take effect. The exception to this rule is the ToRequires member; the effects of any Requires field in any rule will apply to all other rules as well. \n - ToEndpoints, ToCIDR, ToCIDRSet, ToEntities, ToServices and ToGroups are mutually exclusive. Only one of these members may be present within an individual rule.",
               "properties": {
                 "icmps": {
                   "description": "ICMPs is a list of ICMP rule identified by type number which the endpoint subject to the rule is not allowed to connect to. \n Example: Any endpoint with the label \"app=httpd\" is not allowed to initiate type 8 ICMP connections.",
@@ -3020,7 +3020,7 @@
                   "type": "array"
                 },
                 "toGroups": {
-                  "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws:     securityGroupsIds:     - 'sg-XXXXXXXXXXXXX'",
+                  "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                   "items": {
                     "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
                     "properties": {
@@ -3293,7 +3293,7 @@
           "ingress": {
             "description": "Ingress is a list of IngressRule which are enforced at ingress. If omitted or empty, this rule does not apply at ingress.",
             "items": {
-              "description": "IngressRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members are set, all of them need to match in order for     the rule to take effect. The exception to this rule is FromRequires field;     the effects of any Requires field in any rule will apply to all other     rules as well. \n   - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually     exclusive. Only one of these members may be present within an individual     rule.",
+              "description": "IngressRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
               "properties": {
                 "authentication": {
                   "description": "Authentication is the required authentication type for the allowed traffic, if any.",
@@ -3593,7 +3593,7 @@
                             "type": "string"
                           },
                           "secret": {
-                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                             "properties": {
                               "name": {
                                 "description": "Name is the name of the secret.",
@@ -3661,7 +3661,7 @@
                                   "type": "string"
                                 },
                                 "matchPattern": {
-                                  "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level   www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\"   except those containing \".\" separator, subcilium.io and sub-cilium.io match,   www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\"   sub.cilium.io and subdomain.cilium.io match, www.cilium.io,   blog.cilium.io, cilium.io and google.com do not",
+                                  "description": "MatchPattern allows using wildcards to match DNS names. All wildcards are case insensitive. The wildcards are: - \"*\" matches 0 or more DNS valid characters, and may occur anywhere in the pattern. As a special case a \"*\" as the leftmost character, without a following \".\" matches all subdomains as well as the name to the right. A trailing \".\" is automatically added when missing. \n Examples: `*.cilium.io` matches subomains of cilium at that level www.cilium.io and blog.cilium.io match, cilium.io and google.com do not `*cilium.io` matches cilium.io and all subdomains ends with \"cilium.io\" except those containing \".\" separator, subcilium.io and sub-cilium.io match, www.cilium.io and blog.cilium.io does not sub*.cilium.io matches subdomains of cilium where the subdomain component begins with \"sub\" sub.cilium.io and subdomain.cilium.io match, www.cilium.io, blog.cilium.io, cilium.io and google.com do not",
                                   "pattern": "^([-a-zA-Z0-9_*]+[.]?)+$",
                                   "type": "string"
                                 }
@@ -3766,7 +3766,7 @@
                                   "type": "string"
                                 },
                                 "role": {
-                                  "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported:  - \"produce\": Allow producing to the topics specified in the rule  - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
+                                  "description": "Role is a case-insensitive string and describes a group of API keys necessary to perform certain higher-level Kafka operations such as \"produce\" or \"consume\". A Role automatically expands into all APIKeys required to perform the specified higher-level operation. \n The following values are supported: - \"produce\": Allow producing to the topics specified in the rule - \"consume\": Allow consuming from the topics specified in the rule \n This field is incompatible with the APIKey field, i.e APIKey and Role cannot both be specified in the same rule. \n If omitted or empty, and if APIKey is not specified, then all keys are allowed.",
                                   "enum": [
                                     "produce",
                                     "consume"
@@ -3820,7 +3820,7 @@
                             "type": "string"
                           },
                           "secret": {
-                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items:  - 'ca.crt'  - Which represents the trusted CA to verify remote source.  - 'tls.crt' - Which represents the public key certificate.  - 'tls.key' - Which represents the private key matching the public key                certificate.",
+                            "description": "Secret is the secret that contains the certificates and private key for the TLS context. By default, Cilium will search in this secret for the following items: - 'ca.crt'  - Which represents the trusted CA to verify remote source. - 'tls.crt' - Which represents the public key certificate. - 'tls.key' - Which represents the private key matching the public key certificate.",
                             "properties": {
                               "name": {
                                 "description": "Name is the name of the secret.",
@@ -3859,7 +3859,7 @@
           "ingressDeny": {
             "description": "IngressDeny is a list of IngressDenyRule which are enforced at ingress. Any rule inserted here will be denied regardless of the allowed ingress rules in the 'ingress' field. If omitted or empty, this rule does not apply at ingress.",
             "items": {
-              "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n   - All members of this structure are optional. If omitted or empty, the     member will have no effect on the rule. \n   - If multiple members are set, all of them need to match in order for     the rule to take effect. The exception to this rule is FromRequires field;     the effects of any Requires field in any rule will apply to all other     rules as well. \n   - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually     exclusive. Only one of these members may be present within an individual     rule.",
+              "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
               "properties": {
                 "fromCIDR": {
                   "description": "FromCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to receive connections from. Only connections which do *not* originate from the cluster or from the local host are subject to CIDR rules. In order to allow in-cluster connectivity, use the FromEndpoints field.  This will match on the source IP address of incoming connections. Adding  a prefix into FromCIDR or into FromCIDRSet with no ExcludeCIDRs is  equivalent.  Overlaps are allowed between FromCIDR and FromCIDRSet. \n Example: Any endpoint with the label \"app=my-legacy-pet\" is allowed to receive connections from 10.3.9.1",
