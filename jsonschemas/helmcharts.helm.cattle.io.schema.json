@@ -53,13 +53,33 @@
           "nullable": true,
           "type": "string"
         },
+        "insecureSkipTLSVerify": {
+          "type": "boolean"
+        },
         "jobImage": {
           "nullable": true,
           "type": "string"
         },
+        "plainHTTP": {
+          "type": "boolean"
+        },
         "podSecurityContext": {
           "nullable": true,
           "properties": {
+            "appArmorProfile": {
+              "nullable": true,
+              "properties": {
+                "localhostProfile": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
             "fsGroup": {
               "nullable": true,
               "type": "integer"
@@ -79,6 +99,10 @@
             "runAsUser": {
               "nullable": true,
               "type": "integer"
+            },
+            "seLinuxChangePolicy": {
+              "nullable": true,
+              "type": "string"
             },
             "seLinuxOptions": {
               "nullable": true,
@@ -122,6 +146,10 @@
               },
               "nullable": true,
               "type": "array"
+            },
+            "supplementalGroupsPolicy": {
+              "nullable": true,
+              "type": "string"
             },
             "sysctls": {
               "items": {
@@ -189,6 +217,20 @@
             "allowPrivilegeEscalation": {
               "nullable": true,
               "type": "boolean"
+            },
+            "appArmorProfile": {
+              "nullable": true,
+              "properties": {
+                "localhostProfile": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "type": "object"
             },
             "capabilities": {
               "nullable": true,
@@ -325,6 +367,31 @@
     },
     "status": {
       "properties": {
+        "conditions": {
+          "items": {
+            "properties": {
+              "message": {
+                "nullable": true,
+                "type": "string"
+              },
+              "reason": {
+                "nullable": true,
+                "type": "string"
+              },
+              "status": {
+                "nullable": true,
+                "type": "string"
+              },
+              "type": {
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "nullable": true,
+          "type": "array"
+        },
         "jobName": {
           "nullable": true,
           "type": "string"

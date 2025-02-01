@@ -81,10 +81,17 @@
                             "type": "string"
                           },
                           "type": {
-                            "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                            "maximum": 255,
-                            "minimum": 0,
-                            "type": "integer"
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ],
+                            "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                            "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                            "x-kubernetes-int-or-string": true
                           }
                         },
                         "required": [
@@ -92,6 +99,7 @@
                         ],
                         "type": "object"
                       },
+                      "maxItems": 40,
                       "type": "array"
                     }
                   },
@@ -103,7 +111,7 @@
                 "description": "ToCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to initiate connections. Only connections destined for outside of the cluster and not targeting the host will be subject to CIDR rules.  This will match on the destination IP address of outgoing connections. Adding a prefix into ToCIDR or into ToCIDRSet with no ExcludeCIDRs is equivalent. Overlaps are allowed between ToCIDR and ToCIDRSet. \n Example: Any endpoint with the label \"app=database-proxy\" is allowed to initiate connections to 10.2.3.0/24",
                 "items": {
                   "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                  "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                  "format": "cidr",
                   "type": "string"
                 },
                 "type": "array"
@@ -133,11 +141,11 @@
                   "properties": {
                     "cidr": {
                       "description": "CIDR is a CIDR prefix / IP Block.",
-                      "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                      "format": "cidr",
                       "type": "string"
                     },
                     "cidrGroupRef": {
-                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                       "maxLength": 253,
                       "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                       "type": "string"
@@ -146,7 +154,7 @@
                       "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                       "items": {
                         "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "type": "array"
@@ -185,7 +193,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -194,7 +203,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -235,6 +245,24 @@
               "toFQDNs": {
                 "description": "ToFQDN allows whitelisting DNS names in place of IPs. The IPs that result from DNS resolution of `ToFQDN.MatchName`s are added to the same EgressRule object as ToCIDRSet entries, and behave accordingly. Any L4 and L7 rules within this EgressRule will also apply to these IPs. The DNS -> IP mapping is re-resolved periodically from within the cilium-agent, and the IPs in the DNS response are effected in the policy for selected pods as-is (i.e. the list of IPs is not modified in any way). Note: An explicit rule to allow for DNS traffic is needed for the pods, as ToFQDN counts as an egress rule and will enforce egress policy when PolicyEnforcment=default. Note: If the resolved IPs are IPs within the kubernetes cluster, the ToFQDN rule will not apply to that IP. Note: ToFQDN cannot occur in the same policy as other To* rules.",
                 "items": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "matchName": {}
+                      },
+                      "required": [
+                        "matchName"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "matchPattern": {}
+                      },
+                      "required": [
+                        "matchPattern"
+                      ]
+                    }
+                  ],
                   "properties": {
                     "matchName": {
                       "description": "MatchName matches literal DNS names. A trailing \".\" is automatically added when missing.",
@@ -254,7 +282,7 @@
               "toGroups": {
                 "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                 "items": {
-                  "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
+                  "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
                   "properties": {
                     "aws": {
                       "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
@@ -288,6 +316,63 @@
                 },
                 "type": "array"
               },
+              "toNodes": {
+                "description": "ToNodes is a list of nodes identified by an EndpointSelector to which endpoints subject to the rule is allowed to communicate.",
+                "items": {
+                  "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                  "properties": {
+                    "matchExpressions": {
+                      "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                      "items": {
+                        "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                        "properties": {
+                          "key": {
+                            "description": "key is the label key that the selector applies to.",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                            "enum": [
+                              "In",
+                              "NotIn",
+                              "Exists",
+                              "DoesNotExist"
+                            ],
+                            "type": "string"
+                          },
+                          "values": {
+                            "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
+                          }
+                        },
+                        "required": [
+                          "key",
+                          "operator"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    "matchLabels": {
+                      "additionalProperties": {
+                        "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                        "maxLength": 63,
+                        "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                        "type": "string"
+                      },
+                      "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "toPorts": {
                 "description": "ToPorts is a list of destination ports identified by port number and protocol which the endpoint subject to the rule is allowed to connect to. \n Example: Any endpoint with the label \"role=frontend\" is allowed to initiate connections to destination port 8080/tcp",
                 "items": {
@@ -297,7 +382,7 @@
                       "description": "listener specifies the name of a custom Envoy listener to which this traffic should be redirected to.",
                       "properties": {
                         "envoyConfig": {
-                          "description": "EnvoyConfig is a reference to the CEC or CCNP resource in which the listener is defined.",
+                          "description": "EnvoyConfig is a reference to the CEC or CCEC resource in which the listener is defined.",
                           "properties": {
                             "kind": {
                               "description": "Kind is the resource type being referred to. Defaults to CiliumEnvoyConfig or CiliumClusterwideEnvoyConfig for CiliumNetworkPolicy and CiliumClusterwideNetworkPolicy, respectively. The only case this is currently explicitly needed is when referring to a CiliumClusterwideEnvoyConfig from CiliumNetworkPolicy, as using a namespaced listener from a cluster scoped policy is not allowed.",
@@ -322,6 +407,12 @@
                           "description": "Name is the name of the listener.",
                           "minLength": 1,
                           "type": "string"
+                        },
+                        "priority": {
+                          "description": "Priority for this Listener that is used when multiple rules would apply different listeners to a policy map entry. Behavior of this is implementation dependent.",
+                          "maximum": 100,
+                          "minimum": 1,
+                          "type": "integer"
                         }
                       },
                       "required": [
@@ -373,8 +464,15 @@
                       "items": {
                         "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                         "properties": {
+                          "endPort": {
+                            "description": "EndPort can only be an L4 port number.",
+                            "format": "int32",
+                            "maximum": 65535,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
                           "port": {
-                            "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                            "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                             "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                             "type": "string"
                           },
@@ -394,15 +492,68 @@
                         ],
                         "type": "object"
                       },
+                      "maxItems": 40,
                       "type": "array"
                     },
                     "rules": {
                       "description": "Rules is a list of additional port level rules which must be met in order for the PortRule to allow the traffic. If omitted or empty, no layer 7 rules are enforced.",
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "http": {}
+                          },
+                          "required": [
+                            "http"
+                          ]
+                        },
+                        {
+                          "properties": {
+                            "kafka": {}
+                          },
+                          "required": [
+                            "kafka"
+                          ]
+                        },
+                        {
+                          "properties": {
+                            "dns": {}
+                          },
+                          "required": [
+                            "dns"
+                          ]
+                        },
+                        {
+                          "properties": {
+                            "l7proto": {}
+                          },
+                          "required": [
+                            "l7proto"
+                          ]
+                        }
+                      ],
                       "properties": {
                         "dns": {
                           "description": "DNS-specific rules.",
                           "items": {
                             "description": "PortRuleDNS is a list of allowed DNS lookups.",
+                            "oneOf": [
+                              {
+                                "properties": {
+                                  "matchName": {}
+                                },
+                                "required": [
+                                  "matchName"
+                                ]
+                              },
+                              {
+                                "properties": {
+                                  "matchPattern": {}
+                                },
+                                "required": [
+                                  "matchPattern"
+                                ]
+                              }
+                            ],
                             "properties": {
                               "matchName": {
                                 "description": "MatchName matches literal DNS names. A trailing \".\" is automatically added when missing.",
@@ -441,6 +592,7 @@
                                     },
                                     "name": {
                                       "description": "Name identifies the header.",
+                                      "minLength": 1,
                                       "type": "string"
                                     },
                                     "secret": {
@@ -480,7 +632,7 @@
                                 "type": "array"
                               },
                               "host": {
-                                "description": "Host is an extended POSIX regex matched against the host header of a request, e.g. \"foo.com\" \n If omitted or empty, the value of the host header is ignored.",
+                                "description": "Host is an extended POSIX regex matched against the host header of a request. Examples: \n - foo.bar.com will match the host fooXbar.com or foo-bar.com - foo\\.bar\\.com will only match the host foo.bar.com \n If omitted or empty, the value of the host header is ignored.",
                                 "format": "idn-hostname",
                                 "type": "string"
                               },
@@ -629,7 +781,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -638,7 +791,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -705,7 +859,8 @@
                                     "items": {
                                       "type": "string"
                                     },
-                                    "type": "array"
+                                    "type": "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   }
                                 },
                                 "required": [
@@ -714,7 +869,8 @@
                                 ],
                                 "type": "object"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             },
                             "matchLabels": {
                               "additionalProperties": {
@@ -770,10 +926,17 @@
                             "type": "string"
                           },
                           "type": {
-                            "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                            "maximum": 255,
-                            "minimum": 0,
-                            "type": "integer"
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ],
+                            "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                            "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                            "x-kubernetes-int-or-string": true
                           }
                         },
                         "required": [
@@ -781,6 +944,7 @@
                         ],
                         "type": "object"
                       },
+                      "maxItems": 40,
                       "type": "array"
                     }
                   },
@@ -792,7 +956,7 @@
                 "description": "ToCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to initiate connections. Only connections destined for outside of the cluster and not targeting the host will be subject to CIDR rules.  This will match on the destination IP address of outgoing connections. Adding a prefix into ToCIDR or into ToCIDRSet with no ExcludeCIDRs is equivalent. Overlaps are allowed between ToCIDR and ToCIDRSet. \n Example: Any endpoint with the label \"app=database-proxy\" is allowed to initiate connections to 10.2.3.0/24",
                 "items": {
                   "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                  "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                  "format": "cidr",
                   "type": "string"
                 },
                 "type": "array"
@@ -822,11 +986,11 @@
                   "properties": {
                     "cidr": {
                       "description": "CIDR is a CIDR prefix / IP Block.",
-                      "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                      "format": "cidr",
                       "type": "string"
                     },
                     "cidrGroupRef": {
-                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                       "maxLength": 253,
                       "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                       "type": "string"
@@ -835,7 +999,7 @@
                       "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                       "items": {
                         "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "type": "array"
@@ -874,7 +1038,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -883,7 +1048,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -924,7 +1090,7 @@
               "toGroups": {
                 "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                 "items": {
-                  "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
+                  "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
                   "properties": {
                     "aws": {
                       "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
@@ -958,6 +1124,63 @@
                 },
                 "type": "array"
               },
+              "toNodes": {
+                "description": "ToNodes is a list of nodes identified by an EndpointSelector to which endpoints subject to the rule is allowed to communicate.",
+                "items": {
+                  "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                  "properties": {
+                    "matchExpressions": {
+                      "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                      "items": {
+                        "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                        "properties": {
+                          "key": {
+                            "description": "key is the label key that the selector applies to.",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                            "enum": [
+                              "In",
+                              "NotIn",
+                              "Exists",
+                              "DoesNotExist"
+                            ],
+                            "type": "string"
+                          },
+                          "values": {
+                            "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
+                          }
+                        },
+                        "required": [
+                          "key",
+                          "operator"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    "matchLabels": {
+                      "additionalProperties": {
+                        "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                        "maxLength": 63,
+                        "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                        "type": "string"
+                      },
+                      "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "toPorts": {
                 "description": "ToPorts is a list of destination ports identified by port number and protocol which the endpoint subject to the rule is not allowed to connect to. \n Example: Any endpoint with the label \"role=frontend\" is not allowed to initiate connections to destination port 8080/tcp",
                 "items": {
@@ -968,8 +1191,15 @@
                       "items": {
                         "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                         "properties": {
+                          "endPort": {
+                            "description": "EndPort can only be an L4 port number.",
+                            "format": "int32",
+                            "maximum": 65535,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
                           "port": {
-                            "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                            "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                             "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                             "type": "string"
                           },
@@ -1025,7 +1255,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -1034,7 +1265,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -1101,7 +1333,8 @@
                                     "items": {
                                       "type": "string"
                                     },
-                                    "type": "array"
+                                    "type": "array",
+                                    "x-kubernetes-list-type": "atomic"
                                   }
                                 },
                                 "required": [
@@ -1110,7 +1343,8 @@
                                 ],
                                 "type": "object"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             },
                             "matchLabels": {
                               "additionalProperties": {
@@ -1141,6 +1375,20 @@
           },
           "type": "array"
         },
+        "enableDefaultDeny": {
+          "description": "EnableDefaultDeny determines whether this policy configures the subject endpoint(s) to have a default deny mode. If enabled, this causes all traffic not explicitly allowed by a network policy to be dropped. \n If not specified, the default is true for each traffic direction that has rules, and false otherwise. For example, if a policy only has Ingress or IngressDeny rules, then the default for ingress is true and egress is false. \n If multiple policies apply to an endpoint, that endpoint's default deny will be enabled if any policy requests it. \n This is useful for creating broad-based network policies that will not cause endpoints to enter default-deny mode.",
+          "properties": {
+            "egress": {
+              "description": "Whether or not the endpoint should have a default-deny rule applied to egress traffic.",
+              "type": "boolean"
+            },
+            "ingress": {
+              "description": "Whether or not the endpoint should have a default-deny rule applied to ingress traffic.",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
         "endpointSelector": {
           "description": "EndpointSelector selects all endpoints which should be subject to this rule. EndpointSelector and NodeSelector cannot be both empty and are mutually exclusive.",
           "properties": {
@@ -1168,7 +1416,8 @@
                     "items": {
                       "type": "string"
                     },
-                    "type": "array"
+                    "type": "array",
+                    "x-kubernetes-list-type": "atomic"
                   }
                 },
                 "required": [
@@ -1177,7 +1426,8 @@
                 ],
                 "type": "object"
               },
-              "type": "array"
+              "type": "array",
+              "x-kubernetes-list-type": "atomic"
             },
             "matchLabels": {
               "additionalProperties": {
@@ -1219,7 +1469,7 @@
                 "description": "FromCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to receive connections from. Only connections which do *not* originate from the cluster or from the local host are subject to CIDR rules. In order to allow in-cluster connectivity, use the FromEndpoints field.  This will match on the source IP address of incoming connections. Adding  a prefix into FromCIDR or into FromCIDRSet with no ExcludeCIDRs is  equivalent.  Overlaps are allowed between FromCIDR and FromCIDRSet. \n Example: Any endpoint with the label \"app=my-legacy-pet\" is allowed to receive connections from 10.3.9.1",
                 "items": {
                   "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                  "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                  "format": "cidr",
                   "type": "string"
                 },
                 "type": "array"
@@ -1249,11 +1499,11 @@
                   "properties": {
                     "cidr": {
                       "description": "CIDR is a CIDR prefix / IP Block.",
-                      "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                      "format": "cidr",
                       "type": "string"
                     },
                     "cidrGroupRef": {
-                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                       "maxLength": 253,
                       "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                       "type": "string"
@@ -1262,7 +1512,7 @@
                       "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                       "items": {
                         "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "type": "array"
@@ -1301,7 +1551,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -1310,7 +1561,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -1348,6 +1600,100 @@
                 },
                 "type": "array"
               },
+              "fromGroups": {
+                "description": "FromGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: FromGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
+                "items": {
+                  "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
+                  "properties": {
+                    "aws": {
+                      "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
+                      "properties": {
+                        "labels": {
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "region": {
+                          "type": "string"
+                        },
+                        "securityGroupsIds": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "securityGroupsNames": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "fromNodes": {
+                "description": "FromNodes is a list of nodes identified by an EndpointSelector which are allowed to communicate with the endpoint subject to the rule.",
+                "items": {
+                  "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                  "properties": {
+                    "matchExpressions": {
+                      "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                      "items": {
+                        "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                        "properties": {
+                          "key": {
+                            "description": "key is the label key that the selector applies to.",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                            "enum": [
+                              "In",
+                              "NotIn",
+                              "Exists",
+                              "DoesNotExist"
+                            ],
+                            "type": "string"
+                          },
+                          "values": {
+                            "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
+                          }
+                        },
+                        "required": [
+                          "key",
+                          "operator"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    "matchLabels": {
+                      "additionalProperties": {
+                        "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                        "maxLength": 63,
+                        "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                        "type": "string"
+                      },
+                      "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "fromRequires": {
                 "description": "FromRequires is a list of additional constraints which must be met in order for the selected endpoints to be reachable. These additional constraints do no by itself grant access privileges and must always be accompanied with at least one matching FromEndpoints. \n Example: Any Endpoint with the label \"team=A\" requires consuming endpoint to also carry the label \"team=A\".",
                 "items": {
@@ -1377,7 +1723,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -1386,7 +1733,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -1423,10 +1771,17 @@
                             "type": "string"
                           },
                           "type": {
-                            "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                            "maximum": 255,
-                            "minimum": 0,
-                            "type": "integer"
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ],
+                            "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                            "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                            "x-kubernetes-int-or-string": true
                           }
                         },
                         "required": [
@@ -1434,6 +1789,7 @@
                         ],
                         "type": "object"
                       },
+                      "maxItems": 40,
                       "type": "array"
                     }
                   },
@@ -1450,7 +1806,7 @@
                       "description": "listener specifies the name of a custom Envoy listener to which this traffic should be redirected to.",
                       "properties": {
                         "envoyConfig": {
-                          "description": "EnvoyConfig is a reference to the CEC or CCNP resource in which the listener is defined.",
+                          "description": "EnvoyConfig is a reference to the CEC or CCEC resource in which the listener is defined.",
                           "properties": {
                             "kind": {
                               "description": "Kind is the resource type being referred to. Defaults to CiliumEnvoyConfig or CiliumClusterwideEnvoyConfig for CiliumNetworkPolicy and CiliumClusterwideNetworkPolicy, respectively. The only case this is currently explicitly needed is when referring to a CiliumClusterwideEnvoyConfig from CiliumNetworkPolicy, as using a namespaced listener from a cluster scoped policy is not allowed.",
@@ -1475,6 +1831,12 @@
                           "description": "Name is the name of the listener.",
                           "minLength": 1,
                           "type": "string"
+                        },
+                        "priority": {
+                          "description": "Priority for this Listener that is used when multiple rules would apply different listeners to a policy map entry. Behavior of this is implementation dependent.",
+                          "maximum": 100,
+                          "minimum": 1,
+                          "type": "integer"
                         }
                       },
                       "required": [
@@ -1526,8 +1888,15 @@
                       "items": {
                         "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                         "properties": {
+                          "endPort": {
+                            "description": "EndPort can only be an L4 port number.",
+                            "format": "int32",
+                            "maximum": 65535,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
                           "port": {
-                            "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                            "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                             "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                             "type": "string"
                           },
@@ -1547,15 +1916,68 @@
                         ],
                         "type": "object"
                       },
+                      "maxItems": 40,
                       "type": "array"
                     },
                     "rules": {
                       "description": "Rules is a list of additional port level rules which must be met in order for the PortRule to allow the traffic. If omitted or empty, no layer 7 rules are enforced.",
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "http": {}
+                          },
+                          "required": [
+                            "http"
+                          ]
+                        },
+                        {
+                          "properties": {
+                            "kafka": {}
+                          },
+                          "required": [
+                            "kafka"
+                          ]
+                        },
+                        {
+                          "properties": {
+                            "dns": {}
+                          },
+                          "required": [
+                            "dns"
+                          ]
+                        },
+                        {
+                          "properties": {
+                            "l7proto": {}
+                          },
+                          "required": [
+                            "l7proto"
+                          ]
+                        }
+                      ],
                       "properties": {
                         "dns": {
                           "description": "DNS-specific rules.",
                           "items": {
                             "description": "PortRuleDNS is a list of allowed DNS lookups.",
+                            "oneOf": [
+                              {
+                                "properties": {
+                                  "matchName": {}
+                                },
+                                "required": [
+                                  "matchName"
+                                ]
+                              },
+                              {
+                                "properties": {
+                                  "matchPattern": {}
+                                },
+                                "required": [
+                                  "matchPattern"
+                                ]
+                              }
+                            ],
                             "properties": {
                               "matchName": {
                                 "description": "MatchName matches literal DNS names. A trailing \".\" is automatically added when missing.",
@@ -1594,6 +2016,7 @@
                                     },
                                     "name": {
                                       "description": "Name identifies the header.",
+                                      "minLength": 1,
                                       "type": "string"
                                     },
                                     "secret": {
@@ -1633,7 +2056,7 @@
                                 "type": "array"
                               },
                               "host": {
-                                "description": "Host is an extended POSIX regex matched against the host header of a request, e.g. \"foo.com\" \n If omitted or empty, the value of the host header is ignored.",
+                                "description": "Host is an extended POSIX regex matched against the host header of a request. Examples: \n - foo.bar.com will match the host fooXbar.com or foo-bar.com - foo\\.bar\\.com will only match the host foo.bar.com \n If omitted or empty, the value of the host header is ignored.",
                                 "format": "idn-hostname",
                                 "type": "string"
                               },
@@ -1761,13 +2184,13 @@
         "ingressDeny": {
           "description": "IngressDeny is a list of IngressDenyRule which are enforced at ingress. Any rule inserted here will be denied regardless of the allowed ingress rules in the 'ingress' field. If omitted or empty, this rule does not apply at ingress.",
           "items": {
-            "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
+            "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet, FromGroups and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
             "properties": {
               "fromCIDR": {
                 "description": "FromCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to receive connections from. Only connections which do *not* originate from the cluster or from the local host are subject to CIDR rules. In order to allow in-cluster connectivity, use the FromEndpoints field.  This will match on the source IP address of incoming connections. Adding  a prefix into FromCIDR or into FromCIDRSet with no ExcludeCIDRs is  equivalent.  Overlaps are allowed between FromCIDR and FromCIDRSet. \n Example: Any endpoint with the label \"app=my-legacy-pet\" is allowed to receive connections from 10.3.9.1",
                 "items": {
                   "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                  "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                  "format": "cidr",
                   "type": "string"
                 },
                 "type": "array"
@@ -1797,11 +2220,11 @@
                   "properties": {
                     "cidr": {
                       "description": "CIDR is a CIDR prefix / IP Block.",
-                      "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                      "format": "cidr",
                       "type": "string"
                     },
                     "cidrGroupRef": {
-                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                      "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                       "maxLength": 253,
                       "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                       "type": "string"
@@ -1810,7 +2233,7 @@
                       "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                       "items": {
                         "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "type": "array"
@@ -1849,7 +2272,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -1858,7 +2282,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -1896,6 +2321,100 @@
                 },
                 "type": "array"
               },
+              "fromGroups": {
+                "description": "FromGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: FromGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
+                "items": {
+                  "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
+                  "properties": {
+                    "aws": {
+                      "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
+                      "properties": {
+                        "labels": {
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "region": {
+                          "type": "string"
+                        },
+                        "securityGroupsIds": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "securityGroupsNames": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "fromNodes": {
+                "description": "FromNodes is a list of nodes identified by an EndpointSelector which are allowed to communicate with the endpoint subject to the rule.",
+                "items": {
+                  "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                  "properties": {
+                    "matchExpressions": {
+                      "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                      "items": {
+                        "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                        "properties": {
+                          "key": {
+                            "description": "key is the label key that the selector applies to.",
+                            "type": "string"
+                          },
+                          "operator": {
+                            "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                            "enum": [
+                              "In",
+                              "NotIn",
+                              "Exists",
+                              "DoesNotExist"
+                            ],
+                            "type": "string"
+                          },
+                          "values": {
+                            "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
+                          }
+                        },
+                        "required": [
+                          "key",
+                          "operator"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
+                    },
+                    "matchLabels": {
+                      "additionalProperties": {
+                        "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                        "maxLength": 63,
+                        "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                        "type": "string"
+                      },
+                      "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "fromRequires": {
                 "description": "FromRequires is a list of additional constraints which must be met in order for the selected endpoints to be reachable. These additional constraints do no by itself grant access privileges and must always be accompanied with at least one matching FromEndpoints. \n Example: Any Endpoint with the label \"team=A\" requires consuming endpoint to also carry the label \"team=A\".",
                 "items": {
@@ -1925,7 +2444,8 @@
                             "items": {
                               "type": "string"
                             },
-                            "type": "array"
+                            "type": "array",
+                            "x-kubernetes-list-type": "atomic"
                           }
                         },
                         "required": [
@@ -1934,7 +2454,8 @@
                         ],
                         "type": "object"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     },
                     "matchLabels": {
                       "additionalProperties": {
@@ -1971,10 +2492,17 @@
                             "type": "string"
                           },
                           "type": {
-                            "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                            "maximum": 255,
-                            "minimum": 0,
-                            "type": "integer"
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ],
+                            "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                            "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                            "x-kubernetes-int-or-string": true
                           }
                         },
                         "required": [
@@ -1982,6 +2510,7 @@
                         ],
                         "type": "object"
                       },
+                      "maxItems": 40,
                       "type": "array"
                     }
                   },
@@ -1999,8 +2528,15 @@
                       "items": {
                         "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                         "properties": {
+                          "endPort": {
+                            "description": "EndPort can only be an L4 port number.",
+                            "format": "int32",
+                            "maximum": 65535,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
                           "port": {
-                            "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                            "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                             "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                             "type": "string"
                           },
@@ -2082,7 +2618,8 @@
                     "items": {
                       "type": "string"
                     },
-                    "type": "array"
+                    "type": "array",
+                    "x-kubernetes-list-type": "atomic"
                   }
                 },
                 "required": [
@@ -2091,7 +2628,8 @@
                 ],
                 "type": "object"
               },
-              "type": "array"
+              "type": "array",
+              "x-kubernetes-list-type": "atomic"
             },
             "matchLabels": {
               "additionalProperties": {
@@ -2179,10 +2717,17 @@
                               "type": "string"
                             },
                             "type": {
-                              "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                              "maximum": 255,
-                              "minimum": 0,
-                              "type": "integer"
+                              "anyOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                              "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                              "x-kubernetes-int-or-string": true
                             }
                           },
                           "required": [
@@ -2190,6 +2735,7 @@
                           ],
                           "type": "object"
                         },
+                        "maxItems": 40,
                         "type": "array"
                       }
                     },
@@ -2201,7 +2747,7 @@
                   "description": "ToCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to initiate connections. Only connections destined for outside of the cluster and not targeting the host will be subject to CIDR rules.  This will match on the destination IP address of outgoing connections. Adding a prefix into ToCIDR or into ToCIDRSet with no ExcludeCIDRs is equivalent. Overlaps are allowed between ToCIDR and ToCIDRSet. \n Example: Any endpoint with the label \"app=database-proxy\" is allowed to initiate connections to 10.2.3.0/24",
                   "items": {
                     "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                    "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                    "format": "cidr",
                     "type": "string"
                   },
                   "type": "array"
@@ -2231,11 +2777,11 @@
                     "properties": {
                       "cidr": {
                         "description": "CIDR is a CIDR prefix / IP Block.",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "cidrGroupRef": {
-                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                         "maxLength": 253,
                         "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                         "type": "string"
@@ -2244,7 +2790,7 @@
                         "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                         "items": {
                           "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                          "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                          "format": "cidr",
                           "type": "string"
                         },
                         "type": "array"
@@ -2283,7 +2829,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -2292,7 +2839,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -2333,6 +2881,24 @@
                 "toFQDNs": {
                   "description": "ToFQDN allows whitelisting DNS names in place of IPs. The IPs that result from DNS resolution of `ToFQDN.MatchName`s are added to the same EgressRule object as ToCIDRSet entries, and behave accordingly. Any L4 and L7 rules within this EgressRule will also apply to these IPs. The DNS -> IP mapping is re-resolved periodically from within the cilium-agent, and the IPs in the DNS response are effected in the policy for selected pods as-is (i.e. the list of IPs is not modified in any way). Note: An explicit rule to allow for DNS traffic is needed for the pods, as ToFQDN counts as an egress rule and will enforce egress policy when PolicyEnforcment=default. Note: If the resolved IPs are IPs within the kubernetes cluster, the ToFQDN rule will not apply to that IP. Note: ToFQDN cannot occur in the same policy as other To* rules.",
                   "items": {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "matchName": {}
+                        },
+                        "required": [
+                          "matchName"
+                        ]
+                      },
+                      {
+                        "properties": {
+                          "matchPattern": {}
+                        },
+                        "required": [
+                          "matchPattern"
+                        ]
+                      }
+                    ],
                     "properties": {
                       "matchName": {
                         "description": "MatchName matches literal DNS names. A trailing \".\" is automatically added when missing.",
@@ -2352,7 +2918,7 @@
                 "toGroups": {
                   "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                   "items": {
-                    "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
+                    "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
                     "properties": {
                       "aws": {
                         "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
@@ -2386,6 +2952,63 @@
                   },
                   "type": "array"
                 },
+                "toNodes": {
+                  "description": "ToNodes is a list of nodes identified by an EndpointSelector to which endpoints subject to the rule is allowed to communicate.",
+                  "items": {
+                    "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                    "properties": {
+                      "matchExpressions": {
+                        "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                        "items": {
+                          "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                          "properties": {
+                            "key": {
+                              "description": "key is the label key that the selector applies to.",
+                              "type": "string"
+                            },
+                            "operator": {
+                              "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                              "enum": [
+                                "In",
+                                "NotIn",
+                                "Exists",
+                                "DoesNotExist"
+                              ],
+                              "type": "string"
+                            },
+                            "values": {
+                              "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                              "items": {
+                                "type": "string"
+                              },
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
+                            }
+                          },
+                          "required": [
+                            "key",
+                            "operator"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
+                      },
+                      "matchLabels": {
+                        "additionalProperties": {
+                          "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                          "maxLength": 63,
+                          "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                          "type": "string"
+                        },
+                        "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "toPorts": {
                   "description": "ToPorts is a list of destination ports identified by port number and protocol which the endpoint subject to the rule is allowed to connect to. \n Example: Any endpoint with the label \"role=frontend\" is allowed to initiate connections to destination port 8080/tcp",
                   "items": {
@@ -2395,7 +3018,7 @@
                         "description": "listener specifies the name of a custom Envoy listener to which this traffic should be redirected to.",
                         "properties": {
                           "envoyConfig": {
-                            "description": "EnvoyConfig is a reference to the CEC or CCNP resource in which the listener is defined.",
+                            "description": "EnvoyConfig is a reference to the CEC or CCEC resource in which the listener is defined.",
                             "properties": {
                               "kind": {
                                 "description": "Kind is the resource type being referred to. Defaults to CiliumEnvoyConfig or CiliumClusterwideEnvoyConfig for CiliumNetworkPolicy and CiliumClusterwideNetworkPolicy, respectively. The only case this is currently explicitly needed is when referring to a CiliumClusterwideEnvoyConfig from CiliumNetworkPolicy, as using a namespaced listener from a cluster scoped policy is not allowed.",
@@ -2420,6 +3043,12 @@
                             "description": "Name is the name of the listener.",
                             "minLength": 1,
                             "type": "string"
+                          },
+                          "priority": {
+                            "description": "Priority for this Listener that is used when multiple rules would apply different listeners to a policy map entry. Behavior of this is implementation dependent.",
+                            "maximum": 100,
+                            "minimum": 1,
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -2471,8 +3100,15 @@
                         "items": {
                           "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                           "properties": {
+                            "endPort": {
+                              "description": "EndPort can only be an L4 port number.",
+                              "format": "int32",
+                              "maximum": 65535,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
                             "port": {
-                              "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                              "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                               "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                               "type": "string"
                             },
@@ -2492,15 +3128,68 @@
                           ],
                           "type": "object"
                         },
+                        "maxItems": 40,
                         "type": "array"
                       },
                       "rules": {
                         "description": "Rules is a list of additional port level rules which must be met in order for the PortRule to allow the traffic. If omitted or empty, no layer 7 rules are enforced.",
+                        "oneOf": [
+                          {
+                            "properties": {
+                              "http": {}
+                            },
+                            "required": [
+                              "http"
+                            ]
+                          },
+                          {
+                            "properties": {
+                              "kafka": {}
+                            },
+                            "required": [
+                              "kafka"
+                            ]
+                          },
+                          {
+                            "properties": {
+                              "dns": {}
+                            },
+                            "required": [
+                              "dns"
+                            ]
+                          },
+                          {
+                            "properties": {
+                              "l7proto": {}
+                            },
+                            "required": [
+                              "l7proto"
+                            ]
+                          }
+                        ],
                         "properties": {
                           "dns": {
                             "description": "DNS-specific rules.",
                             "items": {
                               "description": "PortRuleDNS is a list of allowed DNS lookups.",
+                              "oneOf": [
+                                {
+                                  "properties": {
+                                    "matchName": {}
+                                  },
+                                  "required": [
+                                    "matchName"
+                                  ]
+                                },
+                                {
+                                  "properties": {
+                                    "matchPattern": {}
+                                  },
+                                  "required": [
+                                    "matchPattern"
+                                  ]
+                                }
+                              ],
                               "properties": {
                                 "matchName": {
                                   "description": "MatchName matches literal DNS names. A trailing \".\" is automatically added when missing.",
@@ -2539,6 +3228,7 @@
                                       },
                                       "name": {
                                         "description": "Name identifies the header.",
+                                        "minLength": 1,
                                         "type": "string"
                                       },
                                       "secret": {
@@ -2578,7 +3268,7 @@
                                   "type": "array"
                                 },
                                 "host": {
-                                  "description": "Host is an extended POSIX regex matched against the host header of a request, e.g. \"foo.com\" \n If omitted or empty, the value of the host header is ignored.",
+                                  "description": "Host is an extended POSIX regex matched against the host header of a request. Examples: \n - foo.bar.com will match the host fooXbar.com or foo-bar.com - foo\\.bar\\.com will only match the host foo.bar.com \n If omitted or empty, the value of the host header is ignored.",
                                   "format": "idn-hostname",
                                   "type": "string"
                                 },
@@ -2727,7 +3417,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -2736,7 +3427,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -2803,7 +3495,8 @@
                                       "items": {
                                         "type": "string"
                                       },
-                                      "type": "array"
+                                      "type": "array",
+                                      "x-kubernetes-list-type": "atomic"
                                     }
                                   },
                                   "required": [
@@ -2812,7 +3505,8 @@
                                   ],
                                   "type": "object"
                                 },
-                                "type": "array"
+                                "type": "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               "matchLabels": {
                                 "additionalProperties": {
@@ -2868,10 +3562,17 @@
                               "type": "string"
                             },
                             "type": {
-                              "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                              "maximum": 255,
-                              "minimum": 0,
-                              "type": "integer"
+                              "anyOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                              "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                              "x-kubernetes-int-or-string": true
                             }
                           },
                           "required": [
@@ -2879,6 +3580,7 @@
                           ],
                           "type": "object"
                         },
+                        "maxItems": 40,
                         "type": "array"
                       }
                     },
@@ -2890,7 +3592,7 @@
                   "description": "ToCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to initiate connections. Only connections destined for outside of the cluster and not targeting the host will be subject to CIDR rules.  This will match on the destination IP address of outgoing connections. Adding a prefix into ToCIDR or into ToCIDRSet with no ExcludeCIDRs is equivalent. Overlaps are allowed between ToCIDR and ToCIDRSet. \n Example: Any endpoint with the label \"app=database-proxy\" is allowed to initiate connections to 10.2.3.0/24",
                   "items": {
                     "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                    "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                    "format": "cidr",
                     "type": "string"
                   },
                   "type": "array"
@@ -2920,11 +3622,11 @@
                     "properties": {
                       "cidr": {
                         "description": "CIDR is a CIDR prefix / IP Block.",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "cidrGroupRef": {
-                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                         "maxLength": 253,
                         "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                         "type": "string"
@@ -2933,7 +3635,7 @@
                         "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                         "items": {
                           "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                          "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                          "format": "cidr",
                           "type": "string"
                         },
                         "type": "array"
@@ -2972,7 +3674,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -2981,7 +3684,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -3022,7 +3726,7 @@
                 "toGroups": {
                   "description": "ToGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: toGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
                   "items": {
-                    "description": "ToGroups structure to store all kinds of new integrations that needs a new derivative policy.",
+                    "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
                     "properties": {
                       "aws": {
                         "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
@@ -3056,6 +3760,63 @@
                   },
                   "type": "array"
                 },
+                "toNodes": {
+                  "description": "ToNodes is a list of nodes identified by an EndpointSelector to which endpoints subject to the rule is allowed to communicate.",
+                  "items": {
+                    "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                    "properties": {
+                      "matchExpressions": {
+                        "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                        "items": {
+                          "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                          "properties": {
+                            "key": {
+                              "description": "key is the label key that the selector applies to.",
+                              "type": "string"
+                            },
+                            "operator": {
+                              "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                              "enum": [
+                                "In",
+                                "NotIn",
+                                "Exists",
+                                "DoesNotExist"
+                              ],
+                              "type": "string"
+                            },
+                            "values": {
+                              "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                              "items": {
+                                "type": "string"
+                              },
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
+                            }
+                          },
+                          "required": [
+                            "key",
+                            "operator"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
+                      },
+                      "matchLabels": {
+                        "additionalProperties": {
+                          "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                          "maxLength": 63,
+                          "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                          "type": "string"
+                        },
+                        "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "toPorts": {
                   "description": "ToPorts is a list of destination ports identified by port number and protocol which the endpoint subject to the rule is not allowed to connect to. \n Example: Any endpoint with the label \"role=frontend\" is not allowed to initiate connections to destination port 8080/tcp",
                   "items": {
@@ -3066,8 +3827,15 @@
                         "items": {
                           "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                           "properties": {
+                            "endPort": {
+                              "description": "EndPort can only be an L4 port number.",
+                              "format": "int32",
+                              "maximum": 65535,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
                             "port": {
-                              "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                              "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                               "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                               "type": "string"
                             },
@@ -3123,7 +3891,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -3132,7 +3901,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -3199,7 +3969,8 @@
                                       "items": {
                                         "type": "string"
                                       },
-                                      "type": "array"
+                                      "type": "array",
+                                      "x-kubernetes-list-type": "atomic"
                                     }
                                   },
                                   "required": [
@@ -3208,7 +3979,8 @@
                                   ],
                                   "type": "object"
                                 },
-                                "type": "array"
+                                "type": "array",
+                                "x-kubernetes-list-type": "atomic"
                               },
                               "matchLabels": {
                                 "additionalProperties": {
@@ -3239,6 +4011,20 @@
             },
             "type": "array"
           },
+          "enableDefaultDeny": {
+            "description": "EnableDefaultDeny determines whether this policy configures the subject endpoint(s) to have a default deny mode. If enabled, this causes all traffic not explicitly allowed by a network policy to be dropped. \n If not specified, the default is true for each traffic direction that has rules, and false otherwise. For example, if a policy only has Ingress or IngressDeny rules, then the default for ingress is true and egress is false. \n If multiple policies apply to an endpoint, that endpoint's default deny will be enabled if any policy requests it. \n This is useful for creating broad-based network policies that will not cause endpoints to enter default-deny mode.",
+            "properties": {
+              "egress": {
+                "description": "Whether or not the endpoint should have a default-deny rule applied to egress traffic.",
+                "type": "boolean"
+              },
+              "ingress": {
+                "description": "Whether or not the endpoint should have a default-deny rule applied to ingress traffic.",
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
           "endpointSelector": {
             "description": "EndpointSelector selects all endpoints which should be subject to this rule. EndpointSelector and NodeSelector cannot be both empty and are mutually exclusive.",
             "properties": {
@@ -3266,7 +4052,8 @@
                       "items": {
                         "type": "string"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     }
                   },
                   "required": [
@@ -3275,7 +4062,8 @@
                   ],
                   "type": "object"
                 },
-                "type": "array"
+                "type": "array",
+                "x-kubernetes-list-type": "atomic"
               },
               "matchLabels": {
                 "additionalProperties": {
@@ -3317,7 +4105,7 @@
                   "description": "FromCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to receive connections from. Only connections which do *not* originate from the cluster or from the local host are subject to CIDR rules. In order to allow in-cluster connectivity, use the FromEndpoints field.  This will match on the source IP address of incoming connections. Adding  a prefix into FromCIDR or into FromCIDRSet with no ExcludeCIDRs is  equivalent.  Overlaps are allowed between FromCIDR and FromCIDRSet. \n Example: Any endpoint with the label \"app=my-legacy-pet\" is allowed to receive connections from 10.3.9.1",
                   "items": {
                     "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                    "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                    "format": "cidr",
                     "type": "string"
                   },
                   "type": "array"
@@ -3347,11 +4135,11 @@
                     "properties": {
                       "cidr": {
                         "description": "CIDR is a CIDR prefix / IP Block.",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "cidrGroupRef": {
-                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                         "maxLength": 253,
                         "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                         "type": "string"
@@ -3360,7 +4148,7 @@
                         "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                         "items": {
                           "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                          "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                          "format": "cidr",
                           "type": "string"
                         },
                         "type": "array"
@@ -3399,7 +4187,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -3408,7 +4197,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -3446,6 +4236,100 @@
                   },
                   "type": "array"
                 },
+                "fromGroups": {
+                  "description": "FromGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: FromGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
+                  "items": {
+                    "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
+                    "properties": {
+                      "aws": {
+                        "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
+                        "properties": {
+                          "labels": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "region": {
+                            "type": "string"
+                          },
+                          "securityGroupsIds": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "securityGroupsNames": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "fromNodes": {
+                  "description": "FromNodes is a list of nodes identified by an EndpointSelector which are allowed to communicate with the endpoint subject to the rule.",
+                  "items": {
+                    "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                    "properties": {
+                      "matchExpressions": {
+                        "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                        "items": {
+                          "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                          "properties": {
+                            "key": {
+                              "description": "key is the label key that the selector applies to.",
+                              "type": "string"
+                            },
+                            "operator": {
+                              "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                              "enum": [
+                                "In",
+                                "NotIn",
+                                "Exists",
+                                "DoesNotExist"
+                              ],
+                              "type": "string"
+                            },
+                            "values": {
+                              "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                              "items": {
+                                "type": "string"
+                              },
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
+                            }
+                          },
+                          "required": [
+                            "key",
+                            "operator"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
+                      },
+                      "matchLabels": {
+                        "additionalProperties": {
+                          "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                          "maxLength": 63,
+                          "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                          "type": "string"
+                        },
+                        "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "fromRequires": {
                   "description": "FromRequires is a list of additional constraints which must be met in order for the selected endpoints to be reachable. These additional constraints do no by itself grant access privileges and must always be accompanied with at least one matching FromEndpoints. \n Example: Any Endpoint with the label \"team=A\" requires consuming endpoint to also carry the label \"team=A\".",
                   "items": {
@@ -3475,7 +4359,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -3484,7 +4369,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -3521,10 +4407,17 @@
                               "type": "string"
                             },
                             "type": {
-                              "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                              "maximum": 255,
-                              "minimum": 0,
-                              "type": "integer"
+                              "anyOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                              "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                              "x-kubernetes-int-or-string": true
                             }
                           },
                           "required": [
@@ -3532,6 +4425,7 @@
                           ],
                           "type": "object"
                         },
+                        "maxItems": 40,
                         "type": "array"
                       }
                     },
@@ -3548,7 +4442,7 @@
                         "description": "listener specifies the name of a custom Envoy listener to which this traffic should be redirected to.",
                         "properties": {
                           "envoyConfig": {
-                            "description": "EnvoyConfig is a reference to the CEC or CCNP resource in which the listener is defined.",
+                            "description": "EnvoyConfig is a reference to the CEC or CCEC resource in which the listener is defined.",
                             "properties": {
                               "kind": {
                                 "description": "Kind is the resource type being referred to. Defaults to CiliumEnvoyConfig or CiliumClusterwideEnvoyConfig for CiliumNetworkPolicy and CiliumClusterwideNetworkPolicy, respectively. The only case this is currently explicitly needed is when referring to a CiliumClusterwideEnvoyConfig from CiliumNetworkPolicy, as using a namespaced listener from a cluster scoped policy is not allowed.",
@@ -3573,6 +4467,12 @@
                             "description": "Name is the name of the listener.",
                             "minLength": 1,
                             "type": "string"
+                          },
+                          "priority": {
+                            "description": "Priority for this Listener that is used when multiple rules would apply different listeners to a policy map entry. Behavior of this is implementation dependent.",
+                            "maximum": 100,
+                            "minimum": 1,
+                            "type": "integer"
                           }
                         },
                         "required": [
@@ -3624,8 +4524,15 @@
                         "items": {
                           "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                           "properties": {
+                            "endPort": {
+                              "description": "EndPort can only be an L4 port number.",
+                              "format": "int32",
+                              "maximum": 65535,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
                             "port": {
-                              "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                              "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                               "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                               "type": "string"
                             },
@@ -3645,15 +4552,68 @@
                           ],
                           "type": "object"
                         },
+                        "maxItems": 40,
                         "type": "array"
                       },
                       "rules": {
                         "description": "Rules is a list of additional port level rules which must be met in order for the PortRule to allow the traffic. If omitted or empty, no layer 7 rules are enforced.",
+                        "oneOf": [
+                          {
+                            "properties": {
+                              "http": {}
+                            },
+                            "required": [
+                              "http"
+                            ]
+                          },
+                          {
+                            "properties": {
+                              "kafka": {}
+                            },
+                            "required": [
+                              "kafka"
+                            ]
+                          },
+                          {
+                            "properties": {
+                              "dns": {}
+                            },
+                            "required": [
+                              "dns"
+                            ]
+                          },
+                          {
+                            "properties": {
+                              "l7proto": {}
+                            },
+                            "required": [
+                              "l7proto"
+                            ]
+                          }
+                        ],
                         "properties": {
                           "dns": {
                             "description": "DNS-specific rules.",
                             "items": {
                               "description": "PortRuleDNS is a list of allowed DNS lookups.",
+                              "oneOf": [
+                                {
+                                  "properties": {
+                                    "matchName": {}
+                                  },
+                                  "required": [
+                                    "matchName"
+                                  ]
+                                },
+                                {
+                                  "properties": {
+                                    "matchPattern": {}
+                                  },
+                                  "required": [
+                                    "matchPattern"
+                                  ]
+                                }
+                              ],
                               "properties": {
                                 "matchName": {
                                   "description": "MatchName matches literal DNS names. A trailing \".\" is automatically added when missing.",
@@ -3692,6 +4652,7 @@
                                       },
                                       "name": {
                                         "description": "Name identifies the header.",
+                                        "minLength": 1,
                                         "type": "string"
                                       },
                                       "secret": {
@@ -3731,7 +4692,7 @@
                                   "type": "array"
                                 },
                                 "host": {
-                                  "description": "Host is an extended POSIX regex matched against the host header of a request, e.g. \"foo.com\" \n If omitted or empty, the value of the host header is ignored.",
+                                  "description": "Host is an extended POSIX regex matched against the host header of a request. Examples: \n - foo.bar.com will match the host fooXbar.com or foo-bar.com - foo\\.bar\\.com will only match the host foo.bar.com \n If omitted or empty, the value of the host header is ignored.",
                                   "format": "idn-hostname",
                                   "type": "string"
                                 },
@@ -3859,13 +4820,13 @@
           "ingressDeny": {
             "description": "IngressDeny is a list of IngressDenyRule which are enforced at ingress. Any rule inserted here will be denied regardless of the allowed ingress rules in the 'ingress' field. If omitted or empty, this rule does not apply at ingress.",
             "items": {
-              "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
+              "description": "IngressDenyRule contains all rule types which can be applied at ingress, i.e. network traffic that originates outside of the endpoint and is entering the endpoint selected by the endpointSelector. \n - All members of this structure are optional. If omitted or empty, the member will have no effect on the rule. \n - If multiple members are set, all of them need to match in order for the rule to take effect. The exception to this rule is FromRequires field; the effects of any Requires field in any rule will apply to all other rules as well. \n - FromEndpoints, FromCIDR, FromCIDRSet, FromGroups and FromEntities are mutually exclusive. Only one of these members may be present within an individual rule.",
               "properties": {
                 "fromCIDR": {
                   "description": "FromCIDR is a list of IP blocks which the endpoint subject to the rule is allowed to receive connections from. Only connections which do *not* originate from the cluster or from the local host are subject to CIDR rules. In order to allow in-cluster connectivity, use the FromEndpoints field.  This will match on the source IP address of incoming connections. Adding  a prefix into FromCIDR or into FromCIDRSet with no ExcludeCIDRs is  equivalent.  Overlaps are allowed between FromCIDR and FromCIDRSet. \n Example: Any endpoint with the label \"app=my-legacy-pet\" is allowed to receive connections from 10.3.9.1",
                   "items": {
                     "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                    "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                    "format": "cidr",
                     "type": "string"
                   },
                   "type": "array"
@@ -3895,11 +4856,11 @@
                     "properties": {
                       "cidr": {
                         "description": "CIDR is a CIDR prefix / IP Block.",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "format": "cidr",
                         "type": "string"
                       },
                       "cidrGroupRef": {
-                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress) or cannot (IngressDeny) receive connections from.",
+                        "description": "CIDRGroupRef is a reference to a CiliumCIDRGroup object. A CiliumCIDRGroup contains a list of CIDRs that the endpoint, subject to the rule, can (Ingress/Egress) or cannot (IngressDeny/EgressDeny) receive connections from.",
                         "maxLength": 253,
                         "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$",
                         "type": "string"
@@ -3908,7 +4869,7 @@
                         "description": "ExceptCIDRs is a list of IP blocks which the endpoint subject to the rule is not allowed to initiate connections to. These CIDR prefixes should be contained within Cidr, using ExceptCIDRs together with CIDRGroupRef is not supported yet. These exceptions are only applied to the Cidr in this CIDRRule, and do not apply to any other CIDR prefixes in any other CIDRRules.",
                         "items": {
                           "description": "CIDR specifies a block of IP addresses. Example: 192.0.2.1/32",
-                          "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/([0-9]|[1-2][0-9]|3[0-2])$|^s*((([0-9A-Fa-f]{1,4}:){7}(:|([0-9A-Fa-f]{1,4})))|(([0-9A-Fa-f]{1,4}:){6}:([0-9A-Fa-f]{1,4})?)|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){0,1}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){0,2}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){0,3}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){0,4}):([0-9A-Fa-f]{1,4})?))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){0,5}):([0-9A-Fa-f]{1,4})?))|(:(:|((:[0-9A-Fa-f]{1,4}){1,7}))))(%.+)?s*/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                          "format": "cidr",
                           "type": "string"
                         },
                         "type": "array"
@@ -3947,7 +4908,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -3956,7 +4918,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -3994,6 +4957,100 @@
                   },
                   "type": "array"
                 },
+                "fromGroups": {
+                  "description": "FromGroups is a directive that allows the integration with multiple outside providers. Currently, only AWS is supported, and the rule can select by multiple sub directives: \n Example: FromGroups: - aws: securityGroupsIds: - 'sg-XXXXXXXXXXXXX'",
+                  "items": {
+                    "description": "Groups structure to store all kinds of new integrations that needs a new derivative policy.",
+                    "properties": {
+                      "aws": {
+                        "description": "AWSGroup is an structure that can be used to whitelisting information from AWS integration",
+                        "properties": {
+                          "labels": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "region": {
+                            "type": "string"
+                          },
+                          "securityGroupsIds": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "securityGroupsNames": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "fromNodes": {
+                  "description": "FromNodes is a list of nodes identified by an EndpointSelector which are allowed to communicate with the endpoint subject to the rule.",
+                  "items": {
+                    "description": "EndpointSelector is a wrapper for k8s LabelSelector.",
+                    "properties": {
+                      "matchExpressions": {
+                        "description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                        "items": {
+                          "description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                          "properties": {
+                            "key": {
+                              "description": "key is the label key that the selector applies to.",
+                              "type": "string"
+                            },
+                            "operator": {
+                              "description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                              "enum": [
+                                "In",
+                                "NotIn",
+                                "Exists",
+                                "DoesNotExist"
+                              ],
+                              "type": "string"
+                            },
+                            "values": {
+                              "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                              "items": {
+                                "type": "string"
+                              },
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
+                            }
+                          },
+                          "required": [
+                            "key",
+                            "operator"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
+                      },
+                      "matchLabels": {
+                        "additionalProperties": {
+                          "description": "MatchLabelsValue represents the value from the MatchLabels {key,value} pair.",
+                          "maxLength": 63,
+                          "pattern": "^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$",
+                          "type": "string"
+                        },
+                        "description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "fromRequires": {
                   "description": "FromRequires is a list of additional constraints which must be met in order for the selected endpoints to be reachable. These additional constraints do no by itself grant access privileges and must always be accompanied with at least one matching FromEndpoints. \n Example: Any Endpoint with the label \"team=A\" requires consuming endpoint to also carry the label \"team=A\".",
                   "items": {
@@ -4023,7 +5080,8 @@
                               "items": {
                                 "type": "string"
                               },
-                              "type": "array"
+                              "type": "array",
+                              "x-kubernetes-list-type": "atomic"
                             }
                           },
                           "required": [
@@ -4032,7 +5090,8 @@
                           ],
                           "type": "object"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-type": "atomic"
                       },
                       "matchLabels": {
                         "additionalProperties": {
@@ -4069,10 +5128,17 @@
                               "type": "string"
                             },
                             "type": {
-                              "description": "Type is a ICMP-type. It should be 0-255 (8bit).",
-                              "maximum": 255,
-                              "minimum": 0,
-                              "type": "integer"
+                              "anyOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "description": "Type is a ICMP-type. It should be an 8bit code (0-255), or it's CamelCase name (for example, \"EchoReply\"). Allowed ICMP types are: Ipv4: EchoReply | DestinationUnreachable | Redirect | Echo | EchoRequest | RouterAdvertisement | RouterSelection | TimeExceeded | ParameterProblem | Timestamp | TimestampReply | Photuris | ExtendedEcho Request | ExtendedEcho Reply Ipv6: DestinationUnreachable | PacketTooBig | TimeExceeded | ParameterProblem | EchoRequest | EchoReply | MulticastListenerQuery| MulticastListenerReport | MulticastListenerDone | RouterSolicitation | RouterAdvertisement | NeighborSolicitation | NeighborAdvertisement | RedirectMessage | RouterRenumbering | ICMPNodeInformationQuery | ICMPNodeInformationResponse | InverseNeighborDiscoverySolicitation | InverseNeighborDiscoveryAdvertisement | HomeAgentAddressDiscoveryRequest | HomeAgentAddressDiscoveryReply | MobilePrefixSolicitation | MobilePrefixAdvertisement | DuplicateAddressRequestCodeSuffix | DuplicateAddressConfirmationCodeSuffix | ExtendedEchoRequest | ExtendedEchoReply",
+                              "pattern": "^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]|EchoReply|DestinationUnreachable|Redirect|Echo|RouterAdvertisement|RouterSelection|TimeExceeded|ParameterProblem|Timestamp|TimestampReply|Photuris|ExtendedEchoRequest|ExtendedEcho Reply|PacketTooBig|ParameterProblem|EchoRequest|MulticastListenerQuery|MulticastListenerReport|MulticastListenerDone|RouterSolicitation|RouterAdvertisement|NeighborSolicitation|NeighborAdvertisement|RedirectMessage|RouterRenumbering|ICMPNodeInformationQuery|ICMPNodeInformationResponse|InverseNeighborDiscoverySolicitation|InverseNeighborDiscoveryAdvertisement|HomeAgentAddressDiscoveryRequest|HomeAgentAddressDiscoveryReply|MobilePrefixSolicitation|MobilePrefixAdvertisement|DuplicateAddressRequestCodeSuffix|DuplicateAddressConfirmationCodeSuffix)$",
+                              "x-kubernetes-int-or-string": true
                             }
                           },
                           "required": [
@@ -4080,6 +5146,7 @@
                           ],
                           "type": "object"
                         },
+                        "maxItems": 40,
                         "type": "array"
                       }
                     },
@@ -4097,8 +5164,15 @@
                         "items": {
                           "description": "PortProtocol specifies an L4 port with an optional transport protocol",
                           "properties": {
+                            "endPort": {
+                              "description": "EndPort can only be an L4 port number.",
+                              "format": "int32",
+                              "maximum": 65535,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
                             "port": {
-                              "description": "Port is an L4 port number. For now the string will be strictly parsed as a single uint16. In the future, this field may support ranges in the form \"1024-2048 Port can also be a port name, which must contain at least one [a-z], and may also contain [0-9] and '-' anywhere except adjacent to another '-' or in the beginning or the end.",
+                              "description": "Port can be an L4 port number, or a name in the form of \"http\" or \"http-8080\".",
                               "pattern": "^(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4})|([a-zA-Z0-9]-?)*[a-zA-Z](-?[a-zA-Z0-9])*$",
                               "type": "string"
                             },
@@ -4180,7 +5254,8 @@
                       "items": {
                         "type": "string"
                       },
-                      "type": "array"
+                      "type": "array",
+                      "x-kubernetes-list-type": "atomic"
                     }
                   },
                   "required": [
@@ -4189,7 +5264,8 @@
                   ],
                   "type": "object"
                 },
-                "type": "array"
+                "type": "array",
+                "x-kubernetes-list-type": "atomic"
               },
               "matchLabels": {
                 "additionalProperties": {
@@ -4212,6 +5288,43 @@
     "status": {
       "description": "Status is the status of the Cilium policy rule",
       "properties": {
+        "conditions": {
+          "items": {
+            "properties": {
+              "lastTransitionTime": {
+                "description": "The last time the condition transitioned from one status to another.",
+                "format": "date-time",
+                "type": "string"
+              },
+              "message": {
+                "description": "A human readable message indicating details about the transition.",
+                "type": "string"
+              },
+              "reason": {
+                "description": "The reason for the condition's last transition.",
+                "type": "string"
+              },
+              "status": {
+                "description": "The status of the condition, one of True, False, or Unknown",
+                "type": "string"
+              },
+              "type": {
+                "description": "The type of the policy condition",
+                "type": "string"
+              }
+            },
+            "required": [
+              "status",
+              "type"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-kubernetes-list-map-keys": [
+            "type"
+          ],
+          "x-kubernetes-list-type": "map"
+        },
         "derivativePolicies": {
           "additionalProperties": {
             "description": "CiliumNetworkPolicyNodeStatus is the status of a Cilium policy rule for a specific node.",
@@ -4249,45 +5362,6 @@
             "type": "object"
           },
           "description": "DerivativePolicies is the status of all policies derived from the Cilium policy",
-          "type": "object"
-        },
-        "nodes": {
-          "additionalProperties": {
-            "description": "CiliumNetworkPolicyNodeStatus is the status of a Cilium policy rule for a specific node.",
-            "properties": {
-              "annotations": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Annotations corresponds to the Annotations in the ObjectMeta of the CNP that have been realized on the node for CNP. That is, if a CNP has been imported and has been assigned annotation X=Y by the user, Annotations in CiliumNetworkPolicyNodeStatus will be X=Y once the CNP that was imported corresponding to Annotation X=Y has been realized on the node.",
-                "type": "object"
-              },
-              "enforcing": {
-                "description": "Enforcing is set to true once all endpoints present at the time the policy has been imported are enforcing this policy.",
-                "type": "boolean"
-              },
-              "error": {
-                "description": "Error describes any error that occurred when parsing or importing the policy, or realizing the policy for the endpoints to which it applies on the node.",
-                "type": "string"
-              },
-              "lastUpdated": {
-                "description": "LastUpdated contains the last time this status was updated",
-                "format": "date-time",
-                "type": "string"
-              },
-              "localPolicyRevision": {
-                "description": "Revision is the policy revision of the repository which first implemented this policy.",
-                "format": "int64",
-                "type": "integer"
-              },
-              "ok": {
-                "description": "OK is true when the policy has been parsed and imported successfully into the in-memory policy repository on the node.",
-                "type": "boolean"
-              }
-            },
-            "type": "object"
-          },
-          "description": "Nodes is the Cilium policy status for each node",
           "type": "object"
         }
       },

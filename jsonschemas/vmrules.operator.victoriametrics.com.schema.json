@@ -25,11 +25,23 @@
                 "description": "Concurrency defines how many rules execute at once.",
                 "type": "integer"
               },
+              "eval_alignment": {
+                "description": "Optional\nThe evaluation timestamp will be aligned with group's interval,\ninstead of using the actual timestamp that evaluation happens at.\nIt is enabled by default to get more predictable results\nand to visually align with graphs plotted via Grafana or vmui.",
+                "type": "boolean"
+              },
+              "eval_delay": {
+                "description": "Optional\nAdjust the `time` parameter of group evaluation requests to compensate intentional query delay from the datasource.",
+                "type": "string"
+              },
+              "eval_offset": {
+                "description": "Optional\nGroup will be evaluated at the exact offset in the range of [0...interval].",
+                "type": "string"
+              },
               "extra_filter_labels": {
                 "additionalProperties": {
                   "type": "string"
                 },
-                "description": "ExtraFilterLabels optional list of label filters applied to every rule's\nrequest withing a group. Is compatible only with VM datasource.\nSee more details at https://docs.victoriametrics.com#prometheus-querying-api-enhancements\nDeprecated, use params instead",
+                "description": "ExtraFilterLabels optional list of label filters applied to every rule's\nrequest within a group. Is compatible only with VM datasource.\nSee more details [here](https://docs.victoriametrics.com/#prometheus-querying-api-enhancements)\nDeprecated, use params instead",
                 "type": "object"
               },
               "headers": {
@@ -128,11 +140,11 @@
                 "type": "array"
               },
               "tenant": {
-                "description": "Tenant id for group, can be used only with enterprise version of vmalert\nSee more details at https://docs.victoriametrics.com/vmalert.html#multitenancy",
+                "description": "Tenant id for group, can be used only with enterprise version of vmalert.\nSee more details [here](https://docs.victoriametrics.com/vmalert#multitenancy).",
                 "type": "string"
               },
               "type": {
-                "description": "Type defines datasource type for enterprise version of vmalert\npossible values - prometheus,graphite",
+                "description": "Type defines datasource type for enterprise version of vmalert\npossible values - prometheus,graphite,vlogs",
                 "type": "string"
               }
             },
@@ -152,6 +164,83 @@
     },
     "status": {
       "description": "VMRuleStatus defines the observed state of VMRule",
+      "properties": {
+        "conditions": {
+          "description": "Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\"",
+          "items": {
+            "description": "Condition defines status condition of the resource",
+            "properties": {
+              "lastTransitionTime": {
+                "description": "lastTransitionTime is the last time the condition transitioned from one status to another.",
+                "format": "date-time",
+                "type": "string"
+              },
+              "lastUpdateTime": {
+                "description": "LastUpdateTime is the last time of given type update.\nThis value is used for status TTL update and removal",
+                "format": "date-time",
+                "type": "string"
+              },
+              "message": {
+                "description": "message is a human readable message indicating details about the transition.\nThis may be an empty string.",
+                "maxLength": 32768,
+                "type": "string"
+              },
+              "observedGeneration": {
+                "description": "observedGeneration represents the .metadata.generation that the condition was set based upon.\nFor instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date\nwith respect to the current state of the instance.",
+                "format": "int64",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "reason": {
+                "description": "reason contains a programmatic identifier indicating the reason for the condition's last transition.\nProducers of specific condition types may define expected values and meanings for this field,\nand whether the values are considered a guaranteed API.\nThe value should be a CamelCase string.\nThis field may not be empty.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              },
+              "status": {
+                "description": "status of the condition, one of True, False, Unknown.",
+                "enum": [
+                  "True",
+                  "False",
+                  "Unknown"
+                ],
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of condition in CamelCase or in name.namespace.resource.victoriametrics.com/CamelCase.",
+                "maxLength": 316,
+                "type": "string"
+              }
+            },
+            "required": [
+              "lastTransitionTime",
+              "lastUpdateTime",
+              "reason",
+              "status",
+              "type"
+            ],
+            "type": "object"
+          },
+          "type": "array",
+          "x-kubernetes-list-map-keys": [
+            "type"
+          ],
+          "x-kubernetes-list-type": "map"
+        },
+        "observedGeneration": {
+          "description": "ObservedGeneration defines current generation picked by operator for the\nreconcile",
+          "format": "int64",
+          "type": "integer"
+        },
+        "reason": {
+          "description": "Reason defines human readadble error reason",
+          "type": "string"
+        },
+        "updateStatus": {
+          "description": "UpdateStatus defines a status for update rollout",
+          "type": "string"
+        }
+      },
       "type": "object"
     }
   },

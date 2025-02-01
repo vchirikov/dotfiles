@@ -180,7 +180,7 @@
             "description": "EndpointStatusChange Indication of a change of status \n swagger:model EndpointStatusChange",
             "properties": {
               "code": {
-                "description": "Code indicate type of status change Enum: [ok failed]",
+                "description": "Code indicate type of status change Enum: [\"ok\",\"failed\"]",
                 "type": "string"
               },
               "message": {
@@ -214,7 +214,7 @@
                 "type": "integer"
               },
               "protocol": {
-                "description": "Layer 4 protocol Enum: [TCP UDP SCTP ICMP ICMPV6 ANY]",
+                "description": "Layer 4 protocol Enum: [\"TCP\",\"UDP\",\"SCTP\",\"ICMP\",\"ICMPV6\",\"ANY\"]",
                 "type": "string"
               }
             },
