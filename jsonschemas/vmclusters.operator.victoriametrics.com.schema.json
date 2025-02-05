@@ -404,7 +404,7 @@
               "type": "string"
             },
             "minReadySeconds": {
-              "description": "MinReadySeconds defines a minim number os seconds to wait before starting update next pod\nif previous in healthy state\nHas no effect for VLogs and VMSingle",
+              "description": "MinReadySeconds defines a minimum number of seconds to wait before starting update next pod\nif previous in healthy state\nHas no effect for VLogs and VMSingle",
               "format": "int32",
               "type": "integer"
             },
@@ -1364,7 +1364,7 @@
               "type": "string"
             },
             "minReadySeconds": {
-              "description": "MinReadySeconds defines a minim number os seconds to wait before starting update next pod\nif previous in healthy state\nHas no effect for VLogs and VMSingle",
+              "description": "MinReadySeconds defines a minimum number of seconds to wait before starting update next pod\nif previous in healthy state\nHas no effect for VLogs and VMSingle",
               "format": "int32",
               "type": "integer"
             },
@@ -2686,7 +2686,7 @@
               "type": "array"
             },
             "minReadySeconds": {
-              "description": "MinReadySeconds defines a minim number os seconds to wait before starting update next pod\nif previous in healthy state\nHas no effect for VLogs and VMSingle",
+              "description": "MinReadySeconds defines a minimum number of seconds to wait before starting update next pod\nif previous in healthy state\nHas no effect for VLogs and VMSingle",
               "format": "int32",
               "type": "integer"
             },
@@ -3558,7 +3558,7 @@
           "type": "integer"
         },
         "reason": {
-          "description": "Reason defines human readadble error reason",
+          "description": "Reason defines human readable error reason",
           "type": "string"
         },
         "updateFailCount": {

@@ -233,7 +233,7 @@
           "type": "integer"
         },
         "reason": {
-          "description": "Reason defines human readadble error reason",
+          "description": "Reason defines human readable error reason",
           "type": "string"
         },
         "updateStatus": {

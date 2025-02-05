@@ -41,5 +41,5 @@
   "type": "object",
   "x-kubernetes-group-version-kind.group": "groupsnapshot.storage.k8s.io",
   "x-kubernetes-group-version-kind.kind": "VolumeGroupSnapshotClass",
-  "x-kubernetes-group-version-kind.version": "v1alpha1"
+  "x-kubernetes-group-version-kind.version": "v1beta1"
 }

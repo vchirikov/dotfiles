@@ -1641,8 +1641,7 @@
               },
               "zone": {
                 "description": "The zone of the scrape targets. If you need multiple zones use multiple GCESDConfigs.",
-                "minLength": 1,
-                "type": "string"
+                "x-kubernetes-preserve-unknown-fields": true
               }
             },
             "required": [
@@ -3956,7 +3955,7 @@
           "type": "integer"
         },
         "reason": {
-          "description": "Reason defines human readadble error reason",
+          "description": "Reason defines human readable error reason",
           "type": "string"
         },
         "updateStatus": {
