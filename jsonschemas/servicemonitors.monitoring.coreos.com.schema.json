@@ -31,6 +31,10 @@
           "pattern": "(^0|([0-9]*[.])?[0-9]+((K|M|G|T|E|P)i?)?B)$",
           "type": "string"
         },
+        "convertClassicHistogramsToNHCB": {
+          "description": "Whether to convert all scraped classic histograms into a native histogram with custom buckets.\nIt requires Prometheus >= v3.0.0.",
+          "type": "boolean"
+        },
         "endpoints": {
           "description": "List of endpoints part of this ServiceMonitor.\nDefines how to scrape metrics from Kubernetes [Endpoints](https://kubernetes.io/docs/concepts/services-networking/service/#endpoints) objects.\nIn most cases, an Endpoints object is backed by a Kubernetes [Service](https://kubernetes.io/docs/concepts/services-networking/service/) object with the same name and labels.",
           "items": {
@@ -328,7 +332,7 @@
                     "type": "object"
                   },
                   "noProxy": {
-                    "description": "`noProxy` is a comma-separated string that can contain IPs, CIDR notation, domain names\nthat should be excluded from proxying. IP and domain names can\ncontain port numbers.\n\nIt requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.",
+                    "description": "`noProxy` is a comma-separated string that can contain IPs, CIDR notation, domain names\nthat should be excluded from proxying. IP and domain names can\ncontain port numbers.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
                     "type": "string"
                   },
                   "proxyConnectHeader": {
@@ -358,17 +362,17 @@
                       },
                       "type": "array"
                     },
-                    "description": "ProxyConnectHeader optionally specifies headers to send to\nproxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.",
+                    "description": "ProxyConnectHeader optionally specifies headers to send to\nproxies during CONNECT requests.\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
                     "type": "object",
                     "x-kubernetes-map-type": "atomic"
                   },
                   "proxyFromEnvironment": {
-                    "description": "Whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0 or Alertmanager >= 0.25.0.",
+                    "description": "Whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).\n\nIt requires Prometheus >= v2.43.0, Alertmanager >= v0.25.0 or Thanos >= v0.32.0.",
                     "type": "boolean"
                   },
                   "proxyUrl": {
                     "description": "`proxyURL` defines the HTTP proxy server to use.",
-                    "pattern": "^http(s)?://.+$",
+                    "pattern": "^(http|https|socks5)://.+$",
                     "type": "string"
                   },
                   "scopes": {
@@ -513,7 +517,7 @@
                         "x-kubernetes-map-type": "atomic"
                       },
                       "maxVersion": {
-                        "description": "Maximum acceptable TLS version.\n\nIt requires Prometheus >= v2.41.0.",
+                        "description": "Maximum acceptable TLS version.\n\nIt requires Prometheus >= v2.41.0 or Thanos >= v0.31.0.",
                         "enum": [
                           "TLS10",
                           "TLS11",
@@ -523,7 +527,7 @@
                         "type": "string"
                       },
                       "minVersion": {
-                        "description": "Minimum acceptable TLS version.\n\nIt requires Prometheus >= v2.35.0.",
+                        "description": "Minimum acceptable TLS version.\n\nIt requires Prometheus >= v2.35.0 or Thanos >= v0.28.0.",
                         "enum": [
                           "TLS10",
                           "TLS11",
@@ -652,7 +656,7 @@
                 "type": "string"
               },
               "scrapeTimeout": {
-                "description": "Timeout after which Prometheus considers the scrape to be failed.\n\nIf empty, Prometheus uses the global scrape timeout unless it is less\nthan the target's scrape interval value in which the latter is used.",
+                "description": "Timeout after which Prometheus considers the scrape to be failed.\n\nIf empty, Prometheus uses the global scrape timeout unless it is less\nthan the target's scrape interval value in which the latter is used.\nThe value cannot be greater than the scrape interval otherwise the operator will reject the resource.",
                 "pattern": "^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$",
                 "type": "string"
               },
@@ -815,7 +819,7 @@
                     "x-kubernetes-map-type": "atomic"
                   },
                   "maxVersion": {
-                    "description": "Maximum acceptable TLS version.\n\nIt requires Prometheus >= v2.41.0.",
+                    "description": "Maximum acceptable TLS version.\n\nIt requires Prometheus >= v2.41.0 or Thanos >= v0.31.0.",
                     "enum": [
                       "TLS10",
                       "TLS11",
@@ -825,7 +829,7 @@
                     "type": "string"
                   },
                   "minVersion": {
-                    "description": "Minimum acceptable TLS version.\n\nIt requires Prometheus >= v2.35.0.",
+                    "description": "Minimum acceptable TLS version.\n\nIt requires Prometheus >= v2.35.0 or Thanos >= v0.28.0.",
                     "enum": [
                       "TLS10",
                       "TLS11",

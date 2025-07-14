@@ -111,7 +111,7 @@
           "type": "integer"
         },
         "requestsLoadBalancer": {
-          "description": "RequestsLoadBalancer configures load-balancing for vminsert and vmselect requests\nit helps to evenly spread load across pods\nusually it's not possible with kubernetes TCP based service",
+          "description": "RequestsLoadBalancer configures load-balancing for vminsert and vmselect requests.\nIt helps to evenly spread load across pods.\nUsually it's not possible with Kubernetes TCP-based services.\nSee more [here](https://docs.victoriametrics.com/operator/resources/vmcluster/#requests-load-balancing)",
           "properties": {
             "disableInsertBalancing": {
               "type": "boolean"
@@ -131,7 +131,8 @@
           "type": "object"
         },
         "retentionPeriod": {
-          "description": "RetentionPeriod for the stored metrics\nNote VictoriaMetrics has data/ and indexdb/ folders\nmetrics from data/ removed eventually as soon as partition leaves retention period\nreverse index data at indexdb rotates once at the half of configured\n[retention period](https://docs.victoriametrics.com/Single-server-VictoriaMetrics/#retention)",
+          "description": "RetentionPeriod defines how long to retain stored metrics, specified as a duration (e.g., \"1d\", \"1w\", \"1m\").\nData with timestamps outside the RetentionPeriod is automatically deleted. The minimum allowed value is 1d, or 24h.\nThe default value is 1 (one month).\nSee [retention](https://docs.victoriametrics.com/victoriametrics/single-server-victoriametrics/#retention) docs for details.",
+          "pattern": "^[0-9]+(h|d|y)?$",
           "type": "string"
         },
         "serviceAccountName": {
@@ -172,6 +173,10 @@
               },
               "type": "array"
             },
+            "disableAutomountServiceAccountToken": {
+              "description": "DisableAutomountServiceAccountToken whether to disable serviceAccount auto mount by Kubernetes (available from v0.54.0).\nOperator will conditionally create volumes and volumeMounts for containers if it requires k8s API access.\nFor example, vmagent and vm-config-reloader requires k8s API access.\nOperator creates volumes with name: \"kube-api-access\", which can be used as volumeMount for extraContainers if needed.\nAnd also adds VolumeMounts at /var/run/secrets/kubernetes.io/serviceaccount.",
+              "type": "boolean"
+            },
             "disableSelfServiceScrape": {
               "description": "DisableSelfServiceScrape controls creation of VMServiceScrape by operator\nfor the application.\nHas priority over `VM_DISABLESELFSERVICESCRAPECREATION` operator env variable",
               "type": "boolean"
@@ -196,10 +201,11 @@
                     "description": "PodDNSConfigOption defines DNS resolver options of a pod.",
                     "properties": {
                       "name": {
-                        "description": "Required.",
+                        "description": "Name is this DNS resolver option's name.\nRequired.",
                         "type": "string"
                       },
                       "value": {
+                        "description": "Value is this DNS resolver option's value.",
                         "type": "string"
                       }
                     },
@@ -249,6 +255,52 @@
                 ],
                 "type": "object",
                 "x-kubernetes-preserve-unknown-fields": true
+              },
+              "type": "array"
+            },
+            "extraEnvsFrom": {
+              "description": "ExtraEnvsFrom defines source of env variables for the application container\ncould either be secret or configmap",
+              "items": {
+                "description": "EnvFromSource represents the source of a set of ConfigMaps",
+                "properties": {
+                  "configMapRef": {
+                    "description": "The ConfigMap to select from",
+                    "properties": {
+                      "name": {
+                        "default": "",
+                        "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                        "type": "string"
+                      },
+                      "optional": {
+                        "description": "Specify whether the ConfigMap must be defined",
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object",
+                    "x-kubernetes-map-type": "atomic"
+                  },
+                  "prefix": {
+                    "description": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                    "type": "string"
+                  },
+                  "secretRef": {
+                    "description": "The Secret to select from",
+                    "properties": {
+                      "name": {
+                        "default": "",
+                        "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                        "type": "string"
+                      },
+                      "optional": {
+                        "description": "Specify whether the Secret must be defined",
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object",
+                    "x-kubernetes-map-type": "atomic"
+                  }
+                },
+                "type": "object"
               },
               "type": "array"
             },
@@ -1079,10 +1131,11 @@
                               "type": "string"
                             },
                             "status": {
+                              "description": "Status is the status of the condition.\nCan be True, False, Unknown.\nMore info: https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/#:~:text=state%20of%20pvc-,conditions.status,-(string)%2C%20required",
                               "type": "string"
                             },
                             "type": {
-                              "description": "PersistentVolumeClaimConditionType defines the condition of PV claim.\nValid values are:\n  - \"Resizing\", \"FileSystemResizePending\"\n\nIf RecoverVolumeExpansionFailure feature gate is enabled, then following additional values can be expected:\n  - \"ControllerResizeError\", \"NodeResizeError\"\n\nIf VolumeAttributesClass feature gate is enabled, then following additional values can be expected:\n  - \"ModifyVolumeError\", \"ModifyingVolume\"",
+                              "description": "Type is the type of the condition.\nMore info: https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/#:~:text=set%20to%20%27ResizeStarted%27.-,PersistentVolumeClaimCondition,-contains%20details%20about",
                               "type": "string"
                             }
                           },
@@ -1154,6 +1207,10 @@
               },
               "type": "array"
             },
+            "disableAutomountServiceAccountToken": {
+              "description": "DisableAutomountServiceAccountToken whether to disable serviceAccount auto mount by Kubernetes (available from v0.54.0).\nOperator will conditionally create volumes and volumeMounts for containers if it requires k8s API access.\nFor example, vmagent and vm-config-reloader requires k8s API access.\nOperator creates volumes with name: \"kube-api-access\", which can be used as volumeMount for extraContainers if needed.\nAnd also adds VolumeMounts at /var/run/secrets/kubernetes.io/serviceaccount.",
+              "type": "boolean"
+            },
             "disableSelfServiceScrape": {
               "description": "DisableSelfServiceScrape controls creation of VMServiceScrape by operator\nfor the application.\nHas priority over `VM_DISABLESELFSERVICESCRAPECREATION` operator env variable",
               "type": "boolean"
@@ -1178,10 +1235,11 @@
                     "description": "PodDNSConfigOption defines DNS resolver options of a pod.",
                     "properties": {
                       "name": {
-                        "description": "Required.",
+                        "description": "Name is this DNS resolver option's name.\nRequired.",
                         "type": "string"
                       },
                       "value": {
+                        "description": "Value is this DNS resolver option's value.",
                         "type": "string"
                       }
                     },
@@ -1231,6 +1289,52 @@
                 ],
                 "type": "object",
                 "x-kubernetes-preserve-unknown-fields": true
+              },
+              "type": "array"
+            },
+            "extraEnvsFrom": {
+              "description": "ExtraEnvsFrom defines source of env variables for the application container\ncould either be secret or configmap",
+              "items": {
+                "description": "EnvFromSource represents the source of a set of ConfigMaps",
+                "properties": {
+                  "configMapRef": {
+                    "description": "The ConfigMap to select from",
+                    "properties": {
+                      "name": {
+                        "default": "",
+                        "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                        "type": "string"
+                      },
+                      "optional": {
+                        "description": "Specify whether the ConfigMap must be defined",
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object",
+                    "x-kubernetes-map-type": "atomic"
+                  },
+                  "prefix": {
+                    "description": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                    "type": "string"
+                  },
+                  "secretRef": {
+                    "description": "The Secret to select from",
+                    "properties": {
+                      "name": {
+                        "default": "",
+                        "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                        "type": "string"
+                      },
+                      "optional": {
+                        "description": "Specify whether the Secret must be defined",
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object",
+                    "x-kubernetes-map-type": "atomic"
+                  }
+                },
+                "type": "object"
               },
               "type": "array"
             },
@@ -1963,10 +2067,11 @@
                                 "type": "string"
                               },
                               "status": {
+                                "description": "Status is the status of the condition.\nCan be True, False, Unknown.\nMore info: https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/#:~:text=state%20of%20pvc-,conditions.status,-(string)%2C%20required",
                                 "type": "string"
                               },
                               "type": {
-                                "description": "PersistentVolumeClaimConditionType defines the condition of PV claim.\nValid values are:\n  - \"Resizing\", \"FileSystemResizePending\"\n\nIf RecoverVolumeExpansionFailure feature gate is enabled, then following additional values can be expected:\n  - \"ControllerResizeError\", \"NodeResizeError\"\n\nIf VolumeAttributesClass feature gate is enabled, then following additional values can be expected:\n  - \"ModifyVolumeError\", \"ModifyingVolume\"",
+                                "description": "Type is the type of the condition.\nMore info: https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/#:~:text=set%20to%20%27ResizeStarted%27.-,PersistentVolumeClaimCondition,-contains%20details%20about",
                                 "type": "string"
                               }
                             },
@@ -2394,10 +2499,11 @@
                               "type": "string"
                             },
                             "status": {
+                              "description": "Status is the status of the condition.\nCan be True, False, Unknown.\nMore info: https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/#:~:text=state%20of%20pvc-,conditions.status,-(string)%2C%20required",
                               "type": "string"
                             },
                             "type": {
-                              "description": "PersistentVolumeClaimConditionType defines the condition of PV claim.\nValid values are:\n  - \"Resizing\", \"FileSystemResizePending\"\n\nIf RecoverVolumeExpansionFailure feature gate is enabled, then following additional values can be expected:\n  - \"ControllerResizeError\", \"NodeResizeError\"\n\nIf VolumeAttributesClass feature gate is enabled, then following additional values can be expected:\n  - \"ModifyVolumeError\", \"ModifyingVolume\"",
+                              "description": "Type is the type of the condition.\nMore info: https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/#:~:text=set%20to%20%27ResizeStarted%27.-,PersistentVolumeClaimCondition,-contains%20details%20about",
                               "type": "string"
                             }
                           },
@@ -2465,6 +2571,10 @@
               },
               "type": "array"
             },
+            "disableAutomountServiceAccountToken": {
+              "description": "DisableAutomountServiceAccountToken whether to disable serviceAccount auto mount by Kubernetes (available from v0.54.0).\nOperator will conditionally create volumes and volumeMounts for containers if it requires k8s API access.\nFor example, vmagent and vm-config-reloader requires k8s API access.\nOperator creates volumes with name: \"kube-api-access\", which can be used as volumeMount for extraContainers if needed.\nAnd also adds VolumeMounts at /var/run/secrets/kubernetes.io/serviceaccount.",
+              "type": "boolean"
+            },
             "disableSelfServiceScrape": {
               "description": "DisableSelfServiceScrape controls creation of VMServiceScrape by operator\nfor the application.\nHas priority over `VM_DISABLESELFSERVICESCRAPECREATION` operator env variable",
               "type": "boolean"
@@ -2489,10 +2599,11 @@
                     "description": "PodDNSConfigOption defines DNS resolver options of a pod.",
                     "properties": {
                       "name": {
-                        "description": "Required.",
+                        "description": "Name is this DNS resolver option's name.\nRequired.",
                         "type": "string"
                       },
                       "value": {
+                        "description": "Value is this DNS resolver option's value.",
                         "type": "string"
                       }
                     },
@@ -2542,6 +2653,52 @@
                 ],
                 "type": "object",
                 "x-kubernetes-preserve-unknown-fields": true
+              },
+              "type": "array"
+            },
+            "extraEnvsFrom": {
+              "description": "ExtraEnvsFrom defines source of env variables for the application container\ncould either be secret or configmap",
+              "items": {
+                "description": "EnvFromSource represents the source of a set of ConfigMaps",
+                "properties": {
+                  "configMapRef": {
+                    "description": "The ConfigMap to select from",
+                    "properties": {
+                      "name": {
+                        "default": "",
+                        "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                        "type": "string"
+                      },
+                      "optional": {
+                        "description": "Specify whether the ConfigMap must be defined",
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object",
+                    "x-kubernetes-map-type": "atomic"
+                  },
+                  "prefix": {
+                    "description": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                    "type": "string"
+                  },
+                  "secretRef": {
+                    "description": "The Secret to select from",
+                    "properties": {
+                      "name": {
+                        "default": "",
+                        "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                        "type": "string"
+                      },
+                      "optional": {
+                        "description": "Specify whether the Secret must be defined",
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object",
+                    "x-kubernetes-map-type": "atomic"
+                  }
+                },
+                "type": "object"
               },
               "type": "array"
             },
@@ -3235,6 +3392,52 @@
                   },
                   "type": "array"
                 },
+                "extraEnvsFrom": {
+                  "description": "ExtraEnvsFrom defines source of env variables for the application container\ncould either be secret or configmap",
+                  "items": {
+                    "description": "EnvFromSource represents the source of a set of ConfigMaps",
+                    "properties": {
+                      "configMapRef": {
+                        "description": "The ConfigMap to select from",
+                        "properties": {
+                          "name": {
+                            "default": "",
+                            "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                            "type": "string"
+                          },
+                          "optional": {
+                            "description": "Specify whether the ConfigMap must be defined",
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object",
+                        "x-kubernetes-map-type": "atomic"
+                      },
+                      "prefix": {
+                        "description": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+                        "type": "string"
+                      },
+                      "secretRef": {
+                        "description": "The Secret to select from",
+                        "properties": {
+                          "name": {
+                            "default": "",
+                            "description": "Name of the referent.\nThis field is effectively required, but due to backwards compatibility is\nallowed to be empty. Instances of this type with an empty value here are\nalmost certainly wrong.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                            "type": "string"
+                          },
+                          "optional": {
+                            "description": "Specify whether the Secret must be defined",
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object",
+                        "x-kubernetes-map-type": "atomic"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
                 "image": {
                   "description": "Image - docker image settings for VMBackuper",
                   "properties": {
@@ -3474,9 +3677,6 @@
           "type": "object"
         }
       },
-      "required": [
-        "retentionPeriod"
-      ],
       "type": "object"
     },
     "status": {
@@ -3548,10 +3748,6 @@
           ],
           "x-kubernetes-list-type": "map"
         },
-        "lastSync": {
-          "description": "Deprecated.",
-          "type": "string"
-        },
         "observedGeneration": {
           "description": "ObservedGeneration defines current generation picked by operator for the\nreconcile",
           "format": "int64",
@@ -3561,18 +3757,11 @@
           "description": "Reason defines human readable error reason",
           "type": "string"
         },
-        "updateFailCount": {
-          "description": "Deprecated.",
-          "type": "integer"
-        },
         "updateStatus": {
           "description": "UpdateStatus defines a status for update rollout",
           "type": "string"
         }
       },
-      "required": [
-        "updateFailCount"
-      ],
       "type": "object"
     }
   },

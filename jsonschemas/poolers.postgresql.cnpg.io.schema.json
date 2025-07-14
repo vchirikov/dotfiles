@@ -7144,7 +7144,8 @@
           "description": "Type of service to forward traffic to. Default: `rw`.",
           "enum": [
             "rw",
-            "ro"
+            "ro",
+            "r"
           ],
           "type": "string"
         }
