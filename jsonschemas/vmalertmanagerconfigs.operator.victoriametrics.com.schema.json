@@ -544,7 +544,7 @@
                       "x-kubernetes-map-type": "atomic"
                     },
                     "auth_secret": {
-                      "description": "AuthSecret defines secrent name and key at CRD namespace.\nIt must contain the CRAM-MD5 secret.",
+                      "description": "AuthSecret defines secret name and key at CRD namespace.\nIt must contain the CRAM-MD5 secret.",
                       "properties": {
                         "key": {
                           "description": "The key of the secret to select from.  Must be a valid secret key.",
@@ -1716,7 +1716,7 @@
                   "properties": {
                     "actions": {
                       "items": {
-                        "description": "RocketchatAttachmentAction defines message attachements\nhttps://github.com/RocketChat/Rocket.Chat.Go.SDK/blob/master/models/message.go",
+                        "description": "RocketchatAttachmentAction defines message attachments\nhttps://github.com/RocketChat/Rocket.Chat.Go.SDK/blob/master/models/message.go",
                         "properties": {
                           "msg": {
                             "type": "string"
