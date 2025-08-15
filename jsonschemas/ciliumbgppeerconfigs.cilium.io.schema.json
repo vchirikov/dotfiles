@@ -177,7 +177,13 @@
               "type": "integer"
             }
           },
-          "type": "object"
+          "type": "object",
+          "x-kubernetes-validations": [
+            {
+              "message": "keepAliveTimeSeconds can not be larger than holdTimeSeconds",
+              "rule": "self.keepAliveTimeSeconds <= self.holdTimeSeconds"
+            }
+          ]
         },
         "transport": {
           "description": "Transport defines the BGP transport parameters for the peer.\n\nIf not specified, the default transport parameters are used.",
