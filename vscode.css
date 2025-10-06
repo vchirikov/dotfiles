@@ -17,32 +17,21 @@
   text-decoration: none !important;
 }
 
-/* sets better width of debugger hover widget */
-/* Disabled due to https://code.visualstudio.com/updates/v1_50#_debug-hover-improvements */
-/* .monaco-editor .debug-hover-widget .complex-value {
-  min-width: 648px !important;
-} */
+/* suggest window fixes (can't be resized) + */
 
-/* intellisense width fix */
-/* .editor-widget.suggest-widget.visible {
-  width: 500px;
-  min-width: 500px !important;
-} */
-
-/* .monaco-editor .parameter-hints-widget>.phwrapper {
+/* <parameter hints (ctrl+shift+space)> widgetid="editor.widget.parameterHintsWidget"  */
+/* they still can't be resized and works bad with bigger font size, let's fix width at least */
+.monaco-editor .parameter-hints-widget>.phwrapper {
   max-width: 60vw !important;
-} */
 
-/* editor-hover */
-/* .monaco-editor .overflowingContentWidgets .monaco-hover-content {
-  max-width: 60vw !important;
-  max-height: 50vh !important;
-} */
+}
+/* </parameter hints> */
 
-/* hides editor group icons. https://github.com/microsoft/vscode/issues/46403 */
-/* a[title="Open Changes"],
-a[title="Git: View File History (Alt+H)"],
-a[title="Split Editor Right (Ctrl+\)"],
-a[title="Split Editor Right (Ctrl+\\)"] {
-  display: none !important;
-} */
+/* border radius of hints */
+.monaco-editor .monaco-hover,
+.monaco-editor .parameter-hints-widget,
+.monaco-editor .suggest-details,
+.monaco-editor .suggest-widget,
+.monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused {
+  border-radius: 12px;
+}
