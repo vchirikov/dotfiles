@@ -1,7 +1,6 @@
 Import-Module posh-git
 $env:POSH_GIT_ENABLED = $true
-oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json" | Invoke-Expression
-Enable-PoshTransientPrompt
+Invoke-Expression (oh-my-posh init pwsh --config="q:\code\vchirikov\dotfiles\oh-my-posh\config.omp.json")
 
 $env:RCLONE_CONFIG = "Q:\code\vchirikov\dotfiles\secrets\rclone.conf"
 
@@ -40,6 +39,7 @@ $env:FZF_DEFAULT_COMMAND = 'fd --color=always --type file --follow --hidden --ex
 $env:FZF_DEFAULT_OPTS = '--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse';
 $env:FZF__OPTS = '--color=dark,gutter:#22262e,bg+:#303b4d --height 40% --layout=reverse';
 $env:BAT_PAGER = ''
+$env:KUBE_EDITOR = 'code -w'
 
 # https://github.com/nickcox/cd-extras
 # https://github.com/nickcox/cd-extras/issues/40
@@ -51,7 +51,8 @@ $env:BAT_PAGER = ''
 Import-Module cd-extras
 
 setocd AUTO_CD $true
-setocd CD_PATH 'q:\\code\\Telgorithm', 'q:\\code\\vchirikov'
+#setocd CD_PATH 'q:\\code\\alphy', 'q:\\code\\vchirikov'
+setocd CD_PATH 'q:\\code\\vchirikov'
 setocd NOARG_CD 'q:\\code'
 # https://github.com/DHowett/DirColors, maybe later
 setocd ColorCompletion $false
@@ -252,19 +253,27 @@ function killDebugProxy {
 function kubeBusybox() {
     kubectl debug -it --target $(kubectl get pods -o name --all-namespaces | fzf) --image=busybox
 }
+function kubeRes {
+    kubectl get pods -o custom-columns='POD:.metadata.name,CPU_REQUEST:.spec.containers[*].resources.requests.cpu,MEM_REQUEST:.spec.containers[*].resources.requests.memory,CPU_LIMIT:.spec.containers[*].resources.limits.cpu,MEM_LIMIT:.spec.containers[*].resources.limits.memory' $args
+}
+
+function curltime {
+    curl -w "@Q:\tools\utils\curltime_format.txt" -o NUL -s $args
+}
 
 function pod() {
     # id = _quake doesn't work well with admin rights
     # createLnk "C:\Users\verysimplenick\AppData\Local\Microsoft\WindowsApps\wt.exe" "$PWD\wt_main.lnk" "q:\code\vchirikov\dotfiles\windows_terminal\terminal.ico" "-w main -d q:\code"
     kubectl get pods --all-namespaces | fzf.exe --info=inline --height 100% --layout=reverse --header-lines=1 `
         --prompt "$(kubectl config current-context | sed 's/-context$//')> " `
-        --header "Enter (kubectl exec) / CTRL-O (open log in editor) / CTRL-R (reload) / CTRL+E change view`n`n" `
+        --header "Enter (kubectl exec) / CTRL-L - open log / CTRL-O (open log in editor) / CTRL-R (reload) / CTRL+E change view`n`n" `
         --bind 'ctrl-e:change-preview-window(down,follow,90%,wrap,border-top|)' `
         --bind 'enter:execute-silent(wt.exe -w main sp -V pwsh -NoLogo -NoProfile -c kubectl exec -i -t -n {1} {2} -- sh)+abort' `
         --bind 'ctrl-o:execute(kubectl logs --all-containers --namespace {1} {2} | code -)' `
+        --bind 'ctrl-l:execute(kubectl logs --all-containers --namespace {1} {2} --tail 100 -f)' `
         --bind 'ctrl-r:reload(kubectl get pods --all-namespaces)' `
         --preview-window 'down,follow,50%,wrap,border-top' `
-        --preview 'kubectl logs --all-containers --tail=300 --namespace {1} {2}'
+        --preview 'kubectl logs --all-containers --tail=100 --namespace {1} {2}'
 }
 
 # spindown hdd
@@ -300,7 +309,7 @@ function vs {
         [ArgumentCompleter(
             {
                 param($cmd, $param, $values)
-                Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" |
+                Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.slnx" |
                 Where-Object { $_.Name.StartsWith($values, [StringComparison]::OrdinalIgnoreCase) } |
                 ForEach-Object { $([System.IO.Path]::GetFileName($_)) } |
                 Sort-Object |
@@ -311,7 +320,7 @@ function vs {
 
     [string] $vsPath = "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe"
     if ([string]::IsNullOrWhiteSpace($path)) {
-        $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" | Select-Object -First 1;
+        $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.slnx" | Select-Object -First 1;
         if ([string]::IsNullOrWhiteSpace($path)) {
             $path = $([System.IO.Path]::GetFullPath($PWD))
         }
@@ -329,7 +338,7 @@ function rider {
         [ArgumentCompleter(
             {
                 param($cmd, $param, $values)
-                Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" |
+                Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.slnx" |
                 Where-Object { $_.Name.StartsWith($values, [StringComparison]::OrdinalIgnoreCase) } |
                 ForEach-Object { $([System.IO.Path]::GetFileName($_)) } |
                 Sort-Object |
@@ -347,7 +356,7 @@ function rider {
 
     [string] $riderPath = "${env:ProgramFiles}\JetBrains\Rider\bin\rider64.exe"
     if ([string]::IsNullOrWhiteSpace($path)) {
-        $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.sln" | Select-Object -First 1;
+        $path = Get-ChildItem -Path $([System.IO.Path]::GetFullPath($PWD)) -Filter "*.slnx" | Select-Object -First 1;
         if ([string]::IsNullOrWhiteSpace($path)) {
             $path = $([System.IO.Path]::GetFullPath($PWD))
         }
@@ -358,6 +367,11 @@ function rider {
         }
     }
     Start-Process -FilePath $riderPath -ArgumentList $([System.IO.Path]::GetFullPath($path))
+}
+
+function camera_settings {
+    # to get all cameras: ffmpeg -list_devices true -f dshow -i dummy -hide_banner
+    ffmpeg -f dshow -show_video_device_dialog true -i "video=EMEET SmartCam S600"
 }
 
 function base64 {
@@ -603,6 +617,7 @@ function createLnk {
 
 Set-Alias time Measure-Command
 Set-Alias import Import-Module
+Set-Alias -Name openssl -Value "C:\Program Files\Git\usr\bin\openssl.exe"
 
 
 # Import-Module PSGitHub
@@ -813,6 +828,115 @@ readDotEnv 'q:\code\vchirikov\dotfiles\secrets\.env'
 # include jira-cli completion
 . 'Q:\code\vchirikov\dotfiles\_jira.ps1'
 
+function clearPwshHistory {
+    # Read the content of the input file
+    [string] $file = "$env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt";
+    if (Test-Path $file) {
+        $content = Get-Content -Path $file
+        $filteredContent = $content | Where-Object {
+            -not $_.StartsWith('cd ') -and
+            -not $_.StartsWith('ls ') -and
+            -not $_.StartsWith('rm ') -and
+            -not $_.StartsWith('ncu ') -and
+            -not $_.StartsWith('npm') -and
+            -not $_.StartsWith('pnpm') -and
+            -not $_.StartsWith('npx') -and
+            -not $_.StartsWith('mkdir ') -and
+            -not $_.StartsWith('pwd') -and
+            -not $_.StartsWith('code ') -and
+            -not $_.StartsWith('.') -and
+            -not $_.StartsWith('Q:') -and
+            -not $_.StartsWith('C:') -and
+            -not $_.StartsWith('git') -and
+            -not $_.StartsWith('ping') -and
+            -not $_.StartsWith('tracert') -and
+            -not $_.StartsWith('spindown') -and
+            -not $_.StartsWith('rider')
+        }
+        $filteredContent | Set-Content -Path $file
+    }
+
+}
+
+function compressVideoFile {
+    $inputFile = $args[0]
+    # 0..51 большее число хуже качество CRF (Constant Rate Factor — постоянный фактор качества) — это режим управления качеством в кодеках libx264 и
+    # 23-24 оптималочка, при 24 битрейт около 48 мбит
+    $crf = if ($args[1]) { $args[1] } else { 23 }
+    $preset = if ($args[2]) { $args[2] } else { "medium" }
+
+    if (-not $inputFile) {
+        Write-Host "Ошибка: укажите путь к файлу" -ForegroundColor Red
+        return
+    }
+
+    if (-not (Test-Path $inputFile)) {
+        Write-Host "Файл не найден: $inputFile" -ForegroundColor Red
+        return
+    }
+
+    $outputFile = $inputFile -replace '\.mp4$', '_compressed.mp4'
+
+    Write-Host "Обработка файла: $inputFile" -ForegroundColor Cyan
+
+    # Определение битности
+    $probe = & ffprobe -v quiet -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$inputFile"
+    $is10bit = $probe -match "p10le"
+
+    Write-Host "Битность: $(if($is10bit){'10-bit'} else {'8-bit'})" -ForegroundColor Gray
+
+    # Параметры видео
+    $videoParams = @("-c:v", "libx265", "-crf", $crf, "-preset", $preset)
+
+    if ($is10bit) {
+        $videoParams += @("-profile:v", "main10", "-pix_fmt", "yuv420p10le")
+    }
+
+    Write-Host "Сжатие (CRF=$crf, preset=$preset)..." -ForegroundColor Yellow
+
+    & ffmpeg -i "$inputFile" $videoParams -c:a aac -b:a 128k -movflags +faststart -y "$outputFile"
+
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "✓ Успешно: $outputFile" -ForegroundColor Green
+    }
+    else {
+        Write-Host "✗ Ошибка при обработке" -ForegroundColor Red
+    }
+}
+
+function compressVideosInDirectory {
+    $directoryPath = $args[0]
+    $crf = if ($args[1]) { $args[1] } else { 23 }
+    $preset = if ($args[2]) { $args[2] } else { "medium" }
+
+    if (-not $directoryPath) {
+        Write-Host "Ошибка: укажите путь к каталогу" -ForegroundColor Red
+        return
+    }
+
+    if (-not (Test-Path $directoryPath -PathType Container)) {
+        Write-Host "Каталог не найден: $directoryPath" -ForegroundColor Red
+        return
+    }
+
+    $videoFiles = Get-ChildItem -Path $directoryPath -Recurse -Filter "*.mp4" |
+    Where-Object { $_.Name -notlike "*_compressed*" }
+
+    if ($videoFiles.Count -eq 0) {
+        Write-Host "MP4-файлы не найдены в каталоге $directoryPath" -ForegroundColor Yellow
+        return
+    }
+
+    Write-Host "Найдено файлов для обработки: $($videoFiles.Count)" -ForegroundColor Cyan
+
+    foreach ($file in $videoFiles) {
+        compressVideoFile $file.FullName $crf $preset
+        Write-Host ""   # разделитель
+    }
+
+    Write-Host "Обработка каталога завершена." -ForegroundColor Green
+}
+
 function jira {
     if ($args[0] -eq "q" -and $args.Length -ge 1) {
         & jira.exe issue list --plain --columns "key,summary,priority,created,status" -q "summary ~ $($args[1])" $($args | Select-Object -Skip 2)
@@ -962,3 +1086,207 @@ function TabExpansion2 {
 }
 #>
 #}
+
+# DO NOT MODIFY -- coreutils -- 60b36fc6-2d59-49df-be51-28dd2f4c3c9a
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# Inlining the template into the profile shaves off ~10ms (25%).
+$script:__COREUTILS__ = [System.Collections.Generic.HashSet[string]]::new(
+    [string[]]@(
+        'arch', 'b2sum', 'base32', 'base64', 'basename',
+        'basenc', 'cat', 'cksum', 'comm', 'cp',
+        'csplit', 'cut', 'date', 'df', 'dirname',
+        'du', 'echo', 'env', 'expr', 'factor',
+        'false', 'find', 'fmt', 'fold', 'grep',
+        'head', 'hostname', 'join', 'la', 'link',
+        'ln', 'ls', 'md5sum', 'mkdir', 'mktemp',
+        'mv', 'nl', 'nproc', 'numfmt', 'od',
+        'pathchk', 'pr', 'printenv', 'printf', 'ptx',
+        'pwd', 'readlink', 'realpath', 'rm', 'rmdir',
+        'seq', 'sha1sum', 'sha224sum', 'sha256sum', 'sha384sum',
+        'sha512sum', 'shuf', 'sleep', 'sort', 'split',
+        'stat', 'sum', 'tac', 'tail', 'tee',
+        'test', 'touch', 'tr', 'true', 'truncate',
+        'tsort', 'unexpand', 'uniq', 'unlink', 'uptime',
+        'wc', 'xargs', 'yes'
+    ),
+    [System.StringComparer]::OrdinalIgnoreCase
+)
+
+$script:__COREUTILS_FAST_SKIP__ = [regex]::new(
+    '\b(?:' + ($script:__COREUTILS__ -join '|') + ')\b',
+    [System.Text.RegularExpressions.RegexOptions]::Compiled -bor `
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+)
+
+# Casting the scriptblock to Func<Ast,bool> once and reusing it avoids the
+# per-FindAll scriptblock-to-delegate wrapping overhead (~1.7x faster).
+$script:__COREUTILS_CMD_PREDICATE__ = [System.Func[System.Management.Automation.Language.Ast, bool]] {
+    param($n) $n -is [System.Management.Automation.Language.CommandAst]
+}
+
+$script:__COREUTILS_ARG_SPECIAL__ = [char[]] @("'", '"', '`', '$')
+
+# Wrap arguments into quotes. By being a function we can properly handle $variables.
+# As per MSVCRT, any `\` before `"` must be doubled to escape them.
+function global:__coreutils_q {
+    param($s)
+    '"' + (([string]$s) -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"'
+}
+
+# PowerShell tokenizes `*"a"*` as [BareWord] instead of the expected [DoubleQuoted, BareWord, DoubleQuoted].
+# To work around that we use... regex. Group 1 = 'single', 2 = "double", 3 = `escape, 4 = bare run.
+$script:__COREUTILS_ARG_RX__ = [regex]::new(
+    "'((?:[^']|'')*)'|""((?:[^""``]|""""|``.)*)""|``(.)|([^'""``]+)",
+    [System.Text.RegularExpressions.RegexOptions]::Compiled
+)
+$script:__COREUTILS_ARG_EVAL__ = [System.Text.RegularExpressions.MatchEvaluator] {
+    param($m)
+    if ($m.Groups[1].Success) {
+        # Single-quoted: literal. PS '' -> ', then MSVCRT-quote.
+        $body = $m.Groups[1].Value.Replace("''", "'")
+        if ($body -match '^(.*?)(\\+)$') {
+            return '"' + ($matches[1] -replace '(\\*)"', '$1$1\"') + '"' + $matches[2]
+        }
+        return '"' + ($body -replace '(\\*)"', '$1$1\"') + '"'
+    }
+    if ($m.Groups[2].Success) {
+        # Double-quoted: collapse PS quote-escapes to raw " / ', let ExpandString
+        # resolve `n / `t / $var, then MSVCRT-quote.
+        $body = $m.Groups[2].Value.
+        Replace('`"', '"').
+        Replace("``'", "'").
+        Replace('""', '"')
+        $body = $ExecutionContext.InvokeCommand.ExpandString($body)
+        if ($body -match '^(.*?)(\\+)$') {
+            return '"' + ($matches[1] -replace '(\\*)"', '$1$1\"') + '"' + $matches[2]
+        }
+        return '"' + ($body -replace '(\\*)"', '$1$1\"') + '"'
+    }
+    if ($m.Groups[3].Success) {
+        # Backtick-escaped char outside a string: " -> \"; everything else
+        # becomes a one-char quoted region so glob metas stay literal.
+        $c = $m.Groups[3].Value
+        if ($c -eq '"') {
+            return '\"'
+        }
+        return '"' + $c + '"'
+    }
+    # Bare run: passed through unquoted so coreutils can glob it; expand $vars.
+    return $ExecutionContext.InvokeCommand.ExpandString($m.Groups[4].Value)
+}
+
+# PSConsoleHostReadLine override that rewrites coreutils command names to their
+# .cmd equivalents after PSReadLine returns (history keeps the original).
+#
+# Why .cmd over .exe: PSNativeCommandArgumentPassing = 'Windows' results in a behavior
+# where passing bare quotes to CreateProcess() is impossible. This prevents us from
+# passing "*" as "*" to coreutils and instead will be given as a bare *.
+# This causes it to treat it as a glob pattern. "*.cmd" files however are automatically
+# treated as PSNativeCommandArgumentPassing = 'Legacy', which preserves quotes.
+# It is the only possible workaround and the only way coreutils can work at all.
+function PSConsoleHostReadLine {
+    [System.Diagnostics.DebuggerHidden()]
+    param()
+
+    $lastRunStatus = $?
+    Microsoft.PowerShell.Core\Set-StrictMode -Off
+    $line = [Microsoft.PowerShell.PSConsoleReadLine]::ReadLine($host.Runspace, $ExecutionContext, $lastRunStatus)
+
+    # If the line contains no coreutils name, we don't need to parse the AST at all.
+    if (-not $script:__COREUTILS_FAST_SKIP__.IsMatch($line)) {
+        return $line
+    }
+
+    $ast = [System.Management.Automation.Language.Parser]::ParseInput($line, [ref]$null, [ref]$null)
+    $commands = $ast.FindAll($script:__COREUTILS_CMD_PREDICATE__, $true)
+
+    # Process right-to-left so earlier offsets stay valid after each splice.
+    # In-place reverse beats Sort-Object for the typical 1-command line.
+    if ($commands.Count -gt 1) {
+        $commands = [System.Collections.Generic.List[object]]::new($commands)
+        $commands.Reverse()
+    }
+
+    foreach ($cmd in $commands) {
+        $name = $cmd.GetCommandName()
+        if (!$name) {
+            continue
+        }
+
+        $baseName = $name
+        if ($name.EndsWith('.exe') -or $name.EndsWith('.cmd')) {
+            $baseName = $name.Substring(0, $name.Length - 4)
+        }
+        if (!$script:__COREUTILS__.Contains($baseName)) {
+            continue
+        }
+
+        # ls/la get colour + listing flags injected; la also rewrites to ls.
+        $cmdElement = $cmd.CommandElements[0]
+        $start = $cmdElement.Extent.StartOffset
+        $end = $cmdElement.Extent.EndOffset
+        $replacement = "& 'C:\Program Files\coreutils\cmd\"
+
+        switch ($baseName) {
+            'la' { $replacement += "ls.cmd' --color=auto -AFhl" }
+            'ls' { $replacement += "ls.cmd' --color=auto" }
+            default { $replacement += "$baseName.cmd'" }
+        }
+
+        # Walk command elements, merging adjacent ones whose extents touch
+        # (e.g. `'a'*` parses as [SingleQuoted, BareWord] but is one shell word).
+        # The inverse case `*'a'*` parses as a single BareWord whose text
+        # contains the embedded quotes, which is why AST-only analysis
+        # isn't enough and we still need to re-tokenize the source span.
+        $argsStart = $end
+        $argsEnd = $cmd.Extent.EndOffset
+        $rewrittenArgs = ''
+        $elements = $cmd.CommandElements
+        $count = $elements.Count
+        $i = 1
+        while ($i -lt $count) {
+            $first = $elements[$i]
+            $wordStart = $first.Extent.StartOffset
+            $wordEnd = $first.Extent.EndOffset
+            $merged = $false
+            while ($i + 1 -lt $count -and $elements[$i + 1].Extent.StartOffset -eq $wordEnd) {
+                $i++
+                $wordEnd = $elements[$i].Extent.EndOffset
+                $merged = $true
+            }
+            $source = $line.Substring($wordStart, $wordEnd - $wordStart)
+            $rewrittenArgs += $line.Substring($argsStart, $wordStart - $argsStart)
+            $argsStart = $wordEnd
+            # IndexOfAny beats running the regex per arg.
+            if ($source.IndexOfAny($script:__COREUTILS_ARG_SPECIAL__) -lt 0) {
+                $rewrittenArgs += $source
+                $i++
+                continue
+            }
+            # A single un-merged PS expression that needs $var resolution
+            # (bare $var, "...$var...", $x.Member, $($expr), etc.).
+            # Defer evaluation to runtime so the value reaches coreutils as a literal arg.
+            # This matches POSIX behaviour where variable expansions don't result in globbing.
+            if (-not $merged -and
+                ($first -is [System.Management.Automation.Language.VariableExpressionAst] -or
+                $first -is [System.Management.Automation.Language.ExpandableStringExpressionAst] -or
+                $first -is [System.Management.Automation.Language.MemberExpressionAst])) {
+                $rewrittenArgs += '(__coreutils_q ' + $source + ')'
+                $i++
+                continue
+            }
+            # Slow path: re-tokenise and re-emit as MSVCRT-style quoting,
+            # then wrap in PS single quotes so PS hands the body verbatim.
+            $windowsQuoted = $script:__COREUTILS_ARG_RX__.Replace($source, $script:__COREUTILS_ARG_EVAL__)
+            $rewrittenArgs += "'" + $windowsQuoted.Replace("'", "''") + "'"
+            $i++
+        }
+        $rewrittenArgs += $line.Substring($argsStart, $argsEnd - $argsStart)
+
+        $line = $line.Substring(0, $start) + $replacement + $rewrittenArgs + $line.Substring($argsEnd)
+    }
+
+    return $line
+}
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# DO NOT MODIFY -- coreutils -- 60b36fc6-2d59-49df-be51-28dd2f4c3c9a
